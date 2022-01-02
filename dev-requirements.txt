@@ -8,10 +8,14 @@ atomicwrites==1.4.0
     # via pytest
 attrs==21.4.0
     # via pytest
+black==21.12b0
+    # via -r .\dev-requirements.in
 cfgv==3.3.1
     # via pre-commit
 click==8.0.3
-    # via pip-tools
+    # via
+    #   black
+    #   pip-tools
 colorama==0.4.4
     # via
     #   click
@@ -24,16 +28,28 @@ identify==2.4.1
     # via pre-commit
 iniconfig==1.1.1
     # via pytest
+isort==5.10.1
+    # via -r .\dev-requirements.in
+mypy==0.930
+    # via -r .\dev-requirements.in
+mypy-extensions==0.4.3
+    # via
+    #   black
+    #   mypy
 nodeenv==1.6.0
     # via pre-commit
 packaging==21.3
     # via pytest
+pathspec==0.9.0
+    # via black
 pep517==0.12.0
     # via pip-tools
 pip-tools==6.4.0
     # via -r .\dev-requirements.in
 platformdirs==2.4.1
-    # via virtualenv
+    # via
+    #   black
+    #   virtualenv
 pluggy==1.0.0
     # via pytest
 pre-commit==2.16.0
@@ -58,8 +74,15 @@ toml==0.10.2
     # via
     #   pre-commit
     #   pytest
-tomli==2.0.0
-    # via pep517
+tomli==1.2.3
+    # via
+    #   black
+    #   mypy
+    #   pep517
+typing-extensions==4.0.1
+    # via
+    #   black
+    #   mypy
 virtualenv==20.13.0
     # via pre-commit
 wheel==0.37.1

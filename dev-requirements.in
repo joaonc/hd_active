@@ -1,4 +1,7 @@
 -r requirements.txt
+black
+isort
+mypy
 pip-tools
 pre-commit
 pytest
