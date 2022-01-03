@@ -1,44 +1,53 @@
-# Copyright 2022 Joao Coelho - MIT License
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
-# documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
-# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
-# persons to whom the Software is furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
-# Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-# WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-# OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 import sys
+from typing import Optional
 
-from PySide6 import QtWidgets, QtGui
+from PySide6 import QtGui, QtWidgets
+from utils import get_asset
 
 from hd_active import HdActive
-from utils import get_asset
 
 
 class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
-    def __init__(self, icon, parent=None, hd_active=None):
+    def __init__(self, icon, parent=None, hd_active: Optional[HdActive] = None):
         super().__init__(icon=icon, parent=parent)
-        self.is_started = True
         self.hd_active = hd_active or HdActive()
 
+        # Menu
         menu = QtWidgets.QMenu(parent)
-        change_state = menu.addAction('Stop' if self.is_started else 'Start')
+        change_state_action = menu.addAction('Stop' if self.hd_active.is_running else 'Start')
+        change_state_action.triggered.connect(self.change_state)
+        menu.addSeparator()
+        quit_action = menu.addAction('Exit')
+        quit_action.triggered.connect(QtWidgets.QApplication.instance().quit)
+        self.setContextMenu(menu)
+
+        # Other events
+        self.activated.connect(self.onTrayIconActivated)
 
     def onTrayIconActivated(self, reason):
-        pass
+        if reason == self.DoubleClick:
+            # TODO: Open Window with options
+            pass
+
+    def change_state(self):
+        if self.hd_active.is_running:
+            self.hd_active.stop()
+        else:
+            self.hd_active.start()
 
 
-def main(drive_paths=None, run=True, wait=1):
+def main(drive_paths=None, run=False, wait=1):
+    print('main entry')
+    # if not QtWidgets.QSystemTrayIcon.isSystemTrayAvailable():
+    #     raise Exception('System Tray not available.')
+
+    # print('main with System Tray available')
+
     hd_active = HdActive(drive_paths=drive_paths, run=run, wait=wait)
     app = QtWidgets.QApplication(sys.argv)
     widget = QtWidgets.QWidget()
     tray_icon = SystemTrayIcon(
+        # Icon from https://icon-icons.com/icon/drive-harddisk-usb/36212 (GPL v3)
         icon=QtGui.QIcon(str(get_asset('drive-harddisk-usb_36212_32px.png'))),
         parent=widget,
         hd_active=hd_active,
@@ -49,4 +58,4 @@ def main(drive_paths=None, run=True, wait=1):
 
 
 if __name__ == '__main__':
-    main(drive_paths=['e:\\_hd_active.txt'])
+    main(drive_paths=['e:\\'])

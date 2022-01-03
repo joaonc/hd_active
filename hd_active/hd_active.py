@@ -1,47 +1,54 @@
-# Copyright 2022 Joao Coelho - MIT License
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
-# documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
-# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
-# persons to whom the Software is furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
-# Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-# WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-# OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 import threading
 import time
+from os import PathLike
 from pathlib import Path
+from typing import Iterable, Optional, Set, Union
 
-FILE_NAME = '_HD_ACTIVE.TXT'
+FILE_NAME = '_hd_active.txt'
 
 
 class HdActive:
-    def __init__(self, drive_paths=None, run=False, wait=1):
-        self.drive_paths = drive_paths or []
+    def __init__(
+        self,
+        drive_paths=Optional[Iterable[PathLike]],
+        run: bool = False,
+        wait: Union[int, float] = 1,
+    ):
+        self._drive_paths: Set[Path] = set()
+        if drive_paths is not None:
+            self.add_hds(drive_paths)
         self._is_running = False
         self.wait = wait
         if run:
             self.start()
 
-    def write_hd(self) -> None:
-        for drive_path in self.drive_paths:
-            file_path = Path(drive_path)
-            if file_path.is_dir():
-                file_path /= FILE_NAME
-            if not file_path.parent.exists():
-                raise FileNotFoundError(file_path)
-            file_path.open('w').write(str(time.time()))
-            file_path.unlink()
+    @staticmethod
+    def _write_hd(drive_path: Path) -> None:
+        file_path = drive_path / FILE_NAME
+        file_path.open('w').write(str(time.time()))
+        file_path.unlink()
+
+    def write_hds(self) -> None:
+        for drive_path in self._drive_paths:
+            self._write_hd(drive_path)
 
     def _do_write_hd(self):
         while self.is_running:
-            self.write_hd()
+            self.write_hds()
             time.sleep(self.wait)
+
+    def add_hds(self, drive_paths: Iterable[PathLike]):
+        self._drive_paths.update(Path(drive_path) for drive_path in drive_paths)
+
+    def add_hd(self, drive_path: PathLike):
+        self.add_hds((drive_path,))
+
+    def remove_hd(self, drive_path: PathLike):
+        self._drive_paths.remove(Path(drive_path))
+
+    @property
+    def drive_paths(self):
+        return self._drive_paths
 
     @property
     def is_running(self):
