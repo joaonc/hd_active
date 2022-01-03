@@ -1,0 +1,19 @@
+site_name: HD Active
+nav:
+  - Notes: index.md
+
+theme:
+  name: material
+  favicon: img/favicon.ico
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoki.twemoji  # https://emojipedia.org/twitter/
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+repo_url: https://github.com/joaonc/hd_active
+copyright: Copyright &copy; 2022 Joao Coelho
