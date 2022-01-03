@@ -1,6 +1,7 @@
 site_name: HD Active
 nav:
   - Notes: index.md
+  - Development: development.md
 
 theme:
   name: material
@@ -12,7 +13,7 @@ markdown_extensions:
   - pymdownx.highlight
   - pymdownx.superfences
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoki.twemoji  # https://emojipedia.org/twitter/
+      emoji_index: !!python/name:materialx.emoji.twemoji  # https://emojipedia.org/twitter/
       emoji_generator: !!python/name:materialx.emoji.to_svg
 
 repo_url: https://github.com/joaonc/hd_active
