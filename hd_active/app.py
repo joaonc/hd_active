@@ -1,10 +1,22 @@
+import os
 import sys
+from enum import Enum
 from typing import Optional
 
 from PySide6 import QtGui, QtWidgets
-from utils import get_asset
+from utils import get_asset, is_truthy
 
 from hd_active import HdActive
+
+HD_ACTION_DEBUG = is_truthy(os.getenv('HD_ACTION_DEBUG', 'False'))
+"""
+If truthy, HDs are not accessed.
+"""
+
+
+class HdActionState(str, Enum):
+    Start = 'Start'
+    Stop = 'Stop'
 
 
 class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
@@ -14,7 +26,7 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 
         # Menu
         menu = QtWidgets.QMenu(parent)
-        change_state_action = menu.addAction('Stop' if self.hd_active.is_running else 'Start')
+        change_state_action = menu.addAction(self.get_change_state())
         change_state_action.triggered.connect(self.change_state)
         menu.addSeparator()
         quit_action = menu.addAction('Exit')
@@ -24,26 +36,37 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         # Other events
         self.activated.connect(self.onTrayIconActivated)
 
+    def get_change_state(self) -> HdActionState:
+        return HdActionState.Stop if self.hd_active.is_running else HdActionState.Start
+
     def onTrayIconActivated(self, reason):
         if reason == self.DoubleClick:
             # TODO: Open Window with options
             pass
 
     def change_state(self):
+        cur_menu_text = self.get_change_state()
         if self.hd_active.is_running:
             self.hd_active.stop()
         else:
             self.hd_active.start()
+        new_menu_text = self.get_change_state()
+
+        # Update menu text
+        change_state_action = next(action for action in self.contextMenu().children() if action.text() == cur_menu_text)
+        change_state_action.setText(new_menu_text)
 
 
 def main(drive_paths=None, run=False, wait=1):
-    print('main entry')
+    # Note: `...isSystemTrayAvailable()` is crashing at the moment. Assuming the system tray is available.
     # if not QtWidgets.QSystemTrayIcon.isSystemTrayAvailable():
     #     raise Exception('System Tray not available.')
 
-    # print('main with System Tray available')
-
     hd_active = HdActive(drive_paths=drive_paths, run=run, wait=wait)
+    if HD_ACTION_DEBUG:
+        # Disable actual writing to HD
+        hd_active.write_hds = lambda: None
+
     app = QtWidgets.QApplication(sys.argv)
     widget = QtWidgets.QWidget()
     tray_icon = SystemTrayIcon(
