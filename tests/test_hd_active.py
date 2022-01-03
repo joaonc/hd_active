@@ -2,6 +2,8 @@ import time
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
+import pytest
+
 from hd_active.hd_active import HdActive
 
 WAIT = 0.1
@@ -12,6 +14,7 @@ class HdActiveTest(HdActive):
     """
     Extend `HdActive` to change defaults for testing purposes.
     """
+
     def __init__(self, drive_paths=None, run=False, wait=WAIT):
         super().__init__(drive_paths, run, wait=wait)
 
@@ -20,7 +23,7 @@ class HdActiveTest(HdActive):
 @patch.object(Path, 'unlink', return_value=None)
 class TestHdActive:
     def test_instantiate_not_started(self, mock_unlink, mock_open):
-        hd_active = HdActiveTest(drive_paths=['foo.txt'], run=False)
+        hd_active = HdActiveTest(drive_paths=['zz'], run=False)
 
         # Verify didn't start
         time.sleep(WAIT_TEST)
@@ -30,11 +33,11 @@ class TestHdActive:
 
     def test_instantiate_default_not_started(self, mock_unlink, mock_open):
         """
-        `run` argument not specified and defaults to `False`.
+        ``run`` argument not specified and defaults to ``False``.
         """
         # Note that `HdActive` if used and not `HdActiveTest`
         # to make sure it's the default for `HdActive` that's tested.
-        hd_active = HdActive(drive_paths=['foo.txt'], wait=0.1)
+        hd_active = HdActive(drive_paths=['z'], wait=0.1)
 
         # Verify didn't start
         time.sleep(WAIT_TEST)
@@ -43,7 +46,7 @@ class TestHdActive:
         mock_unlink.assert_not_called()
 
     def test_instantiate_starts_single_path(self, mock_unlink, mock_open):
-        hd_active = HdActiveTest(drive_paths=['foo.txt'], run=True)
+        hd_active = HdActiveTest(drive_paths=['z'], run=True)
 
         # Verify started
         time.sleep(WAIT_TEST)
@@ -52,5 +55,19 @@ class TestHdActive:
         mock_open.assert_called()
         mock_unlink.assert_called()
 
-    def test_instantiate_starts_multiple_paths(self, mock_unlink, mock_open):
-        hd_active = HdActiveTest
+    @pytest.mark.parametrize(
+        'drive_paths',
+        [
+            ['a:\\', 'b:\\'],
+            (Path('a'), Path('b')),
+        ],
+    )
+    def test_instantiate_starts_multiple_paths(self, mock_unlink, mock_open, drive_paths):
+        hd_active = HdActiveTest(drive_paths=drive_paths, run=True)
+
+        time.sleep(WAIT_TEST)
+        assert hd_active.is_running is True
+        hd_active.stop()
+
+        expected_drive_paths = {Path(drive_path) for drive_path in drive_paths}
+        assert {drive_path.drive for drive_path in hd_active.drive_paths} == expected_drive_paths

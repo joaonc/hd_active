@@ -1,14 +1,22 @@
 import threading
 import time
+from os import PathLike
 from pathlib import Path
-from typing import Optional, Union
+from typing import Iterable, Optional, Set, Union
 
 FILE_NAME = '_hd_active.txt'
 
 
 class HdActive:
-    def __init__(self, drive_paths=Optional[list], run: bool = False, wait: Union[int, float] = 1):
-        self.drive_paths = drive_paths or []
+    def __init__(
+        self,
+        drive_paths=Optional[Iterable[PathLike]],
+        run: bool = False,
+        wait: Union[int, float] = 1,
+    ):
+        self._drive_paths: Set[Path] = set()
+        if drive_paths is not None:
+            self.add_hds(drive_paths)
         self._is_running = False
         self.wait = wait
         if run:
@@ -16,22 +24,31 @@ class HdActive:
 
     @staticmethod
     def _write_hd(drive_path: Path) -> None:
-        file_path = Path(drive_path)
-        if file_path.is_dir():
-            file_path /= FILE_NAME
-        if not file_path.parent.exists():
-            raise FileNotFoundError(file_path)
+        file_path = drive_path / FILE_NAME
         file_path.open('w').write(str(time.time()))
         file_path.unlink()
 
     def write_hds(self) -> None:
-        for drive_path in self.drive_paths:
+        for drive_path in self._drive_paths:
             self._write_hd(drive_path)
 
     def _do_write_hd(self):
         while self.is_running:
             self.write_hds()
             time.sleep(self.wait)
+
+    def add_hds(self, drive_paths: Iterable[PathLike]):
+        self._drive_paths.update(Path(drive_path) for drive_path in drive_paths)
+
+    def add_hd(self, drive_path: PathLike):
+        self.add_hds((drive_path,))
+
+    def remove_hd(self, drive_path: PathLike):
+        self._drive_paths.remove(Path(drive_path))
+
+    @property
+    def drive_paths(self):
+        return self._drive_paths
 
     @property
     def is_running(self):
