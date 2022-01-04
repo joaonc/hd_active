@@ -26,9 +26,19 @@ You can then edit the `.md` files under the `docs` directory and, if more need t
 
 ### Update in GitHub
 
-!!! TODO
+Simply run the command below to push the documentation to GitHub pages.
 
-    Add content
+```
+mkdocs gh-deploy
+```
 
-    Follow instructions here:
-    [https://www.mkdocs.org/user-guide/deploying-your-docs/#github-pages](https://www.mkdocs.org/user-guide/deploying-your-docs/#github-pages)
+More instructions [here](https://www.mkdocs.org/user-guide/deploying-your-docs/#github-pages).
+
+The first time `gh-deploy` is used, authorization needs to be granted to publish to GitHub Pages. A _GitHubCredentials_
+widget appears and follow the prompts.
+
+Documentation available here: [https://joaonc.github.io/hd_active](https://joaonc.github.io/hd_active)
+
+When running this command, it's this website that needs to be updated (unless working in a forked project). Until a
+process is established for other people to update this GitHub Page location, please contact me and I'll push the
+documentation changes as needed.
