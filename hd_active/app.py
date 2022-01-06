@@ -1,3 +1,4 @@
+import configparser
 import os
 import sys
 from enum import Enum
@@ -58,9 +59,6 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 
 
 def main(drive_paths=None, run=False, wait=1):
-    # Note: `...isSystemTrayAvailable()` is crashing at the moment. Assuming the system tray is available.
-    # if not QtWidgets.QSystemTrayIcon.isSystemTrayAvailable():
-    #     raise Exception('System Tray not available.')
 
     hd_active = HdActive(drive_paths=drive_paths, run=run, wait=wait)
     if HD_ACTION_DEBUG:
@@ -81,4 +79,11 @@ def main(drive_paths=None, run=False, wait=1):
 
 
 if __name__ == '__main__':
-    main(drive_paths=['e:\\'])
+    config = configparser.ConfigParser(converters={'list': lambda x: [i.strip(' "\'') for i in x.split(',')]})
+    config.read('hd_active.ini')
+
+    _run = config['HD Active'].getboolean('run_on_start', False)
+    _wait = config['HD Active'].getfloat('wait_between_access', 60)
+    _drive_paths = config['HD Active'].getlist('drives', [])
+
+    main(drive_paths=_drive_paths, run=_run, wait=_wait)
