@@ -90,6 +90,10 @@ pyparsing==3.0.6
 pyside6==6.2.2.1
     # via -r .\requirements.txt
 pytest==6.2.5
+    # via
+    #   -r .\dev-requirements.in
+    #   pytest-check
+pytest-check==1.0.4
     # via -r .\dev-requirements.in
 pyyaml==6.0
     # via
