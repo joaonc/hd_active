@@ -1,7 +1,10 @@
 -r requirements.txt
+bandit
 black
+flake8
 isort
 mypy
 pip-tools
 pre-commit
 pytest
+safety

@@ -8,28 +8,48 @@ atomicwrites==1.4.0
     # via pytest
 attrs==21.4.0
     # via pytest
+bandit==1.7.1
+    # via -r .\dev-requirements.in
 black==21.12b0
     # via -r .\dev-requirements.in
+certifi==2021.10.8
+    # via requests
 cfgv==3.3.1
     # via pre-commit
+charset-normalizer==2.0.10
+    # via requests
 click==8.0.3
     # via
     #   black
     #   pip-tools
+    #   safety
 colorama==0.4.4
     # via
+    #   bandit
     #   click
     #   pytest
 distlib==0.3.4
     # via virtualenv
+dparse==0.5.1
+    # via safety
 filelock==3.4.2
     # via virtualenv
+flake8==4.0.1
+    # via -r .\dev-requirements.in
+gitdb==4.0.9
+    # via gitpython
+gitpython==3.1.24
+    # via bandit
 identify==2.4.1
     # via pre-commit
+idna==3.3
+    # via requests
 iniconfig==1.1.1
     # via pytest
 isort==5.10.1
     # via -r .\dev-requirements.in
+mccabe==0.6.1
+    # via flake8
 mypy==0.930
     # via -r .\dev-requirements.in
 mypy-extensions==0.4.3
@@ -39,9 +59,14 @@ mypy-extensions==0.4.3
 nodeenv==1.6.0
     # via pre-commit
 packaging==21.3
-    # via pytest
+    # via
+    #   dparse
+    #   pytest
+    #   safety
 pathspec==0.9.0
     # via black
+pbr==5.8.0
+    # via stevedore
 pep517==0.12.0
     # via pip-tools
 pip-tools==6.4.0
@@ -56,6 +81,10 @@ pre-commit==2.16.0
     # via -r .\dev-requirements.in
 py==1.11.0
     # via pytest
+pycodestyle==2.8.0
+    # via flake8
+pyflakes==2.4.0
+    # via flake8
 pyparsing==3.0.6
     # via packaging
 pyside6==6.2.2.1
@@ -63,15 +92,27 @@ pyside6==6.2.2.1
 pytest==6.2.5
     # via -r .\dev-requirements.in
 pyyaml==6.0
-    # via pre-commit
+    # via
+    #   bandit
+    #   dparse
+    #   pre-commit
+requests==2.27.1
+    # via safety
+safety==1.10.3
+    # via -r .\dev-requirements.in
 shiboken6==6.2.2.1
     # via
     #   -r .\requirements.txt
     #   pyside6
 six==1.16.0
     # via virtualenv
+smmap==5.0.0
+    # via gitdb
+stevedore==3.5.0
+    # via bandit
 toml==0.10.2
     # via
+    #   dparse
     #   pre-commit
     #   pytest
 tomli==1.2.3
@@ -83,6 +124,8 @@ typing-extensions==4.0.1
     # via
     #   black
     #   mypy
+urllib3==1.26.7
+    # via requests
 virtualenv==20.13.0
     # via pre-commit
 wheel==0.37.1
