@@ -3,7 +3,7 @@ on:
   - pull_request
 
 jobs:
-  isort:
+  pytest:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,4 +17,6 @@ jobs:
           python -m pip install -r requirements.txt -r dev-requirements.txt
       - name: Run pytest
         run: |
-          python -m pytest tests
+          # Test folder(s) configured in `pyproject.toml`
+          # Skip Windows OS tests
+          python -m pytest . -m "not windows"
