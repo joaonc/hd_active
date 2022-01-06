@@ -5,8 +5,8 @@ nav:
 
 theme:
   name: material
-  logo: img/logo.png
-  favicon: img/favicon.ico
+  logo: images/logo.png
+  favicon: images/favicon.ico
   palette:
     primary: blue grey
     accent: indigo
