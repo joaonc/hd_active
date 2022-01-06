@@ -8,6 +8,8 @@ atomicwrites==1.4.0
     # via pytest
 attrs==21.4.0
     # via pytest
+bandit==1.7.1
+    # via -r .\dev-requirements.in
 black==21.12b0
     # via -r .\dev-requirements.in
 cfgv==3.3.1
@@ -18,6 +20,7 @@ click==8.0.3
     #   pip-tools
 colorama==0.4.4
     # via
+    #   bandit
     #   click
     #   pytest
 distlib==0.3.4
@@ -26,6 +29,10 @@ filelock==3.4.2
     # via virtualenv
 flake8==4.0.1
     # via -r .\dev-requirements.in
+gitdb==4.0.9
+    # via gitpython
+gitpython==3.1.24
+    # via bandit
 identify==2.4.1
     # via pre-commit
 iniconfig==1.1.1
@@ -46,6 +53,8 @@ packaging==21.3
     # via pytest
 pathspec==0.9.0
     # via black
+pbr==5.8.0
+    # via stevedore
 pep517==0.12.0
     # via pip-tools
 pip-tools==6.4.0
@@ -71,13 +80,19 @@ pyside6==6.2.2.1
 pytest==6.2.5
     # via -r .\dev-requirements.in
 pyyaml==6.0
-    # via pre-commit
+    # via
+    #   bandit
+    #   pre-commit
 shiboken6==6.2.2.1
     # via
     #   -r .\requirements.txt
     #   pyside6
 six==1.16.0
     # via virtualenv
+smmap==5.0.0
+    # via gitdb
+stevedore==3.5.0
+    # via bandit
 toml==0.10.2
     # via
     #   pre-commit
