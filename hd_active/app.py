@@ -1,10 +1,11 @@
-import configparser
 import os
 import sys
 from enum import Enum
 from typing import Optional
 
 from PySide6 import QtGui, QtWidgets
+
+from config import HdActiveConfig
 from utils import get_asset, is_truthy
 
 from hd_active import HdActive
@@ -58,9 +59,9 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         change_state_action.setText(new_menu_text)
 
 
-def main(drive_paths=None, run=False, wait=1):
-
-    hd_active = HdActive(drive_paths=drive_paths, run=run, wait=wait)
+def main():
+    config = HdActiveConfig('hd_active.ini')
+    hd_active = HdActive(drive_paths=config.drive_paths, run=config.run, wait=config.wait)
     if HD_ACTION_DEBUG:
         # Disable actual writing to HD
         hd_active.write_hds = lambda: None
@@ -79,11 +80,4 @@ def main(drive_paths=None, run=False, wait=1):
 
 
 if __name__ == '__main__':
-    config = configparser.ConfigParser(converters={'list': lambda x: [i.strip(' "\'') for i in x.split(',')]})
-    config.read('hd_active.ini')
-
-    _run = config['HD Active'].getboolean('run_on_start', False)
-    _wait = config['HD Active'].getfloat('wait_between_access', 60)
-    _drive_paths = config['HD Active'].getlist('drives', [])
-
-    main(drive_paths=_drive_paths, run=_run, wait=_wait)
+    main()
