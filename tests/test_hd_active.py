@@ -1,5 +1,7 @@
 import time
+from os import PathLike
 from pathlib import Path
+from typing import List
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -58,16 +60,16 @@ class TestHdActive:
     @pytest.mark.parametrize(
         'drive_paths',
         [
-            ['a:\\', 'b:\\'],
+            pytest.param(['a:\\', 'b:\\'], marks=pytest.mark.windows),
             (Path('a'), Path('b')),
         ],
     )
-    def test_instantiate_starts_multiple_paths(self, mock_unlink, mock_open, drive_paths):
+    def test_instantiate_starts_multiple_paths(self, mock_unlink, mock_open, drive_paths: List[PathLike]):
         hd_active = HdActiveTest(drive_paths=drive_paths, run=True)
 
         time.sleep(WAIT_TEST)
         assert hd_active.is_running is True
         hd_active.stop()
 
-        expected_drive_paths = {Path(drive_path) for drive_path in drive_paths}
+        expected_drive_paths = {Path(drive_path).drive for drive_path in drive_paths}
         assert {drive_path.drive for drive_path in hd_active.drive_paths} == expected_drive_paths

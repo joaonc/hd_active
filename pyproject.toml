@@ -8,6 +8,12 @@ skip-string-normalization = true
 [tool.isort]
 profile = 'black'
 
+[tool.pytest.ini_options]
+# Markers:
+#   - windows: Test case valid on Windows operating system only.
+markers = ['windows']
+testpaths = ['tests']
+
 [tool.mypy]
 python_version = '3.10'
 warn_return_any = true
