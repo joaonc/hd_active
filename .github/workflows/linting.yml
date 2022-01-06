@@ -1,9 +1,9 @@
-name: Run isort
+name: linting
 on:
   - push
 
 jobs:
-  build:
+  isort:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -11,5 +11,3 @@ jobs:
         with:
           python-version: "3.10"
       - uses: isort/isort-action@master
-        with:
-            requirementsFiles: "requirements.txt requirements-test.txt"
