@@ -3,7 +3,7 @@ import sys
 from enum import Enum
 from typing import Optional
 
-from PySide6 import QtGui, QtWidgets
+from PySide6 import QtWidgets, QtGui
 from utils import get_asset, is_truthy
 
 from hd_active import HdActive
