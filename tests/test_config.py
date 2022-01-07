@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 import pytest
 import pytest_check as check
+
 from config import HdActiveConfig
 
 
