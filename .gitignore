@@ -1,3 +1,6 @@
+# HD Active project specific
+hd_active/hd_active.ini
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

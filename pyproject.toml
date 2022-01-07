@@ -7,6 +7,8 @@ skip-string-normalization = true
 
 [tool.isort]
 profile = 'black'
+known_first_party = 'config,utils'
+sections = 'FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER'
 
 [tool.pytest.ini_options]
 # Markers:

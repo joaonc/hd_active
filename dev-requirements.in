@@ -7,4 +7,5 @@ mypy
 pip-tools
 pre-commit
 pytest
+pytest-check
 safety

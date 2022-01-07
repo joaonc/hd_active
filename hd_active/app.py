@@ -4,9 +4,10 @@ from enum import Enum
 from typing import Optional
 
 from PySide6 import QtGui, QtWidgets
-from utils import get_asset, is_truthy
 
+from config import HdActiveConfig
 from hd_active import HdActive
+from utils import get_asset, is_truthy
 
 HD_ACTION_DEBUG = is_truthy(os.getenv('HD_ACTION_DEBUG', 'False'))
 """
@@ -57,12 +58,9 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         change_state_action.setText(new_menu_text)
 
 
-def main(drive_paths=None, run=False, wait=1):
-    # Note: `...isSystemTrayAvailable()` is crashing at the moment. Assuming the system tray is available.
-    # if not QtWidgets.QSystemTrayIcon.isSystemTrayAvailable():
-    #     raise Exception('System Tray not available.')
-
-    hd_active = HdActive(drive_paths=drive_paths, run=run, wait=wait)
+def main():
+    config = HdActiveConfig('hd_active.ini')
+    hd_active = HdActive(drive_paths=config.drive_paths, run=config.run, wait=config.wait)
     if HD_ACTION_DEBUG:
         # Disable actual writing to HD
         hd_active.write_hds = lambda: None
@@ -81,4 +79,4 @@ def main(drive_paths=None, run=False, wait=1):
 
 
 if __name__ == '__main__':
-    main(drive_paths=['e:\\'])
+    main()
