@@ -3,9 +3,8 @@ import sys
 from enum import Enum
 from typing import Optional
 
-from PySide6 import QtGui, QtWidgets
-
 from config import HdActiveConfig
+from PySide6 import QtGui, QtWidgets
 from utils import get_asset, is_truthy
 
 from hd_active import HdActive
