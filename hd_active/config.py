@@ -22,16 +22,16 @@ class HdActiveConfig:
         self.config = configparser.ConfigParser(converters={'list': lambda x: [i.strip(' "\'') for i in x.split(',')]})
         self.read()
 
-    def _read_file(self):
-        self.config.read(self.file_name)
-
     def read(self):
-        self._read_file()
-        section = self.config[self.SECTION_NAME]
-
-        self.run = section.getboolean(self.OPTION_RUN, self.run)
-        self.wait = section.getfloat(self.OPTION_WAIT, self.wait)
-        self.drive_paths = section.getlist(self.OPTION_DRIVE_PATHS, self.drive_paths)
+        self.config.read(self.file_name)
+        try:
+            section = self.config[self.SECTION_NAME]
+            self.run = section.getboolean(self.OPTION_RUN, self.run)
+            self.wait = section.getfloat(self.OPTION_WAIT, self.wait)
+            self.drive_paths = section.getlist(self.OPTION_DRIVE_PATHS, self.drive_paths)
+        except KeyError:
+            # Section didn't exist, vars will continue with previous values.
+            pass
 
     def write(self):
         section = self.config[self.SECTION_NAME]

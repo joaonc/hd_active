@@ -16,7 +16,7 @@ def config_file(request, tmp_path) -> str:
     return str(file)
 
 
-@patch('config.HdActiveConfig.read')
+@patch('config.configparser.ConfigParser.read')
 def test_defaults(read_mock):
     """
     Skip reading file (so defaults are not overwritten) and verify defaults.
