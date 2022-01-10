@@ -69,7 +69,7 @@ def main():
     widget = QtWidgets.QWidget()
     tray_icon = SystemTrayIcon(
         # Icon from https://icon-icons.com/icon/drive-harddisk-usb/36212 (GPL v3)
-        icon=QtGui.QIcon(str(get_asset('drive-harddisk-usb_36212_32px.png'))),
+        icon=QtGui.QIcon(str(get_asset('images', 'drive-harddisk-usb_36212_32px.png'))),
         parent=widget,
         hd_active=hd_active,
     )
