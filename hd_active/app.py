@@ -7,6 +7,7 @@ from PySide6 import QtGui, QtWidgets
 
 from config import HdActiveConfig
 from hd_active import HdActive
+from ui.settings_ui import Ui_Dialog
 from utils import get_asset, is_truthy
 
 HD_ACTION_DEBUG = is_truthy(os.getenv('HD_ACTION_DEBUG', 'False'))
@@ -42,8 +43,8 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 
     def onTrayIconActivated(self, reason):
         if reason == self.DoubleClick:
-            # TODO: Open Window with options
-            pass
+            settings_window = Ui_Dialog()
+            settings_window.setupUi(self)
 
     def change_state(self):
         cur_menu_text = self.get_change_state()
