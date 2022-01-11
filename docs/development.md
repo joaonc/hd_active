@@ -14,6 +14,10 @@ All the required tools are available by installing `pyside6`:
 
 * `Qt Designer`: `pyside6-designer`
 * `.ui > .py` Converter: `pyside6-uic`
+  At the project root:
+  ```
+  pyside6-uic assets/ui/settings.ui > hd_active/ui/settings_ui.py
+  ```
 
 !!! Note
 
