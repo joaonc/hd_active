@@ -7,8 +7,8 @@ from unittest.mock import MagicMock, patch
 import pytest
 import pytest_check as check
 
-from app.hd_active import HdActive
 from app.hd_action_state import HdActionState
+from app.hd_active import HdActive
 
 WAIT = 0.1
 WAIT_TEST = 2 * WAIT

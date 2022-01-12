@@ -5,7 +5,6 @@ from app.ui.base.settings_ui import Ui_Dialog
 
 
 class SettingsDialog(QtWidgets.QDialog):
-
     def __init__(self, hd_active: HdActive, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
         self.hd_active = hd_active

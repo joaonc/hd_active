@@ -3,11 +3,10 @@ import sys
 from typing import Optional
 
 from PySide6 import QtGui, QtWidgets
-from PySide6.QtWidgets import QDialog
 
 from app.config import HdActiveConfig
 from app.hd_active import HdActive
-from app.ui.settings_dialog import  SettingsDialog
+from app.ui.settings_dialog import SettingsDialog
 from app.utils import get_asset, is_truthy
 
 HD_ACTION_DEBUG = is_truthy(os.getenv('HD_ACTION_DEBUG', 'False'))
