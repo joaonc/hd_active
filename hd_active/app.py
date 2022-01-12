@@ -1,24 +1,21 @@
 import os
 import sys
-from enum import Enum
 from typing import Optional
 
 from PySide6 import QtGui, QtWidgets
+from PySide6.QtWidgets import QDialog
 
 from config import HdActiveConfig
-from hd_active import HdActive
-from ui.settings_ui import Ui_Dialog
+from hd_active.hd_active import HdActive
+from hd_active.hd_active_state import HdActionState
+from ui.base.settings_ui import Ui_Dialog
 from utils import get_asset, is_truthy
 
 HD_ACTION_DEBUG = is_truthy(os.getenv('HD_ACTION_DEBUG', 'False'))
 """
 If truthy, HDs are not accessed.
+Used for testing purposes.
 """
-
-
-class HdActionState(str, Enum):
-    Start = 'Start'
-    Stop = 'Stop'
 
 
 class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
@@ -30,6 +27,8 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         menu = QtWidgets.QMenu(parent)
         change_state_action = menu.addAction(self.get_change_state())
         change_state_action.triggered.connect(self.change_state)
+        show_settings_action = menu.addAction('Settings')
+        show_settings_action.triggered.connect(self._show_settings_dialog)
         menu.addSeparator()
         quit_action = menu.addAction('Exit')
         quit_action.triggered.connect(QtWidgets.QApplication.instance().quit)
@@ -41,10 +40,15 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
     def get_change_state(self) -> HdActionState:
         return HdActionState.Stop if self.hd_active.is_running else HdActionState.Start
 
+    def _show_settings_dialog(self):
+        dlg = QDialog(self.parent())
+        settings_window = Ui_Dialog()
+        settings_window.setupUi(dlg)
+        dlg.exec()
+
     def onTrayIconActivated(self, reason):
         if reason == self.DoubleClick:
-            settings_window = Ui_Dialog()
-            settings_window.setupUi(self)
+            self._show_settings_dialog()
 
     def change_state(self):
         cur_menu_text = self.get_change_state()

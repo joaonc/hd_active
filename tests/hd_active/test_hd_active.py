@@ -6,7 +6,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from hd_active.hd_active import HdActive
+from hd_active.hd_active.hd_active import HdActive
 
 WAIT = 0.1
 WAIT_TEST = 2 * WAIT

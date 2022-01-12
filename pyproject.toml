@@ -1,13 +1,13 @@
 [tool.bandit]
 
 [tool.black]
-extend-exclude = 'hd_active/ui'
+extend-exclude = 'hd_active/ui/base'
 line-length = 120
 target-version = ['py310']
 skip-string-normalization = true
 
 [tool.isort]
-extend_skip = ['hd_active/ui']
+extend_skip = ['hd_active/ui/base']
 known_first_party = 'config,ui,utils'
 profile = 'black'
 sections = 'FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER'
