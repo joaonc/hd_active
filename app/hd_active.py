@@ -4,7 +4,7 @@ from os import PathLike
 from pathlib import Path
 from typing import Iterable, Optional, Set, Union
 
-from hd_active.hd_active.hd_action_state import HdActionState
+from app.hd_action_state import HdActionState
 
 FILE_NAME = '_hd_active.txt'
 

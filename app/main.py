@@ -5,11 +5,10 @@ from typing import Optional
 from PySide6 import QtGui, QtWidgets
 from PySide6.QtWidgets import QDialog
 
-from config import HdActiveConfig
-from hd_active.hd_active import HdActive
-from hd_active.hd_active_state import HdActionState
-from ui.base.settings_ui import Ui_Dialog
-from utils import get_asset, is_truthy
+from app.config import HdActiveConfig
+from app.hd_active import HdActive
+from app.ui.settings_dialog import  SettingsDialog
+from app.utils import get_asset, is_truthy
 
 HD_ACTION_DEBUG = is_truthy(os.getenv('HD_ACTION_DEBUG', 'False'))
 """
@@ -25,7 +24,7 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 
         # Menu
         menu = QtWidgets.QMenu(parent)
-        change_state_action = menu.addAction(self.get_change_state())
+        change_state_action = menu.addAction(self.hd_active.get_change_state())
         change_state_action.triggered.connect(self.change_state)
         show_settings_action = menu.addAction('Settings')
         show_settings_action.triggered.connect(self._show_settings_dialog)
@@ -37,30 +36,21 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         # Other events
         self.activated.connect(self.onTrayIconActivated)
 
-    def get_change_state(self) -> HdActionState:
-        return HdActionState.Stop if self.hd_active.is_running else HdActionState.Start
-
     def _show_settings_dialog(self):
-        dlg = QDialog(self.parent())
-        settings_window = Ui_Dialog()
-        settings_window.setupUi(dlg)
-        dlg.exec()
+        settings_dialog = SettingsDialog(self.hd_active)
+        settings_dialog.show()
 
     def onTrayIconActivated(self, reason):
         if reason == self.DoubleClick:
             self._show_settings_dialog()
 
     def change_state(self):
-        cur_menu_text = self.get_change_state()
-        if self.hd_active.is_running:
-            self.hd_active.stop()
-        else:
-            self.hd_active.start()
-        new_menu_text = self.get_change_state()
+        cur_menu_text = self.hd_active.get_change_state()
+        next_state = self.hd_active.change_state()
 
         # Update menu text
         change_state_action = next(action for action in self.contextMenu().children() if action.text() == cur_menu_text)
-        change_state_action.setText(new_menu_text)
+        change_state_action.setText(next_state)
 
 
 def main():
