@@ -30,11 +30,7 @@ def ui(c, file=None):
         c.run(f'pyside6-uic {ui_file_path} -o {py_file_path}')
 
 
-@task(
-    help={
-        'file': f'`.ui` file to be edited. Available files: {", ".join(p.stem for p in UI_FILES)}'
-    }
-)
+@task(help={'file': f'`.ui` file to be edited. Available files: {", ".join(p.stem for p in UI_FILES)}'})
 def ui_edit(c, file):
     """
     Edit a file in QT Designer.
@@ -43,6 +39,16 @@ def ui_edit(c, file):
     file_path = next(p for p in UI_FILES if p.stem == file_stem)
 
     c.run(f'pyside6-designer {file_path}', asynchronous=True)
+
+
+@task
+def lint(c):
+    """
+    Run linters (isort, black).
+    Config for each of the tools is in `pyproject.toml`.
+    """
+    c.run('isort .', echo=True)
+    c.run('black .', echo=True)
 
 
 @task
