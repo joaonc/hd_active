@@ -4,7 +4,7 @@ from unittest.mock import patch
 import pytest
 import pytest_check as check
 
-from app.config import HdActiveConfig
+from app.hd_active_config import HdActiveConfig
 
 
 @pytest.fixture

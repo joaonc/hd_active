@@ -4,15 +4,14 @@ from typing import Optional
 
 from PySide6 import QtGui, QtWidgets
 
-from app.config import HdActiveConfig
 from app.hd_active import HdActive
+from app.hd_active_config import HdActiveConfig
 from app.ui.settings_dialog import SettingsDialog
 from app.utils import get_asset, is_truthy
 
-HD_ACTION_DEBUG = is_truthy(os.getenv('HD_ACTION_DEBUG', 'False'))
+HD_ACTION_DEBUG = is_truthy(os.getenv('HD_ACTION_DEBUG', 'True'))
 """
-If truthy, HDs are not accessed.
-Used for testing purposes.
+If truthy, HDs are not accessed. Used for testing purposes.
 """
 
 
