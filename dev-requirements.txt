@@ -46,6 +46,8 @@ idna==3.3
     # via requests
 iniconfig==1.1.1
     # via pytest
+invoke==1.6.0
+    # via -r .\dev-requirements.in
 isort==5.10.1
     # via -r .\dev-requirements.in
 mccabe==0.6.1
