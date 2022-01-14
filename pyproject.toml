@@ -1,13 +1,13 @@
 [tool.bandit]
 
 [tool.black]
-extend-exclude = 'app/ui/base'
+extend-exclude = 'app/ui/forms'
 line-length = 120
 target-version = ['py310']
 skip-string-normalization = true
 
 [tool.isort]
-extend_skip = ['app/ui/base']
+extend_skip = ['app/ui/forms']
 known_first_party = 'app'
 profile = 'black'
 sections = 'FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER'

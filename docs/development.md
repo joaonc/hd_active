@@ -13,10 +13,10 @@ then transformed into a `.py` file.
 All the required tools are available by installing `pyside6`:
 
 * `Qt Designer`: `pyside6-designer`
-* `.ui > .py` Converter: `pyside6-uic`
-  At the project root:
+* `.ui > .py` Converter: `pyside6-uic`  
+  At the project root (use full paths if relative doesn't work):
   ```
-  pyside6-uic assets/ui/settings.ui > hd_active/ui/settings_ui.py
+  pyside6-uic assets/ui/settings.ui -o hd_active/ui/forms/settings_ui.py
   ```
 
 !!! Note
