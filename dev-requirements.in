@@ -2,6 +2,7 @@
 bandit
 black
 flake8
+invoke
 isort
 mypy
 pip-tools
