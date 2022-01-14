@@ -36,8 +36,8 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         self.activated.connect(self.onTrayIconActivated)
 
     def _show_settings_dialog(self):
-        settings_dialog = SettingsDialog(self.hd_active)
-        settings_dialog.show()
+        settings_dialog = SettingsDialog(hd_active=self.hd_active, parent=self.parent())
+        settings_dialog.exec()
 
     def onTrayIconActivated(self, reason):
         if reason == self.DoubleClick:
