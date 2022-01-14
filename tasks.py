@@ -30,6 +30,21 @@ def ui(c, file=None):
         c.run(f'pyside6-uic {ui_file_path} -o {py_file_path}')
 
 
+@task(
+    help={
+        'file': f'`.ui` file to be edited. Available files: {", ".join(p.stem for p in UI_FILES)}'
+    }
+)
+def ui_edit(c, file):
+    """
+    Edit a file in QT Designer.
+    """
+    file_stem = file[:-3] if file.lower().endswith('.ui') else file
+    file_path = next(p for p in UI_FILES if p.stem == file_stem)
+
+    c.run(f'pyside6-designer {file_path}', asynchronous=True)
+
+
 @task
 def docs_serve(c):
     """
