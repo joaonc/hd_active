@@ -5,8 +5,10 @@ from typing import List
 from unittest.mock import MagicMock, patch
 
 import pytest
+import pytest_check as check
 
-from hd_active.hd_active import HdActive
+from app.hd_action_state import HdActionState
+from app.hd_active import HdActive
 
 WAIT = 0.1
 WAIT_TEST = 2 * WAIT
@@ -25,7 +27,7 @@ class HdActiveTest(HdActive):
 @patch.object(Path, 'unlink', return_value=None)
 class TestHdActive:
     def test_instantiate_not_started(self, mock_unlink, mock_open):
-        hd_active = HdActiveTest(drive_paths=['zz'], run=False)
+        hd_active = HdActiveTest(drive_paths=['z'], run=False)
 
         # Verify didn't start
         time.sleep(WAIT_TEST)
@@ -73,3 +75,18 @@ class TestHdActive:
 
         expected_drive_paths = {Path(drive_path).drive for drive_path in drive_paths}
         assert {drive_path.drive for drive_path in hd_active.drive_paths} == expected_drive_paths
+
+    @pytest.mark.parametrize('run, expected_change_state', [(True, HdActionState.Stop), (False, HdActionState.Start)])
+    def test_get_change_state(self, mock_unlink, mock_open, run, expected_change_state):
+        hd_active = HdActiveTest(drive_paths=['z'], run=run)
+        assert hd_active.get_change_state() is expected_change_state
+
+    @pytest.mark.parametrize('run, expected_change_state', [(True, HdActionState.Start), (False, HdActionState.Stop)])
+    def test_change_state(self, mock_unlink, mock_open, run, expected_change_state):
+        hd_active = HdActiveTest(drive_paths=['z'], run=run)
+        assert hd_active.is_running is run
+
+        actual_change_state = hd_active.change_state()
+
+        check.equal(actual_change_state, expected_change_state)
+        check.equal(hd_active.is_running, not run)

@@ -6,6 +6,7 @@ class HdActiveConfig:
     """
     Config options for HD Active in a INI file format.
     """
+
     SECTION_NAME = 'HD Active'
     OPTION_RUN = 'run_on_start'
     OPTION_WAIT = 'wait_between_access'

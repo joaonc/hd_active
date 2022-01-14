@@ -1,23 +1,19 @@
 import os
 import sys
-from enum import Enum
 from typing import Optional
 
 from PySide6 import QtGui, QtWidgets
 
-from config import HdActiveConfig
-from hd_active import HdActive
-from utils import get_asset, is_truthy
+from app.config import HdActiveConfig
+from app.hd_active import HdActive
+from app.ui.settings_dialog import SettingsDialog
+from app.utils import get_asset, is_truthy
 
 HD_ACTION_DEBUG = is_truthy(os.getenv('HD_ACTION_DEBUG', 'False'))
 """
 If truthy, HDs are not accessed.
+Used for testing purposes.
 """
-
-
-class HdActionState(str, Enum):
-    Start = 'Start'
-    Stop = 'Stop'
 
 
 class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
@@ -27,8 +23,10 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 
         # Menu
         menu = QtWidgets.QMenu(parent)
-        change_state_action = menu.addAction(self.get_change_state())
+        change_state_action = menu.addAction(self.hd_active.get_change_state())
         change_state_action.triggered.connect(self.change_state)
+        show_settings_action = menu.addAction('Settings')
+        show_settings_action.triggered.connect(self._show_settings_dialog)
         menu.addSeparator()
         quit_action = menu.addAction('Exit')
         quit_action.triggered.connect(QtWidgets.QApplication.instance().quit)
@@ -37,25 +35,21 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         # Other events
         self.activated.connect(self.onTrayIconActivated)
 
-    def get_change_state(self) -> HdActionState:
-        return HdActionState.Stop if self.hd_active.is_running else HdActionState.Start
+    def _show_settings_dialog(self):
+        settings_dialog = SettingsDialog(hd_active=self.hd_active, parent=self.parent())
+        settings_dialog.exec()
 
     def onTrayIconActivated(self, reason):
         if reason == self.DoubleClick:
-            # TODO: Open Window with options
-            pass
+            self._show_settings_dialog()
 
     def change_state(self):
-        cur_menu_text = self.get_change_state()
-        if self.hd_active.is_running:
-            self.hd_active.stop()
-        else:
-            self.hd_active.start()
-        new_menu_text = self.get_change_state()
+        cur_menu_text = self.hd_active.get_change_state()
+        next_state = self.hd_active.change_state()
 
         # Update menu text
         change_state_action = next(action for action in self.contextMenu().children() if action.text() == cur_menu_text)
-        change_state_action.setText(new_menu_text)
+        change_state_action.setText(next_state)
 
 
 def main():
@@ -69,7 +63,7 @@ def main():
     widget = QtWidgets.QWidget()
     tray_icon = SystemTrayIcon(
         # Icon from https://icon-icons.com/icon/drive-harddisk-usb/36212 (GPL v3)
-        icon=QtGui.QIcon(str(get_asset('drive-harddisk-usb_36212_32px.png'))),
+        icon=QtGui.QIcon(str(get_asset('images', 'drive-harddisk-usb_36212_32px.png'))),
         parent=widget,
         hd_active=hd_active,
     )

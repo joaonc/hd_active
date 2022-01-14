@@ -19,6 +19,7 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji  # https://emojipedia.org/twitter/
       emoji_generator: !!python/name:materialx.emoji.to_svg
+  - tables
 
 repo_url: https://github.com/joaonc/hd_active
 copyright: Copyright &copy; 2022 Joao Coelho

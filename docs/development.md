@@ -4,6 +4,41 @@
 
     Add content
 
+## UI
+This project uses [Qt 6](https://www.qt.io) for its UI components.
+
+`Qt Designer` is used to create the UI, which outputs a `.ui` file (XML content that describes the UI). This file is
+then transformed into a `.py` file.
+
+All the required tools are available by installing `pyside6`:
+
+* `Qt Designer`: `pyside6-designer`
+* `.ui > .py` Converter: `pyside6-uic`  
+  At the project root (use full paths if relative doesn't work):
+  ```
+  pyside6-uic assets/ui/settings.ui -o hd_active/ui/forms/settings_ui.py
+  ```
+
+!!! Note
+
+    Qt is not necessarily required, something like Tkinter could have been used (more open and included in Python), and
+    the latest version of Qt (6) isn't necessary, something more established like Qt 5 could have been used, but I
+    wanted to dip my toes into the Qt world and figured using the latest version would give me more lasting knowledge.
+
+## Test
+[pytest](https://pytest.org) is used for testing and main features used are fixtures, parameters and markers. When
+working on test cases, make sure you're familiar with how these work.
+
+### Markers
+Markers are used to distinguish tests with `pytest.mark.<marker_name>`.
+
+List of markers used, defined in `pyproject.toml`
+
+| Marker | Description                                       |
+|:-------|:--------------------------------------------------|
+| `windows` | Test case valid on Windows operating system only. |
+
+
 ## Documentation
 Install documentation requirements with:
 ```

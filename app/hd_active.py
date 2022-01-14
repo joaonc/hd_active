@@ -4,6 +4,8 @@ from os import PathLike
 from pathlib import Path
 from typing import Iterable, Optional, Set, Union
 
+from app.hd_action_state import HdActionState
+
 FILE_NAME = '_hd_active.txt'
 
 
@@ -66,3 +68,18 @@ class HdActive:
     def stop(self):
         if self.is_running:
             self._is_running = False
+
+    def get_change_state(self) -> HdActionState:
+        return HdActionState.Stop if self.is_running else HdActionState.Start
+
+    def change_state(self) -> HdActionState:
+        """
+        Changes the current state (starts if stopped, stops if started).
+
+        :return: The action required to change state again.
+        """
+        if self.is_running:
+            self.stop()
+            return HdActionState.Start
+        self.start()
+        return HdActionState.Stop
