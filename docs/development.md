@@ -25,6 +25,20 @@ All the required tools are available by installing `pyside6`:
     the latest version of Qt (6) isn't necessary, something more established like Qt 5 could have been used, but I
     wanted to dip my toes into the Qt world and figured using the latest version would give me more lasting knowledge.
 
+## Test
+[pytest](https://pytest.org) is used for testing and main features used are fixtures, parameters and markers. When
+working on test cases, make sure you're familiar with how these work.
+
+### Markers
+Markers are used to distinguish tests with `pytest.mark.<marker_name>`.
+
+List of markers used, defined in `pyproject.toml`
+
+| Marker | Description                                       |
+|:-------|:--------------------------------------------------|
+| `windows` | Test case valid on Windows operating system only. |
+
+
 ## Documentation
 Install documentation requirements with:
 ```

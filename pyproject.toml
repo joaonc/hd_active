@@ -13,8 +13,7 @@ profile = 'black'
 sections = 'FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER'
 
 [tool.pytest.ini_options]
-# Markers:
-#   - windows: Test case valid on Windows operating system only.
+# Markers: See documentation on what markers represent.
 markers = ['windows']
 testpaths = ['tests']
 
