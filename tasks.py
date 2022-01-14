@@ -28,3 +28,19 @@ def ui(c, file=None):
         py_file_path = PROJECT_DIR / 'app/ui/forms' / f'{file_stem}_ui.py'
 
         c.run(f'pyside6-uic {ui_file_path} -o {py_file_path}')
+
+
+@task
+def docs_serve(c):
+    """
+    Start documentation local server.
+    """
+    c.run('mkdocs serve')
+
+
+@task
+def docs_deploy(c):
+    """
+    Deploy documentation to GitHub.
+    """
+    c.run('mkdocs gh-deploy')
