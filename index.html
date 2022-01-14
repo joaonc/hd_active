@@ -8,7 +8,7 @@
       
       
       
-      <link rel="icon" href="img/favicon.ico">
+      <link rel="icon" href="images/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.4">
     
     
@@ -78,7 +78,7 @@
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="." title="HD Active" class="md-header__button md-logo" aria-label="HD Active" data-md-component="logo">
       
-  <img src="img/logo.png" alt="logo">
+  <img src="images/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -175,7 +175,7 @@
   <label class="md-nav__title" for="__drawer">
     <a href="." title="HD Active" class="md-nav__button md-logo" aria-label="HD Active" data-md-component="logo">
       
-  <img src="img/logo.png" alt="logo">
+  <img src="images/logo.png" alt="logo">
 
     </a>
     HD Active
@@ -212,9 +212,40 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Notes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="." class="md-nav__link md-nav__link--active">
         Notes
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#config-file" class="md-nav__link">
+    Config file
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -255,6 +286,21 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#config-file" class="md-nav__link">
+    Config file
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -272,6 +318,24 @@
 
 <h1 id="hd-active">HD Active</h1>
 <p>Prevent external HD's from becoming inactive (sleeping).</p>
+<h2 id="config-file">Config file</h2>
+<p>The file <code>hd_active.ini</code>, located in the same folder as the app, is used to persist settings.</p>
+<p>The file is created/updated when settings change.</p>
+<p><strong>Options:</strong></p>
+<ul>
+<li><code>run_on_start</code>: Whether <em>HD Active</em> should start pinging drives when it runs. If <code>False</code>, the user needs to click
+  <em>Start</em>.</li>
+<li><code>wait_between_access</code>: Time, in seconds, to wait between drive pings. If too long, the drives may go to sleep, if too
+  short, drives will be pinged unnecessarily, although this is not a big issue.</li>
+<li><code>drives</code>: Which drives to ping. This is a comma separated list and doesn't need to have quotes, ex: <code>e,f,g</code> or
+  <code>e:\, f:\, g:\</code>.</li>
+</ul>
+<p><strong>Sample:</strong>
+<div class="highlight"><pre><span></span><code>[HD Active]
+run_on_start = True
+wait_between_access = 60
+drives = e:\, f:\, g:\
+</code></pre></div></p>
 
               
             </article>
