@@ -1,7 +1,7 @@
 from PySide6 import QtWidgets
 
 from app.hd_active import HdActive
-from app.ui.base.settings_ui import Ui_Dialog
+from ui.settings_ui import Ui_Dialog
 
 
 class SettingsDialog(QtWidgets.QDialog):
