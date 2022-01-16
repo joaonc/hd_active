@@ -20,6 +20,7 @@ class HdActive:
         if drive_paths is not None:
             self.add_hds(drive_paths)
         self._is_running = False
+        self._write_hd_thread = None
         self.wait = wait
         if run:
             self.start()
@@ -59,15 +60,34 @@ class HdActive:
         """
         return self._is_running
 
+    def _wait_write_hd_thread(self):
+        """
+        Waits for the thread that accesses the drives to exit.
+        """
+        if self._write_hd_thread is not None:
+            timeout = self.wait * len(self.drive_paths) * 2
+            time_sleep = self.wait
+            time_waited = 0
+            while self._write_hd_thread.is_alive():
+                time.sleep(time_sleep)
+                time_waited += time_sleep
+                if time_waited > timeout:
+                    raise Exception('Timeout while waiting for thread that accesses drives to finish.')
+
+            self._write_hd_thread = None
+
     def start(self):
         if not self.is_running:
+            self._wait_write_hd_thread()
             self._is_running = True
-            write_hd_thread = threading.Thread(target=self._do_write_hd)
-            write_hd_thread.start()
+            self._write_hd_thread = threading.Thread(target=self._do_write_hd)
+            self._write_hd_thread.start()
 
-    def stop(self):
+    def stop(self, wait=False):
         if self.is_running:
             self._is_running = False
+        if wait:
+            self._wait_write_hd_thread()
 
     def get_change_state(self) -> HdActionState:
         return HdActionState.Stop if self.is_running else HdActionState.Start

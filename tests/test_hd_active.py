@@ -52,7 +52,7 @@ class TestHdActive:
         # Verify started
         time.sleep(WAIT_TEST)
         assert hd_active.is_running is True
-        hd_active.stop()
+        hd_active.stop(wait=True)
         mock_write_hd.assert_called()
 
     @pytest.mark.parametrize(
@@ -67,7 +67,7 @@ class TestHdActive:
 
         time.sleep(WAIT_TEST)
         assert hd_active.is_running is True
-        hd_active.stop()
+        hd_active.stop(wait=True)
 
         expected_drive_paths = {Path(drive_path).drive for drive_path in drive_paths}
         assert {drive_path.drive for drive_path in hd_active.drive_paths} == expected_drive_paths
@@ -76,6 +76,7 @@ class TestHdActive:
     def test_get_change_state(self, mock_write_hd, run, expected_change_state):
         hd_active = HdActiveTest(drive_paths=['z'], run=run)
         assert hd_active.get_change_state() is expected_change_state
+        hd_active.stop(wait=True)
 
     @pytest.mark.parametrize('run, expected_change_state', [(True, HdActionState.Start), (False, HdActionState.Stop)])
     def test_change_state(self, mock_write_hd, run, expected_change_state):
@@ -86,3 +87,4 @@ class TestHdActive:
 
         check.equal(actual_change_state, expected_change_state)
         check.equal(hd_active.is_running, not run)
+        hd_active.stop(wait=True)
