@@ -1,7 +1,8 @@
-from PySide6 import QtWidgets
+from PySide6 import QtWidgets, QtGui
 
 from app.hd_active import HdActive
 from app.ui.forms.settings_ui import Ui_Dialog
+from utils import get_asset
 
 
 class SettingsDialog(QtWidgets.QDialog):
@@ -12,6 +13,8 @@ class SettingsDialog(QtWidgets.QDialog):
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
         self._update_change_state_button_text()
+
+        self.setWindowIcon(QtGui.QIcon(str(get_asset('images', 'drive-harddisk-usb_36212_32px.png'))))
 
         # UI bindings
         self.ui.change_state_button.clicked.connect(self.change_state)

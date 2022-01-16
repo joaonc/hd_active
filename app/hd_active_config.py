@@ -12,7 +12,7 @@ class HdActiveConfig:
     OPTION_WAIT = 'wait_between_access'
     OPTION_DRIVE_PATHS = 'drives'
 
-    def __init__(self, file_name: str = 'hd_active.ini'):
+    def __init__(self, file_name: str):
         self.file_name = file_name
 
         # Default values
