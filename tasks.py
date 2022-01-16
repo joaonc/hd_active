@@ -54,6 +54,13 @@ def lint(c):
 
 
 @task
+def test(c):
+    """
+    Run unit tests.
+    """
+    c.run('python -m pytest .')
+
+@task
 def docs_serve(c):
     """
     Start documentation local server.
