@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from invoke import task
@@ -6,6 +7,7 @@ from app.utils import get_asset
 
 PROJECT_DIR = Path()
 UI_FILES = tuple(get_asset('ui').glob("**/*.ui"))
+os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
 
 
 @task(
@@ -28,6 +30,35 @@ def ui(c, file=None):
         py_file_path = PROJECT_DIR / 'app/ui/forms' / f'{file_stem}_ui.py'
 
         c.run(f'pyside6-uic {ui_file_path} -o {py_file_path}')
+
+
+@task(help={'file': f'`.ui` file to be edited. Available files: {", ".join(p.stem for p in UI_FILES)}'})
+def ui_edit(c, file):
+    """
+    Edit a file in QT Designer.
+    """
+    file_stem = file[:-3] if file.lower().endswith('.ui') else file
+    file_path = next(p for p in UI_FILES if p.stem == file_stem)
+
+    c.run(f'pyside6-designer {file_path}', asynchronous=True)
+
+
+@task
+def lint(c):
+    """
+    Run linters (isort, black).
+    Config for each of the tools is in `pyproject.toml`.
+    """
+    c.run('isort .')
+    c.run('black .')
+
+
+@task
+def test(c):
+    """
+    Run unit tests.
+    """
+    c.run('python -m pytest .')
 
 
 @task

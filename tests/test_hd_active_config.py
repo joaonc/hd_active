@@ -4,7 +4,7 @@ from unittest.mock import patch
 import pytest
 import pytest_check as check
 
-from app.config import HdActiveConfig
+from app.hd_active_config import HdActiveConfig
 
 
 @pytest.fixture
@@ -20,12 +20,12 @@ def config_file(request, tmp_path) -> Tuple[str, List[str]]:
     return str(file), request.param[1]
 
 
-@patch('app.config.configparser.ConfigParser.read')
+@patch('app.hd_active_config.configparser.ConfigParser.read')
 def test_defaults(read_mock):
     """
     Skip reading file (so defaults are not overwritten) and verify defaults.
     """
-    config = HdActiveConfig()
+    config = HdActiveConfig('foo.ini')
     check.is_false(config.run)
     check.equal(config.wait, 60)
     check.equal(config.drive_paths, [])

@@ -17,17 +17,17 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QDialog, QGridLayout, QHBoxLayout,
     QLabel, QLayout, QLineEdit, QPushButton,
-    QSizePolicy, QSpacerItem, QWidget)
+    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         if not Dialog.objectName():
             Dialog.setObjectName(u"Dialog")
-        Dialog.resize(492, 300)
-        Dialog.setMinimumSize(QSize(300, 200))
+        Dialog.resize(318, 231)
+        Dialog.setMinimumSize(QSize(300, 150))
         Dialog.setMaximumSize(QSize(800, 300))
-        self.gridLayout_2 = QGridLayout(Dialog)
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.verticalLayout = QVBoxLayout(Dialog)
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
@@ -53,12 +53,25 @@ class Ui_Dialog(object):
         self.gridLayout.addWidget(self.wait_line_edit, 1, 1, 1, 1)
 
 
-        self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
+        self.verticalLayout.addLayout(self.gridLayout)
+
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
+
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
 
         self.change_state_button = QPushButton(Dialog)
         self.change_state_button.setObjectName(u"change_state_button")
 
-        self.gridLayout_2.addWidget(self.change_state_button, 1, 1, 1, 1)
+        self.horizontalLayout_2.addWidget(self.change_state_button)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -77,11 +90,7 @@ class Ui_Dialog(object):
         self.horizontalLayout.addWidget(self.cancel_button)
 
 
-        self.gridLayout_2.addLayout(self.horizontalLayout, 2, 0, 1, 2)
-
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout_2.addItem(self.verticalSpacer, 1, 0, 1, 1)
+        self.verticalLayout.addLayout(self.horizontalLayout)
 
 #if QT_CONFIG(shortcut)
         self.drives_label.setBuddy(self.drives_line_edit)
@@ -94,6 +103,7 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
 
+        self.ok_button.setDefault(True)
         self.cancel_button.setDefault(False)
 
 
