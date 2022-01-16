@@ -103,6 +103,7 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
 
+        self.ok_button.setDefault(True)
         self.cancel_button.setDefault(False)
 
 
