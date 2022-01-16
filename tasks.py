@@ -60,6 +60,7 @@ def test(c):
     """
     c.run('python -m pytest .')
 
+
 @task
 def docs_serve(c):
     """

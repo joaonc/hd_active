@@ -1,9 +1,8 @@
-import app.hd_active
 import time
 from os import PathLike
-from pathlib import Path, WindowsPath
+from pathlib import Path
 from typing import List
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 import pytest_check as check
