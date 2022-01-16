@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from invoke import task
@@ -6,6 +7,7 @@ from app.utils import get_asset
 
 PROJECT_DIR = Path()
 UI_FILES = tuple(get_asset('ui').glob("**/*.ui"))
+os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
 
 
 @task(
@@ -47,8 +49,8 @@ def lint(c):
     Run linters (isort, black).
     Config for each of the tools is in `pyproject.toml`.
     """
-    c.run('isort .', echo=True)
-    c.run('black .', echo=True)
+    c.run('isort .')
+    c.run('black .')
 
 
 @task
