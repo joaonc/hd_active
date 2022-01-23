@@ -1,12 +1,7 @@
 -r requirements.txt
-bandit
-black
-flake8
+-r lint-requirements.txt
 invoke
-isort
-mypy
 pip-tools
 pre-commit
 pytest
 pytest-check
-safety
