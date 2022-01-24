@@ -22,7 +22,7 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         self.hd_active = HdActive(drive_paths=config.drive_paths, run=config.run, wait=config.wait)
         if HD_ACTION_DEBUG:
             # Disable actual writing to HD
-            self.hd_active.write_hds = lambda: None
+            self.hd_active.write_hds = lambda: None  # type: ignore
 
         # Menu
         menu = QtWidgets.QMenu(parent)
@@ -32,7 +32,7 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         show_settings_action.triggered.connect(self._show_settings_dialog)
         menu.addSeparator()
         quit_action = menu.addAction('Exit')
-        quit_action.triggered.connect(QtWidgets.QApplication.instance().quit)
+        quit_action.triggered.connect(QtWidgets.QApplication.instance().quit)  # type: ignore
         self.setContextMenu(menu)
 
         # Other events
