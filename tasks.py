@@ -51,6 +51,9 @@ def lint(c):
     """
     c.run('isort .')
     c.run('black .')
+    c.run('flake8 .')
+    c.run('mypy .')
+    c.run('safety check')
 
 
 @task
