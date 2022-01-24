@@ -25,3 +25,10 @@ warn_unused_configs = true
 [[tool.mypy.overrides]]
 module = ['invoke', 'pytest_check']
 ignore_missing_imports = true
+
+[tool.yapf]
+based_on_style = 'facebook'
+column_limit = 120
+
+[tool.yapfignore]
+ignore_patterns = ['.git', '.github', '.venv', '__pycache__', 'assets', 'app/ui/forms', 'docs', 'site']

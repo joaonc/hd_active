@@ -80,6 +80,8 @@ typing-extensions==4.0.1
     #   mypy
 urllib3==1.26.8
     # via requests
+yapf==0.32.0
+    # via -r .\lint-requirements.in
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
