@@ -22,7 +22,7 @@ jobs:
         run: black .
       - name: flake8
         run: flake8 .
-      - name: mypy
-        run: mypy .
+#      - name: mypy
+#        run: mypy .
       - name: safety
         run: safety check
