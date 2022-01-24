@@ -1,7 +1,18 @@
 -r requirements.txt
--r lint-requirements.txt
+
+# Tools
 invoke
 pip-tools
 pre-commit
+
+# Linting
+bandit
+black
+flake8
+isort
+mypy
+safety
+
+# Test
 pytest
 pytest-check
