@@ -1,11 +1,11 @@
 name: linting
-# Linting tools use `pyproject.toml` for config.
+# Linting tools use `pyproject.toml` and `setup.cfg` for config.
 
 on:
   - pull_request
 
 jobs:
-  isort:
+  linting:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -20,3 +20,5 @@ jobs:
         run: isort .
       - name: black
         run: black .
+      - name: flake8
+        run: flake8 .
