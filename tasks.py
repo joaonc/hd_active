@@ -12,8 +12,22 @@ REQUIREMENTS_FILES_MAPPING = {
     s[0] if len(s) > 1 else 'main': filename
     for s, filename in ((p.stem.split('-'), p.name) for p in REQUIREMENTS_FILES)
 }
+REQUIREMENTS_TASK_HELP = {
+    'requirements': '`.in` file. Full name not required, just the initial name before the dash (ex. \'dev\'). '
+    f'For main file use \'main\'. Available requirements: {", ".join(REQUIREMENTS_FILES_MAPPING)}.'
+}
 
 os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
+
+
+def _get_requirements_files(requirements: str | None) -> list[str]:
+    if requirements is None:
+        # `requirements.txt` needs to be first
+        filenames = ['requirements.txt'] + [f.name for f in REQUIREMENTS_FILES if f.name != 'requirements.txt']
+    else:
+        filenames = [REQUIREMENTS_FILES_MAPPING.get(requirements, requirements)]
+
+    return filenames
 
 
 @task(
@@ -107,24 +121,25 @@ def docs_deploy(c):
     c.run('mkdocs gh-deploy')
 
 
-@task(
-    help={
-        'requirements': '`.in` file. Full name not required, just the initial name before the dash (ex. \'dev\'). '
-        f'For main file use \'main\'. Available requirements: {", ".join(REQUIREMENTS_FILES_MAPPING)}.'
-    }
-)
+@task(help=REQUIREMENTS_TASK_HELP)
 def pip_compile(c, requirements=None):
     """
     Compile requirements file.
     """
-    if requirements is None:
-        # `requirements.txt` needs to be first
-        filenames = ['requirements.txt'] + [f.name for f in REQUIREMENTS_FILES if f.name != 'requirements.txt']
-    else:
-        filenames = [REQUIREMENTS_FILES_MAPPING.get(requirements, requirements)]
-
-    for filename in filenames:
+    for filename in _get_requirements_files(requirements):
         c.run(f'pip-compile {filename}')
+
+
+@task(help=REQUIREMENTS_TASK_HELP)
+def pip_sync(c, requirements=None):
+    """
+    Synchronize environment with requirements file.
+    """
+    c.run(f'pip-sync {" ".join(_get_requirements_files(requirements))}')
+
+
+def pip_upgrade(c, requirements=None):
+    ...
 
 
 ns = Collection()  # Main namespace
@@ -141,6 +156,7 @@ lint.add_task(lint_mypy, 'mypy')
 lint.add_task(lint_safety, 'safety')
 pip = Collection('pip')
 pip.add_task(pip_compile, 'compile')
+pip.add_task(pip_sync, 'sync')
 ui = Collection('ui')
 ui.add_task(ui_py, 'py')
 ui.add_task(ui_edit, 'edit')
