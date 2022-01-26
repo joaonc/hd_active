@@ -12,13 +12,13 @@ os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
 
 @task(
     help={
-        'file': '`.ui` file to be converted to `.py`. If not supplied, all files will be converted. Available files: '
-        f'{", ".join(p.stem for p in UI_FILES)}'
+        'file': '`.ui` file to be converted to `.py`. `.ui` extension not required. '
+        f'If not supplied, all files will be converted. Available files: {", ".join(p.stem for p in UI_FILES)}'
     }
 )
 def ui_py(c, file=None):
     """
-    Convert QT `.ui` files into `.py`. `.ui` extension not required in the parameter.
+    Convert QT `.ui` files into `.py`.
     """
     if file:
         file_stems = [file[:-3] if file.lower().endswith('.ui') else file]
@@ -44,15 +44,36 @@ def ui_edit(c, file):
 
 
 @task
-def lint(c):
+def lint_all(c):
     """
-    Run linters (isort, black).
-    Config for each of the tools is in `pyproject.toml`.
+    Run all linters.
+    Config for each of the tools is in `pyproject.toml` and `setup.cfg`.
     """
-    c.run('isort .')
+    c.run('safety check')
+
+
+@task
+def lint_black(c):
     c.run('black .')
+
+
+@task
+def lint_flake8(c):
     c.run('flake8 .')
+
+
+@task
+def lint_isort(c):
+    c.run('isort .')
+
+
+@task
+def lint_mypy(c):
     c.run('mypy .')
+
+
+@task
+def lint_safety(c):
     c.run('safety check')
 
 
@@ -82,11 +103,19 @@ def docs_deploy(c):
 
 ns = Collection()  # Main namespace
 ns.add_task(test)
-ui = Collection('ui')
-ui.add_task(ui_py, 'py')
-ui.add_task(ui_edit, 'edit')
 docs = Collection('docs')
 docs.add_task(docs_serve, 'serve')
 docs.add_task(docs_deploy, 'deploy')
-ns.add_collection(ui)
+lint = Collection('lint')
+lint.add_task(lint_all, 'all')
+lint.add_task(lint_black, 'black')
+lint.add_task(lint_flake8, 'flake8')
+lint.add_task(lint_isort, 'isort')
+lint.add_task(lint_mypy, 'mypy')
+lint.add_task(lint_safety, 'safety')
+ui = Collection('ui')
+ui.add_task(ui_py, 'py')
+ui.add_task(ui_edit, 'edit')
 ns.add_collection(docs)
+ns.add_collection(lint)
+ns.add_collection(ui)
