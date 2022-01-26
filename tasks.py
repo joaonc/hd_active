@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from invoke import task
+from invoke import Collection, task
 
 from app.utils import get_asset
 
@@ -16,7 +16,7 @@ os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
         f'{", ".join(p.stem for p in UI_FILES)}'
     }
 )
-def ui(c, file=None):
+def ui_py(c, file=None):
     """
     Convert QT `.ui` files into `.py`. `.ui` extension not required in the parameter.
     """
@@ -75,6 +75,18 @@ def docs_serve(c):
 @task
 def docs_deploy(c):
     """
-    Deploy documentation to GitHub.
+    Publish documentation to GitHub Pages at https://joaonc.github.io/hd_active.
     """
     c.run('mkdocs gh-deploy')
+
+
+ns = Collection()  # Main namespace
+ns.add_task(test)
+ui = Collection('ui')
+ui.add_task(ui_py, 'py')
+ui.add_task(ui_edit, 'edit')
+docs = Collection('docs')
+docs.add_task(docs_serve, 'serve')
+docs.add_task(docs_deploy, 'deploy')
+ns.add_collection(ui)
+ns.add_collection(docs)
