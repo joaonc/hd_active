@@ -20,7 +20,7 @@ REQUIREMENTS_TASK_HELP = {
 os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
 
 
-def _get_requirements_file(requirements: str | None) -> str:
+def _get_requirements_file(requirements: str) -> str:
     filename = REQUIREMENTS_FILES_MAPPING.get(requirements, requirements)
     if filename not in REQUIREMENTS_FILES_MAPPING.values():
         raise FileNotFoundError(f'`{requirements}` is an unknown requirements file.')
