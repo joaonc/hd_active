@@ -7,21 +7,22 @@ from app.utils import get_asset
 
 PROJECT_DIR = Path()
 UI_FILES = tuple(get_asset('ui').glob("**/*.ui"))
-REQUIREMENTS_FILES = tuple(Path().glob("*requirements.txt"))
+"""
+QT ``.ui`` files.
+"""
 REQUIREMENTS_MAIN = 'main'
-REQUIREMENTS_FILES_MAPPING = {
-    s[0] if len(s) > 1 else 'main': filename
-    for s, filename in ((p.stem.split('-'), p.name) for p in REQUIREMENTS_FILES)
+REQUIREMENTS_FILES = {
+    REQUIREMENTS_MAIN: 'requirements.txt',
+    'dev': 'dev-requirements.txt',
+    'docs': 'docs-requirements.txt',
 }
-# Sort keys to make `requirements.txt` first
-# In several `pip-tools` operations working with more than one requirements file, `requirements.txt` needs to be first
-REQUIREMENTS_FILES_MAPPING = {
-    k: REQUIREMENTS_FILES_MAPPING[k]
-    for k in ([REQUIREMENTS_MAIN] + sorted(x for x in REQUIREMENTS_FILES_MAPPING if x != REQUIREMENTS_MAIN))
-}
+"""
+Requirements files.
+Order matters as most operations with multiple files need ``requirements.txt`` to be processed first.
+"""
 REQUIREMENTS_TASK_HELP = {
     'requirements': '`.in` file. Full name not required, just the initial name before the dash (ex. \'dev\'). '
-    f'For main file use \'{REQUIREMENTS_MAIN}\'. Available requirements: {", ".join(REQUIREMENTS_FILES_MAPPING)}.'
+    f'For main file use \'{REQUIREMENTS_MAIN}\'. Available requirements: {", ".join(REQUIREMENTS_FILES)}.'
 }
 
 os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
@@ -32,8 +33,8 @@ def _csstr_to_list(csstr: str) -> list[str]:
 
 
 def _get_requirements_file(requirements: str) -> str:
-    filename = REQUIREMENTS_FILES_MAPPING.get(requirements, requirements)
-    if filename not in REQUIREMENTS_FILES_MAPPING.values():
+    filename = REQUIREMENTS_FILES.get(requirements, requirements)
+    if filename not in REQUIREMENTS_FILES.values():
         raise FileNotFoundError(f'`{requirements}` is an unknown requirements file.')
 
     return filename
@@ -41,11 +42,11 @@ def _get_requirements_file(requirements: str) -> str:
 
 def _get_requirements_files(requirements: str | None) -> list[str]:
     if requirements is None:
-        filenames = list(REQUIREMENTS_FILES_MAPPING.values())
+        filenames = list(REQUIREMENTS_FILES.values())
     else:
         filenames = [_get_requirements_file(r) for r in _csstr_to_list(requirements)]
-        # Sort by the order defined in `REQUIREMENTS_FILES_MAPPING`
-        filenames = [f for f in REQUIREMENTS_FILES_MAPPING.values() if f in filenames]
+        # Sort by the order defined in `REQUIREMENTS_FILES`
+        filenames = [f for f in REQUIREMENTS_FILES.values() if f in filenames]
 
     return filenames
 
