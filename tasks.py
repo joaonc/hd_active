@@ -20,19 +20,28 @@ REQUIREMENTS_TASK_HELP = {
 os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
 
 
+def _get_requirements_file(requirements: str | None) -> str:
+    filename = REQUIREMENTS_FILES_MAPPING.get(requirements, requirements)
+    if filename not in REQUIREMENTS_FILES_MAPPING.values():
+        raise FileNotFoundError(f'`{requirements}` is an unknown requirements file.')
+
+    return filename
+
+
 def _get_requirements_files(requirements: str | None) -> list[str]:
     if requirements is None:
         # `requirements.txt` needs to be first
         filenames = ['requirements.txt'] + [f.name for f in REQUIREMENTS_FILES if f.name != 'requirements.txt']
     else:
-        filenames = [REQUIREMENTS_FILES_MAPPING.get(requirements, requirements)]
+        filenames = [_get_requirements_file(r.strip()) for r in requirements.split(',')]
 
+    # TODO: Sort here or in REQUIREMENTS_FILES_MAPPING dict
     return filenames
 
 
 @task(
     help={
-        'file': '`.ui` file to be converted to `.py`. `.ui` extension not required. '
+        'file': '`.ui` file to be converted to `.py`. `.ui` extension not required. Can be a comma separated. '
         f'If not supplied, all files will be converted. Available files: {", ".join(p.stem for p in UI_FILES)}.'
     }
 )
@@ -138,8 +147,23 @@ def pip_sync(c, requirements=None):
     c.run(f'pip-sync {" ".join(_get_requirements_files(requirements))}')
 
 
-def pip_upgrade(c, requirements=None):
-    ...
+@task(help=REQUIREMENTS_TASK_HELP | {'package': 'Package to upgrade. Can be a comma separated list.'})
+def pip_package(c, requirements, package):
+    """
+    Upgrade package.
+    """
+    packages = [p.strip() for p in package.split(',')]
+    for filename in _get_requirements_files(requirements):
+        c.run(f'pip-compile --upgrade-package {" --upgrade-package ".join(packages)} {filename}')
+
+
+@task(help=REQUIREMENTS_TASK_HELP)
+def pip_upgrade(c, requirements):
+    """
+    Try to upgrade all dependencies to their latest versions.
+    """
+    for filename in _get_requirements_files(requirements):
+        c.run(f'pip-compile --upgrade {filename}')
 
 
 ns = Collection()  # Main namespace
@@ -156,7 +180,9 @@ lint.add_task(lint_mypy, 'mypy')
 lint.add_task(lint_safety, 'safety')
 pip = Collection('pip')
 pip.add_task(pip_compile, 'compile')
+pip.add_task(pip_package, 'package')
 pip.add_task(pip_sync, 'sync')
+pip.add_task(pip_upgrade, 'upgrade')
 ui = Collection('ui')
 ui.add_task(ui_py, 'py')
 ui.add_task(ui_edit, 'edit')
