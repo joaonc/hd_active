@@ -127,6 +127,27 @@ def test(c):
 
 
 @task
+def package(c):
+    """
+    Package app into an executable file.
+    """
+    import shutil
+    package_folder = PROJECT_DIR / 'app_build'
+    app_folder_name = 'app'
+    if package_folder.exists():
+        shutil.rmtree(package_folder)
+    package_folder.mkdir()
+    shutil.copytree(app_folder_name, package_folder/app_folder_name)
+
+    c.run(f'python -m pip install -r requirements.txt --target {package_folder/app_folder_name}')
+    # Delete `dist-info` folders
+    for p in (package_folder / app_folder_name).glob('*.dist-info'):
+        shutil.rmtree(p)
+    with c.cd(package_folder):
+        c.run(f'python -m zipapp -p "interpreter" {app_folder_name}')
+
+
+@task
 def docs_serve(c):
     """
     Start documentation local server.
@@ -180,6 +201,7 @@ def pip_upgrade(c, requirements):
 
 ns = Collection()  # Main namespace
 ns.add_task(test)
+ns.add_task(package)
 docs = Collection('docs')
 docs.add_task(docs_serve, 'serve')
 docs.add_task(docs_deploy, 'deploy')
