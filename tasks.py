@@ -8,16 +8,27 @@ from app.utils import get_asset
 PROJECT_DIR = Path()
 UI_FILES = tuple(get_asset('ui').glob("**/*.ui"))
 REQUIREMENTS_FILES = tuple(Path().glob("*requirements.txt"))
+REQUIREMENTS_MAIN = 'main'
 REQUIREMENTS_FILES_MAPPING = {
     s[0] if len(s) > 1 else 'main': filename
     for s, filename in ((p.stem.split('-'), p.name) for p in REQUIREMENTS_FILES)
 }
+# Sort keys to make `requirements.txt` first
+# In several `pip-tools` operations working with more than one requirements file, `requirements.txt` needs to be first
+REQUIREMENTS_FILES_MAPPING = {
+    k: REQUIREMENTS_FILES_MAPPING[k]
+    for k in ([REQUIREMENTS_MAIN] + sorted(x for x in REQUIREMENTS_FILES_MAPPING if x != REQUIREMENTS_MAIN))
+}
 REQUIREMENTS_TASK_HELP = {
     'requirements': '`.in` file. Full name not required, just the initial name before the dash (ex. \'dev\'). '
-    f'For main file use \'main\'. Available requirements: {", ".join(REQUIREMENTS_FILES_MAPPING)}.'
+    f'For main file use \'{REQUIREMENTS_MAIN}\'. Available requirements: {", ".join(REQUIREMENTS_FILES_MAPPING)}.'
 }
 
 os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
+
+
+def _csstr_to_list(csstr: str) -> list[str]:
+    return [s.strip() for s in csstr.split(',')]
 
 
 def _get_requirements_file(requirements: str) -> str:
@@ -30,12 +41,12 @@ def _get_requirements_file(requirements: str) -> str:
 
 def _get_requirements_files(requirements: str | None) -> list[str]:
     if requirements is None:
-        # `requirements.txt` needs to be first
-        filenames = ['requirements.txt'] + [f.name for f in REQUIREMENTS_FILES if f.name != 'requirements.txt']
+        filenames = list(REQUIREMENTS_FILES_MAPPING.values())
     else:
-        filenames = [_get_requirements_file(r.strip()) for r in requirements.split(',')]
+        filenames = [_get_requirements_file(r) for r in _csstr_to_list(requirements)]
+        # Sort by the order defined in `REQUIREMENTS_FILES_MAPPING`
+        filenames = [f for f in REQUIREMENTS_FILES_MAPPING.values() if f in filenames]
 
-    # TODO: Sort here or in REQUIREMENTS_FILES_MAPPING dict
     return filenames
 
 
