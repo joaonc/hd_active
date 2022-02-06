@@ -12,9 +12,9 @@ QT ``.ui`` files.
 """
 REQUIREMENTS_MAIN = 'main'
 REQUIREMENTS_FILES = {
-    REQUIREMENTS_MAIN: 'requirements.txt',
-    'dev': 'dev-requirements.txt',
-    'docs': 'docs-requirements.txt',
+    REQUIREMENTS_MAIN: 'requirements',
+    'dev': 'dev-requirements',
+    'docs': 'docs-requirements',
 }
 """
 Requirements files.
@@ -32,19 +32,19 @@ def _csstr_to_list(csstr: str) -> list[str]:
     return [s.strip() for s in csstr.split(',')]
 
 
-def _get_requirements_file(requirements: str) -> str:
+def _get_requirements_file(requirements: str, extension: str) -> str:
     filename = REQUIREMENTS_FILES.get(requirements, requirements)
     if filename not in REQUIREMENTS_FILES.values():
         raise FileNotFoundError(f'`{requirements}` is an unknown requirements file.')
 
-    return filename
+    return f'{filename}.{extension.lstrip(".")}'
 
 
-def _get_requirements_files(requirements: str | None) -> list[str]:
+def _get_requirements_files(requirements: str | None, extension: str) -> list[str]:
     if requirements is None:
         filenames = list(REQUIREMENTS_FILES.values())
     else:
-        filenames = [_get_requirements_file(r) for r in _csstr_to_list(requirements)]
+        filenames = [_get_requirements_file(r, extension) for r in _csstr_to_list(requirements)]
         # Sort by the order defined in `REQUIREMENTS_FILES`
         filenames = [f for f in REQUIREMENTS_FILES.values() if f in filenames]
 
@@ -147,7 +147,7 @@ def pip_compile(c, requirements=None):
     """
     Compile requirements file.
     """
-    for filename in _get_requirements_files(requirements):
+    for filename in _get_requirements_files(requirements, 'in'):
         c.run(f'pip-compile {filename}')
 
 
@@ -156,7 +156,7 @@ def pip_sync(c, requirements=None):
     """
     Synchronize environment with requirements file.
     """
-    c.run(f'pip-sync {" ".join(_get_requirements_files(requirements))}')
+    c.run(f'pip-sync {" ".join(_get_requirements_files(requirements, "txt"))}')
 
 
 @task(help=REQUIREMENTS_TASK_HELP | {'package': 'Package to upgrade. Can be a comma separated list.'})
@@ -165,7 +165,7 @@ def pip_package(c, requirements, package):
     Upgrade package.
     """
     packages = [p.strip() for p in package.split(',')]
-    for filename in _get_requirements_files(requirements):
+    for filename in _get_requirements_files(requirements, 'in'):
         c.run(f'pip-compile --upgrade-package {" --upgrade-package ".join(packages)} {filename}')
 
 
@@ -174,7 +174,7 @@ def pip_upgrade(c, requirements):
     """
     Try to upgrade all dependencies to their latest versions.
     """
-    for filename in _get_requirements_files(requirements):
+    for filename in _get_requirements_files(requirements, 'in'):
         c.run(f'pip-compile --upgrade {filename}')
 
 
