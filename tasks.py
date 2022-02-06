@@ -178,7 +178,17 @@ def pip_upgrade(c, requirements):
         c.run(f'pip-compile --upgrade {filename}')
 
 
+@task(help={'hook': 'Name of hook to run. Default is to run all.'})
+def precommit(c, hook=None):
+    """
+    Manually run pre-commit hooks.
+    """
+    hook = hook or '--all-files'
+    c.run(f'pre-commit run {hook}')
+
+
 ns = Collection()  # Main namespace
+ns.add_task(precommit)
 ns.add_task(test)
 docs = Collection('docs')
 docs.add_task(docs_serve, 'serve')
