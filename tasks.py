@@ -53,12 +53,12 @@ def _get_requirements_file(requirements: str, extension: str) -> str:
 def _get_requirements_files(requirements: str | None, extension: str) -> list[str]:
     extension = extension.lstrip('.')
     if requirements is None:
-        requirements_files = REQUIREMENTS_FILES.values()
+        requirements_files = list(REQUIREMENTS_FILES)
     else:
         requirements_files = _csstr_to_list(requirements)
 
     # Get full filename+extension and sort by the order defined in `REQUIREMENTS_FILES`
-    filenames = [_get_requirements_file(r, extension) for r in REQUIREMENTS_FILES.values() if r in requirements_files]
+    filenames = [_get_requirements_file(r, extension) for r in REQUIREMENTS_FILES if r in requirements_files]
 
     return filenames
 
