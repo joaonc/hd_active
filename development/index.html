@@ -9,7 +9,7 @@
       
       
       <link rel="icon" href="../images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.4">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.10">
     
     
       
@@ -17,7 +17,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.bb3983ee.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.d6be258b.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
@@ -279,6 +279,33 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#development-tasks" class="md-nav__link">
+    Development tasks
+  </a>
+  
+    <nav class="md-nav" aria-label="Development tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-invoke" class="md-nav__link">
+    Using invoke
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging-tasks" class="md-nav__link">
+    Debugging tasks
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#documentation" class="md-nav__link">
     Documentation
   </a>
@@ -367,6 +394,33 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#development-tasks" class="md-nav__link">
+    Development tasks
+  </a>
+  
+    <nav class="md-nav" aria-label="Development tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-invoke" class="md-nav__link">
+    Using invoke
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging-tasks" class="md-nav__link">
+    Debugging tasks
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#documentation" class="md-nav__link">
     Documentation
   </a>
@@ -411,6 +465,13 @@
 
 
 <h1 id="development">Development</h1>
+<p>To get started with development of this project:</p>
+<ol>
+<li>Clone
+   Virtual environment recommended, but optional.</li>
+<li><code>pip install -U -r dev-requirements.txt</code></li>
+<li><code>pre-commit install</code></li>
+</ol>
 <div class="admonition todo">
 <p class="admonition-title">Todo</p>
 <p>Add content</p>
@@ -422,7 +483,7 @@ then transformed into a <code>.py</code> file.</p>
 <p>All the required tools are available by installing <code>pyside6</code>:</p>
 <ul>
 <li><code>Qt Designer</code>: <code>pyside6-designer</code></li>
-<li><code>.ui &gt; .py</code> Converter: <code>pyside6-uic</code><br />
+<li><code>.ui &gt; .py</code> Converter: <code>pyside6-uic</code>
   At the project root (use full paths if relative doesn't work):
   <div class="highlight"><pre><span></span><code>pyside6-uic assets/ui/settings.ui -o hd_active/ui/forms/settings_ui.py
 </code></pre></div></li>
@@ -453,6 +514,26 @@ working on test cases, make sure you're familiar with how these work.</p>
 </tr>
 </tbody>
 </table>
+<h2 id="development-tasks">Development tasks</h2>
+<p>This project uses <strong>pyinvoke</strong> (<a href="https://www.pyinvoke.org/">main page</a> | <a href="https://docs.pyinvoke.org/en/stable/">docs</a> |
+<a href="https://github.com/pyinvoke/invoke">GitHub</a>) to facilitate executing miscellaneous tasks that help with development.</p>
+<h3 id="using-invoke">Using invoke</h3>
+<p>After the installing the dev requirements (which include <code>invoke</code>), try the commands below.</p>
+<p>List all available tasks:
+<div class="highlight"><pre><span></span><code>inv --list
+</code></pre></div></p>
+<p>Tasks are grouped (those that have a <code>.</code>). To see all the <em>lint</em> tasks:
+<div class="highlight"><pre><span></span><code>inv --list lint
+</code></pre></div></p>
+<p>Help with a certain task:
+<div class="highlight"><pre><span></span><code>inv --help pip.package
+</code></pre></div></p>
+<p>Use <code>--dry</code> to see what the task does without executing it.</p>
+<h3 id="debugging-tasks">Debugging tasks</h3>
+<p>To debug <code>tasks.py</code> (the file used by <code>invoke</code>), either add a <code>breakpoint()</code> statement or, if using an IDE (in this
+example PyCharm), use the configuration below to allow setting breakpoints in the code and debug <code>tasks.py</code> as any
+other Python file.</p>
+<p><img alt="PyCharm tasks run config" src="../images/pycharm_tasks_run_config.png" /></p>
 <h2 id="documentation">Documentation</h2>
 <p>Install documentation requirements with:
 <div class="highlight"><pre><span></span><code>pip install -r docs-requirements.txt
@@ -533,10 +614,10 @@ documentation changes as needed.</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.361d90f1.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.092fa1f6.min.js"}</script>
     
     
-      <script src="../assets/javascripts/bundle.289a2a4b.min.js"></script>
+      <script src="../assets/javascripts/bundle.e3b2bf44.min.js"></script>
       
     
   </body>
