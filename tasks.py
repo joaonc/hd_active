@@ -12,9 +12,9 @@ QT ``.ui`` files.
 """
 REQUIREMENTS_MAIN = 'main'
 REQUIREMENTS_FILES = {
-    REQUIREMENTS_MAIN: 'requirements.txt',
-    'dev': 'dev-requirements.txt',
-    'docs': 'docs-requirements.txt',
+    REQUIREMENTS_MAIN: 'requirements',
+    'dev': 'dev-requirements',
+    'docs': 'docs-requirements',
 }
 """
 Requirements files.
@@ -29,24 +29,36 @@ os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
 
 
 def _csstr_to_list(csstr: str) -> list[str]:
+    """
+    Convert a comma-separated string to list.
+    """
     return [s.strip() for s in csstr.split(',')]
 
 
-def _get_requirements_file(requirements: str) -> str:
+def _get_requirements_file(requirements: str, extension: str) -> str:
+    """
+    Return the full requirements file name (with extension).
+
+    :param requirements: The requirements file to retrieve. Can be the whole filename (no extension), ex
+        `'dev-requirements'` or just the initial portion, ex `'dev'`. Use `'main'` for the `requirements` file.
+    :param extension: Requirements file extension. Can be either `'in'` or `'txt'`.
+    """
     filename = REQUIREMENTS_FILES.get(requirements, requirements)
     if filename not in REQUIREMENTS_FILES.values():
         raise FileNotFoundError(f'`{requirements}` is an unknown requirements file.')
 
-    return filename
+    return f'{filename}.{extension.lstrip(".")}'
 
 
-def _get_requirements_files(requirements: str | None) -> list[str]:
+def _get_requirements_files(requirements: str | None, extension: str) -> list[str]:
+    extension = extension.lstrip('.')
     if requirements is None:
-        filenames = list(REQUIREMENTS_FILES.values())
+        requirements_files = list(REQUIREMENTS_FILES)
     else:
-        filenames = [_get_requirements_file(r) for r in _csstr_to_list(requirements)]
-        # Sort by the order defined in `REQUIREMENTS_FILES`
-        filenames = [f for f in REQUIREMENTS_FILES.values() if f in filenames]
+        requirements_files = _csstr_to_list(requirements)
+
+    # Get full filename+extension and sort by the order defined in `REQUIREMENTS_FILES`
+    filenames = [_get_requirements_file(r, extension) for r in REQUIREMENTS_FILES if r in requirements_files]
 
     return filenames
 
@@ -147,7 +159,7 @@ def pip_compile(c, requirements=None):
     """
     Compile requirements file.
     """
-    for filename in _get_requirements_files(requirements):
+    for filename in _get_requirements_files(requirements, 'in'):
         c.run(f'pip-compile {filename}')
 
 
@@ -156,7 +168,7 @@ def pip_sync(c, requirements=None):
     """
     Synchronize environment with requirements file.
     """
-    c.run(f'pip-sync {" ".join(_get_requirements_files(requirements))}')
+    c.run(f'pip-sync {" ".join(_get_requirements_files(requirements, "txt"))}')
 
 
 @task(help=REQUIREMENTS_TASK_HELP | {'package': 'Package to upgrade. Can be a comma separated list.'})
@@ -165,7 +177,7 @@ def pip_package(c, requirements, package):
     Upgrade package.
     """
     packages = [p.strip() for p in package.split(',')]
-    for filename in _get_requirements_files(requirements):
+    for filename in _get_requirements_files(requirements, 'in'):
         c.run(f'pip-compile --upgrade-package {" --upgrade-package ".join(packages)} {filename}')
 
 
@@ -174,8 +186,35 @@ def pip_upgrade(c, requirements):
     """
     Try to upgrade all dependencies to their latest versions.
     """
-    for filename in _get_requirements_files(requirements):
+    for filename in _get_requirements_files(requirements, 'in'):
         c.run(f'pip-compile --upgrade {filename}')
+
+
+@task
+def precommit_install(c):
+    """
+    Install pre-commit into the git hooks, which will cause pre-commit to run on automatically.
+    This should be the first thing to do after cloning this project and installing requirements.
+    """
+    c.run('pre-commit install')
+
+
+@task
+# `upgrade` instead of `update` to maintain similar naming to `pip-compile upgrade`
+def precommit_upgrade(c):
+    """
+    Upgrade pre-commit config to the latest repos' versions.
+    """
+    c.run('pre-commit autoupdate')
+
+
+@task(help={'hook': 'Name of hook to run. Default is to run all.'})
+def precommit_run(c, hook=None):
+    """
+    Manually run pre-commit hooks.
+    """
+    hook = hook or '--all-files'
+    c.run(f'pre-commit run {hook}')
 
 
 ns = Collection()  # Main namespace
@@ -195,10 +234,16 @@ pip.add_task(pip_compile, 'compile')
 pip.add_task(pip_package, 'package')
 pip.add_task(pip_sync, 'sync')
 pip.add_task(pip_upgrade, 'upgrade')
+precommit = Collection('precommit')
+precommit.add_task(precommit_run, 'run')
+precommit.add_task(precommit_install, 'install')
+precommit.add_task(precommit_upgrade, 'upgrade')
 ui = Collection('ui')
 ui.add_task(ui_py, 'py')
 ui.add_task(ui_edit, 'edit')
+
 ns.add_collection(docs)
 ns.add_collection(lint)
 ns.add_collection(pip)
+ns.add_collection(precommit)
 ns.add_collection(ui)

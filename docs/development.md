@@ -1,5 +1,12 @@
 # Development
 
+To get started with development of this project:
+
+1. Clone
+   Virtual environment recommended, but optional.
+2. `pip install -U -r dev-requirements.txt`
+3. `pre-commit install`
+
 !!! TODO
 
     Add content
@@ -13,7 +20,7 @@ then transformed into a `.py` file.
 All the required tools are available by installing `pyside6`:
 
 * `Qt Designer`: `pyside6-designer`
-* `.ui > .py` Converter: `pyside6-uic`  
+* `.ui > .py` Converter: `pyside6-uic`
   At the project root (use full paths if relative doesn't work):
   ```
   pyside6-uic assets/ui/settings.ui -o hd_active/ui/forms/settings_ui.py
@@ -38,6 +45,36 @@ List of markers used, defined in `pyproject.toml`
 |:-------|:--------------------------------------------------|
 | `windows` | Test case valid on Windows operating system only. |
 
+## Development tasks
+This project uses **pyinvoke** ([main page](https://www.pyinvoke.org/) | [docs](https://docs.pyinvoke.org/en/stable/) |
+[GitHub](https://github.com/pyinvoke/invoke)) to facilitate executing miscellaneous tasks that help with development.
+
+### Using invoke
+After the installing the dev requirements (which include `invoke`), try the commands below.
+
+List all available tasks:
+```
+inv --list
+```
+
+Tasks are grouped (those that have a `.`). To see all the _lint_ tasks:
+```
+inv --list lint
+```
+
+Help with a certain task:
+```
+inv --help pip.package
+```
+
+Use `--dry` to see what the task does without executing it.
+
+### Debugging tasks
+To debug `tasks.py` (the file used by `invoke`), either add a `breakpoint()` statement or, if using an IDE (in this
+example PyCharm), use the configuration below to allow setting breakpoints in the code and debug `tasks.py` as any
+other Python file.
+
+![PyCharm tasks run config](images/pycharm_tasks_run_config.png)
 
 ## Documentation
 Install documentation requirements with:
