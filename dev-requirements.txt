@@ -8,7 +8,7 @@ atomicwrites==1.4.0
     # via pytest
 attrs==21.4.0
     # via pytest
-bandit==1.7.2
+bandit==1.7.4
     # via -r dev-requirements.in
 black==22.1.0
     # via -r dev-requirements.in
@@ -16,9 +16,9 @@ certifi==2021.10.8
     # via requests
 cfgv==3.3.1
     # via pre-commit
-charset-normalizer==2.0.11
+charset-normalizer==2.0.12
     # via requests
-click==8.0.3
+click==8.0.4
     # via
     #   black
     #   pip-tools
@@ -32,27 +32,27 @@ distlib==0.3.4
     # via virtualenv
 dparse==0.5.1
     # via safety
-filelock==3.4.2
+filelock==3.6.0
     # via virtualenv
 flake8==4.0.1
     # via -r dev-requirements.in
 gitdb==4.0.9
     # via gitpython
-gitpython==3.1.26
+gitpython==3.1.27
     # via bandit
-identify==2.4.8
+identify==2.4.12
     # via pre-commit
 idna==3.3
     # via requests
 iniconfig==1.1.1
     # via pytest
-invoke==1.6.0
+invoke==1.7.0
     # via -r dev-requirements.in
 isort==5.10.1
     # via -r dev-requirements.in
 mccabe==0.6.1
     # via flake8
-mypy==0.931
+mypy==0.941
     # via -r dev-requirements.in
 mypy-extensions==0.4.3
     # via
@@ -67,13 +67,13 @@ packaging==21.3
     #   safety
 pathspec==0.9.0
     # via black
-pbr==5.8.0
+pbr==5.8.1
     # via stevedore
 pep517==0.12.0
     # via pip-tools
-pip-tools==6.5.0
+pip-tools==6.5.1
     # via -r dev-requirements.in
-platformdirs==2.4.1
+platformdirs==2.5.1
     # via
     #   black
     #   virtualenv
@@ -91,7 +91,7 @@ pyparsing==3.0.7
     # via packaging
 pyside6==6.2.3
     # via -r requirements.txt
-pytest==7.0.0
+pytest==7.1.1
     # via
     #   -r dev-requirements.in
     #   pytest-check
@@ -120,17 +120,17 @@ toml==0.10.2
     # via
     #   dparse
     #   pre-commit
-tomli==2.0.0
+tomli==2.0.1
     # via
     #   black
     #   mypy
     #   pep517
     #   pytest
-typing-extensions==4.0.1
+typing-extensions==4.1.1
     # via mypy
-urllib3==1.26.8
+urllib3==1.26.9
     # via requests
-virtualenv==20.13.1
+virtualenv==20.13.4
     # via pre-commit
 wheel==0.37.1
     # via pip-tools
