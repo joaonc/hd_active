@@ -28,7 +28,8 @@ class HdActive:
     @staticmethod
     def _write_hd(drive_path: Path) -> None:
         file_path = drive_path / FILE_NAME
-        file_path.open('w').write(str(time.time()))
+        # Binary mode required to switch buffering off.
+        file_path.open('wb', buffering=0).write(str(time.time()).encode())
         file_path.unlink()
 
     def write_hds(self) -> None:

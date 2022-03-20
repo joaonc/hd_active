@@ -1,6 +1,6 @@
 default_language_version:
   python: python3.10
-default_stages: [push]
+default_stages: [ push ]
 repos:
   - repo: https://github.com/psf/black
     rev: 22.1.0
@@ -16,8 +16,6 @@ repos:
     rev: v4.1.0
     hooks:
       - id: check-added-large-files
-      - id: check-yaml
       - id: debug-statements
       - id: double-quote-string-fixer
       - id: end-of-file-fixer
-      - id: trailing-whitespace
