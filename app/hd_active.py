@@ -4,7 +4,7 @@ from collections import deque
 from datetime import datetime
 from os import PathLike, urandom
 from pathlib import Path
-from typing import Iterable, Optional, Set, Union
+from typing import Deque, Iterable, Optional, Set, Union
 
 from app.hd_action_state import HdActionState
 
@@ -24,7 +24,7 @@ class HdActive:
         self._is_running = False
         self._write_hd_thread = None
         # `deque` instead of `list` to prevent from growing indefinitely
-        self._log = deque(maxlen=1000)
+        self._log: Deque[str] = deque(maxlen=1000)
         self.wait = wait
         if run:
             self.start()
