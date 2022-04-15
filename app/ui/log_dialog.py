@@ -1,4 +1,3 @@
-import time
 from PySide6 import QtGui, QtWidgets
 
 from app.hd_active import HdActive
