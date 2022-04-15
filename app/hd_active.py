@@ -1,3 +1,4 @@
+import logging
 import threading
 import time
 from collections import deque
@@ -9,6 +10,7 @@ from typing import Deque, Iterable, Optional, Set, Union
 from app.hd_action_state import HdActionState
 
 FILE_NAME = '_hd_active.txt'
+logger = logging.getLogger(__name__)
 
 
 class HdActive:
@@ -51,6 +53,7 @@ class HdActive:
         return bytes_written
 
     def write_hds(self) -> None:
+        logger.debug(f'Writing to {len(self._drive_paths)} HD(s).')
         t = datetime.now().isoformat(timespec='seconds')
         for drive_path in self._drive_paths:
             b = self._write_hd(drive_path)
@@ -92,6 +95,7 @@ class HdActive:
         Waits for the thread that accesses the drives to exit.
         """
         if self._write_hd_thread is not None:
+            logger.debug('Waiting for HD write thread to finish.')
             timeout = self.wait * len(self.drive_paths) * 2
             time_sleep = self.wait
             time_waited = 0
@@ -106,7 +110,12 @@ class HdActive:
             self._write_hd_thread = None
 
     def start(self):
-        if not self.is_running:
+        if len(self._drive_paths) == 0:
+            logger.warning('No drives specified.')
+        if self.is_running:
+            logger.debug('HD Active already started, do nothing.')
+        else:
+            logger.debug('Starting HD Active.')
             self._wait_write_hd_thread()
             self._is_running = True
             self._write_hd_thread = threading.Thread(target=self._do_write_hd)
@@ -132,3 +141,41 @@ class HdActive:
             return HdActionState.Start
         self.start()
         return HdActionState.Stop
+
+
+if __name__ == '__main__':
+    import argparse
+    import sys
+
+    from app.hd_active_config import HdActiveConfig
+
+    parser = argparse.ArgumentParser(description='Keep HDs active.')
+    parser.add_argument(
+        '--conf',
+        default='hd_active.ini',
+        help='Config file to use.',
+    )
+    parser.add_argument(
+        '--debug',
+        action=argparse.BooleanOptionalAction,
+        help='Set logging to debug for more info.',
+    )
+
+    args = parser.parse_args()
+    if args.debug:
+        handler = logging.StreamHandler(stream=sys.stdout)
+        handler.setLevel(logging.DEBUG)
+        handler.setFormatter(logging.Formatter('%(levelname)s: %(message)s'))
+        logger.addHandler(handler)
+        logger.setLevel(logging.DEBUG)
+    config = HdActiveConfig(args.conf)
+    hd_active = HdActive(drive_paths=config.drive_paths, run=config.run, wait=config.wait)
+    hd_active.start()
+    print('HD Active started.')
+    while True:
+        x = input('Type `s` to stop: ')
+        if x.lower() == 's':
+            break
+    print('Stopping HD Active.')
+    hd_active.stop(wait=True)
+    print('HD Active stopped. Exiting.')
