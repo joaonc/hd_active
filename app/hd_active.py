@@ -1,6 +1,6 @@
 import threading
 import time
-from os import PathLike
+from os import PathLike, urandom
 from pathlib import Path
 from typing import Iterable, Optional, Set, Union
 
@@ -27,9 +27,15 @@ class HdActive:
 
     @staticmethod
     def _write_hd(drive_path: Path) -> None:
+        """
+        Does the actual writing of data to the drive.
+        """
         file_path = drive_path / FILE_NAME
         # Binary mode required to switch buffering off.
-        file_path.open('wb', buffering=0).write(str(time.time()).encode())
+        with file_path.open('wb', buffering=0) as f:
+            for _ in range(10):
+                f.write(urandom(1000))
+
         file_path.unlink()
 
     def write_hds(self) -> None:
@@ -73,7 +79,9 @@ class HdActive:
                 time.sleep(time_sleep)
                 time_waited += time_sleep
                 if time_waited > timeout:
-                    raise Exception('Timeout while waiting for thread that accesses drives to finish.')
+                    raise Exception(
+                        'Timeout while waiting for thread that accesses drives to finish.'
+                    )
 
             self._write_hd_thread = None
 

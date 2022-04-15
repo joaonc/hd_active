@@ -72,13 +72,17 @@ class TestHdActive:
         expected_drive_paths = {Path(drive_path).drive for drive_path in drive_paths}
         assert {drive_path.drive for drive_path in hd_active.drive_paths} == expected_drive_paths
 
-    @pytest.mark.parametrize('run, expected_change_state', [(True, HdActionState.Stop), (False, HdActionState.Start)])
+    @pytest.mark.parametrize(
+        'run, expected_change_state', [(True, HdActionState.Stop), (False, HdActionState.Start)]
+    )
     def test_get_change_state(self, mock_write_hd, run, expected_change_state):
         hd_active = HdActiveTest(drive_paths=['z'], run=run)
         assert hd_active.get_change_state() is expected_change_state
         hd_active.stop(wait=True)
 
-    @pytest.mark.parametrize('run, expected_change_state', [(True, HdActionState.Start), (False, HdActionState.Stop)])
+    @pytest.mark.parametrize(
+        'run, expected_change_state', [(True, HdActionState.Start), (False, HdActionState.Stop)]
+    )
     def test_change_state(self, mock_write_hd, run, expected_change_state):
         hd_active = HdActiveTest(drive_paths=['z'], run=run)
         assert hd_active.is_running is run

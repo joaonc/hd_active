@@ -12,8 +12,8 @@ def config_file(request, tmp_path) -> Tuple[str, List[str]]:
     """
     Fixture to be called indirectly with the INI file contents as parameter in the ``request``.
 
-    The parameter to ``request`` should be a tuple with the contents of the INI file and a list with the expected
-    drives.
+    The parameter to ``request`` should be a tuple with the contents of the INI file and a list
+    with the expected drives.
     """
     file = tmp_path / 'test.ini'
     file.write_text(request.param[0])

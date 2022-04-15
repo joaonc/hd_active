@@ -20,7 +20,9 @@ class HdActiveConfig:
         self.wait: Union[int, float] = 60
         self.drive_paths: List[str] = []
 
-        self.config = configparser.ConfigParser(converters={'list': lambda x: [i.strip(' "\'') for i in x.split(',')]})
+        self.config = configparser.ConfigParser(
+            converters={'list': lambda x: [i.strip(' "\'') for i in x.split(',')]}
+        )
         self.read()
 
     def read(self):
@@ -38,7 +40,9 @@ class HdActiveConfig:
         section = self.config[self.SECTION_NAME]
         section[self.OPTION_RUN] = str(self.run)
         section[self.OPTION_WAIT] = str(self.wait)
-        section[self.OPTION_DRIVE_PATHS] = ', '.join(str(drive_path) for drive_path in self.drive_paths)
+        section[self.OPTION_DRIVE_PATHS] = ', '.join(
+            str(drive_path) for drive_path in self.drive_paths
+        )
 
         with open(self.file_name) as configfile:
             self.config.write(configfile)

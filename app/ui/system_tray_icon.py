@@ -51,5 +51,7 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         next_state = self.hd_active.change_state()
 
         # Update menu text
-        change_state_action = next(action for action in self.contextMenu().children() if action.text() == cur_menu_text)
+        change_state_action = next(
+            action for action in self.contextMenu().children() if action.text() == cur_menu_text
+        )
         change_state_action.setText(next_state)
