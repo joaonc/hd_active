@@ -73,7 +73,9 @@ class HdActive:
                 time.sleep(time_sleep)
                 time_waited += time_sleep
                 if time_waited > timeout:
-                    raise Exception('Timeout while waiting for thread that accesses drives to finish.')
+                    raise Exception(
+                        'Timeout while waiting for thread that accesses drives to finish.'
+                    )
 
             self._write_hd_thread = None
 

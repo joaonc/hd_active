@@ -58,7 +58,9 @@ def _get_requirements_files(requirements: str | None, extension: str) -> list[st
         requirements_files = _csstr_to_list(requirements)
 
     # Get full filename+extension and sort by the order defined in `REQUIREMENTS_FILES`
-    filenames = [_get_requirements_file(r, extension) for r in REQUIREMENTS_FILES if r in requirements_files]
+    filenames = [
+        _get_requirements_file(r, extension) for r in REQUIREMENTS_FILES if r in requirements_files
+    ]
 
     return filenames
 
@@ -85,7 +87,11 @@ def ui_py(c, file=None):
         c.run(f'pyside6-uic {ui_file_path} -o {py_file_path}')
 
 
-@task(help={'file': f'`.ui` file to be edited. Available files: {", ".join(p.stem for p in UI_FILES)}.'})
+@task(
+    help={
+        'file': f'`.ui` file to be edited. Available files: {", ".join(p.stem for p in UI_FILES)}.'
+    }
+)
 def ui_edit(c, file):
     """
     Edit a file in QT Designer.
@@ -171,7 +177,9 @@ def pip_sync(c, requirements=None):
     c.run(f'pip-sync {" ".join(_get_requirements_files(requirements, "txt"))}')
 
 
-@task(help=REQUIREMENTS_TASK_HELP | {'package': 'Package to upgrade. Can be a comma separated list.'})
+@task(
+    help=REQUIREMENTS_TASK_HELP | {'package': 'Package to upgrade. Can be a comma separated list.'}
+)
 def pip_package(c, requirements, package):
     """
     Upgrade package.
