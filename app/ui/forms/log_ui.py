@@ -18,24 +18,24 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QDialog, QPushButton, QSizePolicy,
     QTextBrowser, QWidget)
 
-class Ui_log_dialog(object):
-    def setupUi(self, log_dialog):
-        if not log_dialog.objectName():
-            log_dialog.setObjectName(u"log_dialog")
-        log_dialog.resize(719, 411)
-        self.ok_button = QPushButton(log_dialog)
+class Ui_LogDialog(object):
+    def setupUi(self, LogDialog):
+        if not LogDialog.objectName():
+            LogDialog.setObjectName(u"LogDialog")
+        LogDialog.resize(719, 411)
+        self.ok_button = QPushButton(LogDialog)
         self.ok_button.setObjectName(u"ok_button")
         self.ok_button.setGeometry(QRect(630, 380, 75, 24))
-        self.log_textBrowser = QTextBrowser(log_dialog)
+        self.log_textBrowser = QTextBrowser(LogDialog)
         self.log_textBrowser.setObjectName(u"log_textBrowser")
         self.log_textBrowser.setGeometry(QRect(10, 10, 701, 361))
 
-        self.retranslateUi(log_dialog)
+        self.retranslateUi(LogDialog)
 
-        QMetaObject.connectSlotsByName(log_dialog)
+        QMetaObject.connectSlotsByName(LogDialog)
     # setupUi
 
-    def retranslateUi(self, log_dialog):
-        log_dialog.setWindowTitle(QCoreApplication.translate("log_dialog", u"HD Active Log", None))
-        self.ok_button.setText(QCoreApplication.translate("log_dialog", u"Ok", None))
+    def retranslateUi(self, LogDialog):
+        LogDialog.setWindowTitle(QCoreApplication.translate("LogDialog", u"HD Active Log", None))
+        self.ok_button.setText(QCoreApplication.translate("LogDialog", u"Ok", None))
     # retranslateUi
