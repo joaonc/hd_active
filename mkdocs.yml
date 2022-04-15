@@ -21,5 +21,8 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
   - tables
 
+plugins:
+  - search
+
 repo_url: https://github.com/joaonc/hd_active
 copyright: Copyright &copy; 2022 Joao Coelho
