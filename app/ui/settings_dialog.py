@@ -8,7 +8,7 @@ from app.utils import get_asset
 
 
 class SettingsDialog(QtWidgets.QDialog):
-    # Technical note: Using class composition instead of inheritance or `PySide6.QtUiTools.loadUiType`.
+    # Using class composition instead of inheritance or `PySide6.QtUiTools.loadUiType`.
     def __init__(self, hd_active: HdActive, parent):
         super().__init__(parent)
         self.hd_active = hd_active

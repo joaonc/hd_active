@@ -18,11 +18,13 @@ REQUIREMENTS_FILES = {
 }
 """
 Requirements files.
-Order matters as most operations with multiple files need ``requirements.txt`` to be processed first.
+Order matters as most operations with multiple files need ``requirements.txt`` to be processed
+first.
 """
 REQUIREMENTS_TASK_HELP = {
-    'requirements': '`.in` file. Full name not required, just the initial name before the dash (ex. \'dev\'). '
-    f'For main file use \'{REQUIREMENTS_MAIN}\'. Available requirements: {", ".join(REQUIREMENTS_FILES)}.'
+    'requirements': '`.in` file. Full name not required, just the initial name before the dash '
+    f'(ex. \'dev\'). For main file use \'{REQUIREMENTS_MAIN}\'. Available requirements: '
+    f'{", ".join(REQUIREMENTS_FILES)}.'
 }
 
 os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
@@ -39,8 +41,9 @@ def _get_requirements_file(requirements: str, extension: str) -> str:
     """
     Return the full requirements file name (with extension).
 
-    :param requirements: The requirements file to retrieve. Can be the whole filename (no extension), ex
-        `'dev-requirements'` or just the initial portion, ex `'dev'`. Use `'main'` for the `requirements` file.
+    :param requirements: The requirements file to retrieve. Can be the whole filename
+        (no extension), ex `'dev-requirements'` or just the initial portion, ex `'dev'`.
+        Use `'main'` for the `requirements` file.
     :param extension: Requirements file extension. Can be either `'in'` or `'txt'`.
     """
     filename = REQUIREMENTS_FILES.get(requirements, requirements)
@@ -67,8 +70,9 @@ def _get_requirements_files(requirements: str | None, extension: str) -> list[st
 
 @task(
     help={
-        'file': '`.ui` file to be converted to `.py`. `.ui` extension not required. Can be a comma separated. '
-        f'If not supplied, all files will be converted. Available files: {", ".join(p.stem for p in UI_FILES)}.'
+        'file': '`.ui` file to be converted to `.py`. `.ui` extension not required. Can be a comma '
+        'separated. If not supplied, all files will be converted. Available files: '
+        f'{", ".join(p.stem for p in UI_FILES)}.'
     }
 )
 def ui_py(c, file=None):
