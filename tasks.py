@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import List, Optional
 
 from invoke import Collection, task
 
@@ -30,7 +31,7 @@ REQUIREMENTS_TASK_HELP = {
 os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
 
 
-def _csstr_to_list(csstr: str) -> list[str]:
+def _csstr_to_list(csstr: str) -> List[str]:
     """
     Convert a comma-separated string to list.
     """
@@ -53,7 +54,7 @@ def _get_requirements_file(requirements: str, extension: str) -> str:
     return f'{filename}.{extension.lstrip(".")}'
 
 
-def _get_requirements_files(requirements: str | None, extension: str) -> list[str]:
+def _get_requirements_files(requirements: Optional[str], extension: str) -> List[str]:
     extension = extension.lstrip('.')
     if requirements is None:
         requirements_files = list(REQUIREMENTS_FILES)
@@ -182,7 +183,10 @@ def pip_sync(c, requirements=None):
 
 
 @task(
-    help=REQUIREMENTS_TASK_HELP | {'package': 'Package to upgrade. Can be a comma separated list.'}
+    help={
+        **REQUIREMENTS_TASK_HELP,
+        **{'package': 'Package to upgrade. Can be a comma separated list.'},
+    }
 )
 def pip_package(c, requirements, package):
     """
