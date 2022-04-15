@@ -7,6 +7,9 @@ from app.utils import get_asset
 
 
 def main():
+    """
+    Run HD Active with UI.
+    """
     app = QtWidgets.QApplication(sys.argv)
     widget = QtWidgets.QWidget()
     tray_icon = SystemTrayIcon(

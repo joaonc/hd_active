@@ -26,7 +26,9 @@ class HdActiveConfig:
         self.read()
 
     def read(self):
-        self.config.read(self.file_name)
+        files_read = self.config.read(self.file_name)
+        if not files_read:
+            raise FileNotFoundError(self.file_name)
         try:
             section = self.config[self.SECTION_NAME]
             self.run = section.getboolean(self.OPTION_RUN, self.run)
