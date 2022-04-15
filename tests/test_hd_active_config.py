@@ -65,3 +65,8 @@ def test_drives(config_file):
     file_name, expected_drives_paths = config_file
     config = HdActiveConfig(file_name)
     assert config.drive_paths == expected_drives_paths
+
+
+def test_file_doesnt_exist():
+    with pytest.raises(FileNotFoundError):
+        HdActiveConfig('foo_doesnt_exist.ini')
