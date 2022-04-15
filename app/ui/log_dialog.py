@@ -1,5 +1,4 @@
-from os import PathLike
-
+import time
 from PySide6 import QtGui, QtWidgets
 
 from app.hd_active import HdActive
@@ -16,3 +15,11 @@ class LogDialog(QtWidgets.QDialog):
 
         # UI bindings
         self.ui.ok_button.clicked.connect(self.close)
+
+    def showEvent(self, arg__1: QtGui.QShowEvent):
+        super().showEvent(arg__1)
+
+        self.set_text()
+
+    def set_text(self):
+        self.ui.log_textBrowser.setText('\n'.join(self.hd_active.log))
