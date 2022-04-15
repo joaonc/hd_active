@@ -4,6 +4,7 @@ from PySide6 import QtGui, QtWidgets
 
 from app.hd_active import HdActive
 from app.ui.forms.settings_ui import Ui_Dialog
+from app.ui.log_dialog import LogDialog
 from app.utils import get_asset
 
 
@@ -22,7 +23,10 @@ class SettingsDialog(QtWidgets.QDialog):
         self.set_values()
 
         # UI bindings
+        self.ui.ok_button.clicked.connect(self.ok)
+        self.ui.cancel_button.clicked.connect(self.close)
         self.ui.change_state_button.clicked.connect(self.change_state)
+        self.ui.log_button.clicked.connect(self.show_log)
 
     @staticmethod
     def _path_to_str(drive_path: PathLike) -> str:
@@ -40,3 +44,11 @@ class SettingsDialog(QtWidgets.QDialog):
             ','.join(self._path_to_str(drive_path) for drive_path in self.hd_active.drive_paths)
         )
         self.ui.wait_line_edit.setText(str(self.hd_active.wait))
+
+    def ok(self):
+        # TODO: Save state to HD Active file.
+        self.close()
+
+    def show_log(self):
+        log = LogDialog(self.hd_active, self)
+        log.show()

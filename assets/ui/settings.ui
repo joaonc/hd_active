@@ -95,6 +95,13 @@
       </spacer>
      </item>
      <item>
+      <widget class="QPushButton" name="log_button">
+       <property name="text">
+        <string>Log</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="change_state_button">
        <property name="text">
         <string>Start/Stop</string>
@@ -145,6 +152,7 @@
  <tabstops>
   <tabstop>drives_line_edit</tabstop>
   <tabstop>wait_line_edit</tabstop>
+  <tabstop>log_button</tabstop>
   <tabstop>change_state_button</tabstop>
   <tabstop>ok_button</tabstop>
   <tabstop>cancel_button</tabstop>

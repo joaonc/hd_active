@@ -23,7 +23,7 @@ class HdActiveTest(HdActive):
         super().__init__(drive_paths, run, wait=wait)
 
 
-@patch('app.hd_active.HdActive._write_hd')
+@patch('app.hd_active.HdActive._write_hd', return_value=1000)
 class TestHdActive:
     def test_instantiate_not_started(self, mock_write_hd):
         hd_active = HdActiveTest(drive_paths=['z'], run=False)
@@ -91,4 +91,15 @@ class TestHdActive:
 
         check.equal(actual_change_state, expected_change_state)
         check.equal(hd_active.is_running, not run)
+        hd_active.stop(wait=True)
+
+    def test_log(self, mock_write_hd):
+        hd_active = HdActiveTest(drive_paths=['z'], run=True)
+
+        time.sleep(WAIT_TEST)
+        len_1 = len(hd_active.log)
+        assert len_1 > 0
+        time.sleep(WAIT_TEST)
+        len_2 = len(hd_active.log)
+        assert len_2 > len_1
         hd_active.stop(wait=True)
