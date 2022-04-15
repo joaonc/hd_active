@@ -95,7 +95,7 @@ class HdActive:
         Waits for the thread that accesses the drives to exit.
         """
         if self._write_hd_thread is not None:
-            logger.debug('Waiting for HD write thread to finish.')
+            logger.info('Waiting for HD write thread to finish.')
             timeout = self.wait * len(self.drive_paths) * 2
             time_sleep = self.wait
             time_waited = 0
@@ -113,9 +113,9 @@ class HdActive:
         if len(self._drive_paths) == 0:
             logger.warning('No drives specified.')
         if self.is_running:
-            logger.debug('HD Active already started, do nothing.')
+            logger.info('HD Active already started, do nothing.')
         else:
-            logger.debug('Starting HD Active.')
+            logger.info('Starting HD Active.')
             self._wait_write_hd_thread()
             self._is_running = True
             self._write_hd_thread = threading.Thread(target=self._do_write_hd)
@@ -156,18 +156,20 @@ if __name__ == '__main__':
         help='Config file to use.',
     )
     parser.add_argument(
-        '--debug',
-        action=argparse.BooleanOptionalAction,
-        help='Set logging to debug for more info.',
+        '--log',
+        choices=['info', 'debug'],
+        required=False,
+        help='Set logging for more info.',
     )
 
     args = parser.parse_args()
-    if args.debug:
+    if args.log:
+        log_level = args.log.upper()
         handler = logging.StreamHandler(stream=sys.stdout)
-        handler.setLevel(logging.DEBUG)
+        handler.setLevel(log_level)
         handler.setFormatter(logging.Formatter('%(levelname)s: %(message)s'))
         logger.addHandler(handler)
-        logger.setLevel(logging.DEBUG)
+        logger.setLevel(log_level)
     config = HdActiveConfig(args.conf)
     hd_active = HdActive(drive_paths=config.drive_paths, run=config.run, wait=config.wait)
     hd_active.start()
