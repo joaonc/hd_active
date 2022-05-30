@@ -7,13 +7,24 @@ theme:
   name: material
   logo: images/logo.png
   favicon: images/favicon.ico
+  features:
+    - content.code.annotate
   palette:
-    primary: blue grey
-    accent: indigo
+    - media: "(prefers-color-scheme: light"
+      scheme: default
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark"
+      scheme: slate
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to light mode
 
 markdown_extensions:
   - abbr
   - admonition
+  - pymdownx.details
   - pymdownx.highlight
   - pymdownx.superfences
   - pymdownx.emoji:
