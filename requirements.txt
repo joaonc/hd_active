@@ -4,7 +4,11 @@
 #
 #    pip-compile
 #
-pyside6==6.2.4
+pyside6==6.3.0
     # via -r requirements.in
-shiboken6==6.2.4
+pyside6-addons==6.3.0
+    # via pyside6
+pyside6-essentials==6.3.0
+    # via pyside6
+shiboken6==6.3.0
     # via pyside6
