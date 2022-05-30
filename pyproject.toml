@@ -23,5 +23,5 @@ warn_return_any = true
 warn_unused_configs = true
 
 [[tool.mypy.overrides]]
-module = ['invoke', 'pytest_check']
+module = ['invoke', 'pytest_check', 'PySide6.*']
 ignore_missing_imports = true
