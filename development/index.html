@@ -492,18 +492,15 @@
 <p>To get started with development of this project:</p>
 <ol>
 <li>Clone
-   Virtual environment recommended, but optional.</li>
+   Virtual environment recommended, but optional.<br />
+   Developed with Python 3.7, but should be straightforward to upgrade to newer versions.</li>
 <li><code>pip install -U -r dev-requirements.txt</code></li>
 <li><code>pre-commit install</code></li>
 </ol>
-<div class="admonition todo">
-<p class="admonition-title">Todo</p>
-<p>Add content</p>
-</div>
 <h2 id="ui">UI</h2>
 <p>This project uses <a href="https://www.qt.io">Qt 6</a> for its UI components.</p>
-<p><code>Qt Designer</code> is used to create the UI, which outputs a <code>.ui</code> file (XML content that describes the UI). This file is
-then transformed into a <code>.py</code> file.</p>
+<p><code>Qt Designer</code> is used to create the UI, which outputs a <code>.ui</code> file (XML content that describes the
+UI). This file is then transformed into a <code>.py</code> file.</p>
 <p>All the required tools are available by installing <code>pyside6</code>:</p>
 <ul>
 <li><code>Qt Designer</code>: <code>pyside6-designer</code></li>
@@ -514,13 +511,14 @@ then transformed into a <code>.py</code> file.</p>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Qt is not necessarily required, something like Tkinter could have been used (more open and included in Python), and
-the latest version of Qt (6) isn't necessary, something more established like Qt 5 could have been used, but I
-wanted to dip my toes into the Qt world and figured using the latest version would give me more lasting knowledge.</p>
+<p>Qt is not necessarily required, something like Tkinter could have been used (more open and
+included in Python), and the latest version of Qt (6) isn't necessary, something more
+established like Qt 5 could have been used, but I wanted to dip my toes into the Qt world and
+figured using the latest version would give me more lasting knowledge.</p>
 </div>
 <h2 id="test">Test</h2>
-<p><a href="https://pytest.org">pytest</a> is used for testing and main features used are fixtures, parameters and markers. When
-working on test cases, make sure you're familiar with how these work.</p>
+<p><a href="https://pytest.org">pytest</a> is used for testing and main features used are fixtures, parameters
+and markers. When working on test cases, make sure you're familiar with how these work.</p>
 <h3 id="markers">Markers</h3>
 <p>Markers are used to distinguish tests with <code>pytest.mark.&lt;marker_name&gt;</code>.</p>
 <p>List of markers used, defined in <code>pyproject.toml</code></p>
@@ -540,7 +538,8 @@ working on test cases, make sure you're familiar with how these work.</p>
 </table>
 <h2 id="development-tasks">Development tasks</h2>
 <p>This project uses <strong>pyinvoke</strong> (<a href="https://www.pyinvoke.org/">main page</a> | <a href="https://docs.pyinvoke.org/en/stable/">docs</a> |
-<a href="https://github.com/pyinvoke/invoke">GitHub</a>) to facilitate executing miscellaneous tasks that help with development.</p>
+<a href="https://github.com/pyinvoke/invoke">GitHub</a>) to facilitate executing miscellaneous tasks that help
+with development.</p>
 <h3 id="using-invoke">Using invoke</h3>
 <p>After the installing the dev requirements (which include <code>invoke</code>), try the commands below.</p>
 <p>List all available tasks:
@@ -554,15 +553,16 @@ working on test cases, make sure you're familiar with how these work.</p>
 </code></pre></div></p>
 <p>Use <code>--dry</code> to see what the task does without executing it.</p>
 <h3 id="debugging-tasks">Debugging tasks</h3>
-<p>To debug <code>tasks.py</code> (the file used by <code>invoke</code>), either add a <code>breakpoint()</code> statement or, if using an IDE (in this
-example PyCharm), use the configuration below to allow setting breakpoints in the code and debug <code>tasks.py</code> as any
-other Python file.</p>
+<p>To debug <code>tasks.py</code> (the file used by <code>invoke</code>), either add a <code>breakpoint()</code> statement or, if using
+an IDE (in this example PyCharm), use the configuration below to allow setting breakpoints in the
+code and debug <code>tasks.py</code> as any other Python file.</p>
 <p><img alt="PyCharm tasks run config" src="../images/pycharm_tasks_run_config.png" /></p>
 <h2 id="documentation">Documentation</h2>
 <p>Install documentation requirements with:
 <div class="highlight"><pre><span></span><code>pip install -r docs-requirements.txt
 </code></pre></div></p>
-<p>You can then edit the <code>.md</code> files under the <code>docs</code> directory and, if more need to be added, update <code>mkdocs.yml</code>.</p>
+<p>You can then edit the <code>.md</code> files under the <code>docs</code> directory and, if more need to be added, update
+<code>mkdocs.yml</code>.</p>
 <h3 id="view-locally">View locally</h3>
 <ul>
 <li>Web server (recommended)
@@ -571,19 +571,19 @@ other Python file.</p>
 <li>Static files
   <div class="highlight"><pre><span></span><code>mkdocs build
 </code></pre></div>
-  This generates a static web site under <code>/site</code>, which is in <code>.gitignore</code>.</li>
+  This generates a static website under <code>/site</code>, which is in <code>.gitignore</code>.</li>
 </ul>
 <h3 id="update-in-github">Update in GitHub</h3>
 <p>Simply run the command below to push the documentation to GitHub pages.</p>
 <div class="highlight"><pre><span></span><code>mkdocs gh-deploy
 </code></pre></div>
 <p>More instructions <a href="https://www.mkdocs.org/user-guide/deploying-your-docs/#github-pages">here</a>.</p>
-<p>The first time <code>gh-deploy</code> is used, authorization needs to be granted to publish to GitHub Pages. A <em>GitHubCredentials</em>
-widget appears and follow the prompts.</p>
+<p>The first time <code>gh-deploy</code> is used, authorization needs to be granted to publish to GitHub Pages.
+A <em>GitHubCredentials</em> widget appears and follow the prompts.</p>
 <p>Documentation available here: <a href="https://joaonc.github.io/hd_active">https://joaonc.github.io/hd_active</a></p>
-<p>When running this command, it's this website that needs to be updated (unless working in a forked project). Until a
-process is established for other people to update this GitHub Page location, please contact me and I'll push the
-documentation changes as needed.</p>
+<p>When running this command, it's this website that needs to be updated (unless working in a forked
+project). Until a process is established for other people to update this GitHub Page location,
+please contact me and I'll push the documentation changes as needed.</p>
 
               
             </article>
@@ -619,7 +619,7 @@ documentation changes as needed.</p>
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2022 Joao Coelho
+      Copyright &copy; 2023 Joao Coelho
     </div>
   
   

@@ -260,6 +260,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#about" class="md-nav__link">
+    About
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#config-file" class="md-nav__link">
     Config file
   </a>
@@ -316,6 +323,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#about" class="md-nav__link">
+    About
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#config-file" class="md-nav__link">
     Config file
   </a>
@@ -342,17 +356,35 @@
 
 <h1 id="hd-active">HD Active</h1>
 <p>Prevent external HD's from becoming inactive (sleeping).</p>
+<h2 id="about">About</h2>
+<p>The functionality of this project, as stated above, is to prevent external mechanical Hard Drives
+from sleeping and avoid waiting for them to spin up when accessing.</p>
+<p>The <em>objectives</em> of this project, however are the following:</p>
+<ul>
+<li>Learn some <a href="https://www.qt.io">QT</a> basics for UI development in Python.</li>
+<li>Use <a href="https://www.mkdocs.org/">MkDocs</a> and the theme
+  <a href="https://squidfunk.github.io/mkdocs-material/">MkDocs-Material</a> for documentation.</li>
+<li>Use <a href="https://www.pyinvoke.org/">PyInvoke</a> for misc tasks in lieu of the more widely used Makefile.<br />
+  This has the following advantages:<ul>
+<li>Avoid the use of a different language for scripting.</li>
+<li>Scripts are OS independent by using Python instead of an OS specific language like bash.</li>
+<li>Scripts are easier to create and maintain (because Python <img alt="😃" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f603.svg" title=":smiley:" />).</li>
+<li>Other functionality that PyInvoke provides.</li>
+</ul>
+</li>
+<li>CI with GitHub Actions.</li>
+</ul>
 <h2 id="config-file">Config file</h2>
 <p>The file <code>hd_active.ini</code>, located in the same folder as the app, is used to persist settings.</p>
 <p>The file is created/updated when settings change.</p>
 <p><strong>Options:</strong></p>
 <ul>
-<li><code>run_on_start</code>: Whether <em>HD Active</em> should start pinging drives when it runs. If <code>False</code>, the user needs to click
-  <em>Start</em>.</li>
-<li><code>wait_between_access</code>: Time, in seconds, to wait between drive pings. If too long, the drives may go to sleep, if too
-  short, drives will be pinged unnecessarily, although this is not a big issue.</li>
-<li><code>drives</code>: Which drives to ping. This is a comma separated list and doesn't need to have quotes, ex: <code>e,f,g</code> or
-  <code>e:\, f:\, g:\</code>.</li>
+<li><code>run_on_start</code>: Whether <em>HD Active</em> should start pinging drives when it runs. If <code>False</code>, the
+  user needs to click <em>Start</em>.</li>
+<li><code>wait_between_access</code>: Time, in seconds, to wait between drive pings. If too long, the drives may
+  go to sleep, if too short, drives will be pinged unnecessarily, although this is not a big issue.</li>
+<li><code>drives</code>: Which drives to ping. This is a comma separated list and doesn't need to have quotes,
+  ex: <code>e,f,g</code> or <code>e:\, f:\, g:\</code>.</li>
 </ul>
 <p><strong>Sample:</strong>
 <div class="highlight"><pre><span></span><code>[HD Active]
@@ -395,7 +427,7 @@ drives = e:\, f:\, g:\
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2022 Joao Coelho
+      Copyright &copy; 2023 Joao Coelho
     </div>
   
   
