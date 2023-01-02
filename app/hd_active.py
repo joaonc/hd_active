@@ -110,8 +110,9 @@ class HdActive:
             self._write_hd_thread = None
 
     def start(self):
-        if len(self._drive_paths) == 0:
+        if not self._drive_paths:
             logger.warning('No drives specified.')
+            return
         if self.is_running:
             logger.info('HD Active already started, do nothing.')
         else:
