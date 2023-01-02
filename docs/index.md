@@ -16,6 +16,7 @@ The _objectives_ of this project, however are the following:
     * Avoid the use of a different language for scripting.
     * Scripts are OS independent by using Python instead of an OS specific language like bash.
     * Scripts are easier to create and maintain (because Python :smiley:).
+    * Other functionality that PyInvoke provides.
 * CI with GitHub Actions.
 
 ## Config file

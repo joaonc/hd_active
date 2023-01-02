@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from typing import List, Optional
 
-from invoke import Collection, task
+from invoke import Collection, Exit, task
 
 from app.utils import get_asset
 
@@ -86,7 +86,12 @@ def ui_py(c, file=None):
         file_stems = [p.stem for p in UI_FILES]
 
     for file_stem in file_stems:
-        ui_file_path = next(p for p in UI_FILES if p.stem == file_stem)
+        ui_file_path = next((p for p in UI_FILES if p.stem == file_stem), None)
+        if not ui_file_path:
+            raise Exit(
+                f'File "{file}" not found. Available files: ", ".join(p.stem for p in UI_FILES)'
+            )
+
         py_file_path = PROJECT_DIR / 'app/ui/forms' / f'{file_stem}_ui.py'
 
         c.run(f'pyside6-uic {ui_file_path} -o {py_file_path}')
@@ -102,9 +107,13 @@ def ui_edit(c, file):
     Edit a file in QT Designer.
     """
     file_stem = file[:-3] if file.lower().endswith('.ui') else file
-    file_path = next(p for p in UI_FILES if p.stem == file_stem)
+    ui_file_path = next((p for p in UI_FILES if p.stem == file_stem), None)
+    if not ui_file_path:
+        raise Exit(
+            f'File "{file}" not found. Available files: ", ".join(p.stem for p in UI_FILES)'
+        )
 
-    c.run(f'pyside6-designer {file_path}', asynchronous=True)
+    c.run(f'pyside6-designer {ui_file_path}', asynchronous=True)
 
 
 @task
