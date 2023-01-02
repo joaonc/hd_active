@@ -7,10 +7,6 @@ To get started with development of this project:
 2. `pip install -U -r dev-requirements.txt`
 3. `pre-commit install`
 
-!!! TODO
-
-    Add content
-
 ## UI
 This project uses [Qt 6](https://www.qt.io) for its UI components.
 

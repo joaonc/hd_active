@@ -35,5 +35,7 @@ markdown_extensions:
 plugins:
   - search
 
+dev_addr: 127.0.0.1:7000
+
 repo_url: https://github.com/joaonc/hd_active
-copyright: Copyright &copy; 2022 Joao Coelho
+copyright: Copyright &copy; 2023 Joao Coelho
