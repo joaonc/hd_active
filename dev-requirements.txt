@@ -30,7 +30,7 @@ colorama==0.4.4
     #   pytest
 distlib==0.3.4
     # via virtualenv
-dparse==0.5.1
+dparse==0.6.2
     # via safety
 filelock==3.7.0
     # via virtualenv
@@ -110,11 +110,14 @@ pytest-check==1.0.5
 pyyaml==6.0
     # via
     #   bandit
-    #   dparse
     #   pre-commit
 requests==2.27.1
     # via safety
-safety==1.10.3
+ruamel-yaml==0.17.21
+    # via safety
+ruamel-yaml-clib==0.2.7
+    # via ruamel-yaml
+safety==2.3.5
     # via -r dev-requirements.in
 shiboken6==6.2.2.1
     # via

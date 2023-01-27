@@ -208,6 +208,9 @@ def pip_package(c, requirements, package):
 def pip_upgrade(c, requirements):
     """
     Try to upgrade all dependencies to their latest versions.
+
+    Use `pip-compile <filename> --upgrade-package <package>` to only upgrade one package.
+    Ex `pip-compile dev-requirements.in --upgrade-package safety`
     """
     for filename in _get_requirements_files(requirements, 'in'):
         c.run(f'pip-compile --upgrade {filename}')
