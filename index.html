@@ -267,6 +267,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    Quick start
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#config-file" class="md-nav__link">
     Config file
   </a>
@@ -330,6 +337,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    Quick start
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#config-file" class="md-nav__link">
     Config file
   </a>
@@ -374,6 +388,9 @@ from sleeping and avoid waiting for them to spin up when accessing.</p>
 </li>
 <li>CI with GitHub Actions.</li>
 </ul>
+<h2 id="quick-start">Quick start</h2>
+<div class="highlight"><pre><span></span><code>python -m app.hd_active --conf app/hd_active.ini
+</code></pre></div>
 <h2 id="config-file">Config file</h2>
 <p>The file <code>hd_active.ini</code>, located in the same folder as the app, is used to persist settings.</p>
 <p>The file is created/updated when settings change.</p>
@@ -389,7 +406,7 @@ from sleeping and avoid waiting for them to spin up when accessing.</p>
 <p><strong>Sample:</strong>
 <div class="highlight"><pre><span></span><code>[HD Active]
 run_on_start = True
-wait_between_access = 60
+wait_between_access = 30
 drives = e:\, f:\, g:\
 </code></pre></div></p>
 
