@@ -4,6 +4,11 @@ Prevent external HD's from becoming inactive (sleeping).
 
 **[https://joaonc.github.io/hd_active](https://joaonc.github.io/hd_active)**
 
+## Quick start
+```
+python -m app.hd_active --conf app/hd_active.ini
+```
+
 ## Development
 Note: Best to work on a virtual environment.
 This page doesn't go into how to do that.

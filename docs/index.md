@@ -19,6 +19,11 @@ The _objectives_ of this project, however are the following:
     * Other functionality that PyInvoke provides.
 * CI with GitHub Actions.
 
+## Quick start
+```
+python -m app.hd_active --conf app/hd_active.ini
+```
+
 ## Config file
 The file `hd_active.ini`, located in the same folder as the app, is used to persist settings.
 
@@ -37,6 +42,6 @@ The file is created/updated when settings change.
 ```
 [HD Active]
 run_on_start = True
-wait_between_access = 60
+wait_between_access = 30
 drives = e:\, f:\, g:\
 ```
