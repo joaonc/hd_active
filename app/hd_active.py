@@ -174,7 +174,7 @@ if __name__ == '__main__':
     config = HdActiveConfig(args.conf)
     hd_active = HdActive(drive_paths=config.drive_paths, run=config.run, wait=config.wait)
     hd_active.start()
-    print('HD Active started.')
+    print(f'HD Active started.\n{config}')
     while True:
         x = input('Type `s` to stop: ')
         if x.lower() == 's':
