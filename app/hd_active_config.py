@@ -26,8 +26,7 @@ class HdActiveConfig:
         self.read()
 
     def __str__(self):
-        return f'drive paths: {", ".join(self.drive_paths)}' \
-               f'\nwait: {self.wait}s'
+        return f'drive paths: {", ".join(self.drive_paths)}' f'\nwait: {self.wait}s'
 
     def read(self):
         files_read = self.config.read(self.file_name)

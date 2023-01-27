@@ -109,9 +109,7 @@ def ui_edit(c, file):
     file_stem = file[:-3] if file.lower().endswith('.ui') else file
     ui_file_path = next((p for p in UI_FILES if p.stem == file_stem), None)
     if not ui_file_path:
-        raise Exit(
-            f'File "{file}" not found. Available files: ", ".join(p.stem for p in UI_FILES)'
-        )
+        raise Exit(f'File "{file}" not found. Available files: ", ".join(p.stem for p in UI_FILES)')
 
     c.run(f'pyside6-designer {ui_file_path}', asynchronous=True)
 
