@@ -1,8 +1,7 @@
 import os
 from pathlib import Path
-from typing import List, Optional
 
-from invoke import Collection, task
+from invoke import Collection, Exit, task
 
 from app.utils import get_asset
 
@@ -95,7 +94,7 @@ def ui_py(c, file=None):
                 f'File "{file}" not found. Available files: ", ".join(p.stem for p in UI_FILES)'
             )
 
-        py_file_path = PROJECT_DIR / 'app/ui/forms' / f'{file_stem}_ui.py'
+        py_file_path = PROJECT_ROOT / 'app/ui/forms' / f'{file_stem}_ui.py'
 
         c.run(f'pyside6-uic {ui_file_path} -o {py_file_path}')
 
@@ -192,7 +191,9 @@ def pip_sync(c, requirements=None):
     c.run(f'pip-sync {" ".join(_get_requirements_files(requirements, "txt"))}')
 
 
-@task(help=REQUIREMENTS_TASK_HELP | {'package': 'Package to upgrade. Can be a comma separated list.'})
+@task(
+    help=REQUIREMENTS_TASK_HELP | {'package': 'Package to upgrade. Can be a comma separated list.'}
+)
 def pip_package(c, requirements, package):
     """
     Upgrade package.
