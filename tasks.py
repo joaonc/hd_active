@@ -15,9 +15,9 @@ QT ``.ui`` files.
 """
 REQUIREMENTS_MAIN = 'main'
 REQUIREMENTS_FILES = {
-    REQUIREMENTS_MAIN: 'requirements.txt',
-    'dev': 'requirements-dev.txt',
-    'docs': 'requirements-docs.txt',
+    REQUIREMENTS_MAIN: 'requirements',
+    'dev': 'requirements-dev',
+    'docs': 'requirements-docs',
 }
 """
 Requirements files.
@@ -165,7 +165,7 @@ def docs_deploy(c):
 @task(help=REQUIREMENTS_TASK_HELP)
 def pip_compile(c, requirements=None):
     """
-    Compile requirements file.
+    Compile requirements file(s).
     """
     for filename in _get_requirements_files(requirements, 'in'):
         c.run(f'pip-compile {filename}')
