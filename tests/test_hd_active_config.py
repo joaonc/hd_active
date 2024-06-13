@@ -12,8 +12,8 @@ def config_file(request, tmp_path) -> Tuple[str, List[str]]:
     """
     Fixture to be called indirectly with the INI file contents as parameter in the ``request``.
 
-    The parameter to ``request`` should be a tuple with the contents of the INI file and a list with the expected
-    drives.
+    The parameter to ``request`` should be a tuple with the contents of the INI file and a list
+    with the expected drives.
     """
     file = tmp_path / 'test.ini'
     file.write_text(request.param[0])
@@ -65,3 +65,29 @@ def test_drives(config_file):
     file_name, expected_drives_paths = config_file
     config = HdActiveConfig(file_name)
     assert config.drive_paths == expected_drives_paths
+
+
+def test_file_doesnt_exist():
+    with pytest.raises(FileNotFoundError):
+        HdActiveConfig('foo_doesnt_exist.ini')
+
+
+@pytest.mark.parametrize(
+    'config_file',
+    [
+        pytest.param(
+            (
+                '''[HD Active]
+wait_between_access = 7
+drives = e:\\,f:\\''',
+                'drive paths: e:\\, f:\\\nwait: 7.0s',
+            ),
+            id='two drives',
+        ),
+    ],
+    indirect=True,
+)
+def test_str(config_file):
+    file_name, expected_str = config_file
+    config = HdActiveConfig(file_name)
+    assert str(config) == expected_str

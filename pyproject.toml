@@ -2,7 +2,7 @@
 
 [tool.black]
 extend-exclude = 'app/ui/forms'
-line-length = 120
+line-length = 100
 target-version = ['py311']
 skip-string-normalization = true
 
@@ -23,5 +23,5 @@ warn_return_any = true
 warn_unused_configs = true
 
 [[tool.mypy.overrides]]
-module = ['invoke', 'pytest_check']
+module = ['invoke', 'pytest_check', 'PySide6.*']
 ignore_missing_imports = true

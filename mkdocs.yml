@@ -7,19 +7,35 @@ theme:
   name: material
   logo: images/logo.png
   favicon: images/favicon.ico
+  features:
+    - content.code.annotate
   palette:
-    primary: blue grey
-    accent: indigo
+    - media: "(prefers-color-scheme: light"
+      scheme: default
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark"
+      scheme: slate
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to light mode
 
 markdown_extensions:
   - abbr
   - admonition
+  - pymdownx.details
   - pymdownx.highlight
   - pymdownx.superfences
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji  # https://emojipedia.org/twitter/
       emoji_generator: !!python/name:materialx.emoji.to_svg
   - tables
+
+plugins:
+  - search
+
+dev_addr: 127.0.0.1:7000
 
 repo_url: https://github.com/joaonc/hd_active
 copyright: Copyright &copy; 2024 Joao Coelho

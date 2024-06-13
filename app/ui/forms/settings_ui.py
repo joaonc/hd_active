@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'settings.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.2.2
+## Created by: Qt User Interface Compiler version 6.2.4
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -23,7 +23,7 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog):
         if not Dialog.objectName():
             Dialog.setObjectName(u"Dialog")
-        Dialog.resize(318, 231)
+        Dialog.resize(300, 151)
         Dialog.setMinimumSize(QSize(300, 150))
         Dialog.setMaximumSize(QSize(800, 300))
         self.verticalLayout = QVBoxLayout(Dialog)
@@ -65,6 +65,11 @@ class Ui_Dialog(object):
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
 
+        self.log_button = QPushButton(Dialog)
+        self.log_button.setObjectName(u"log_button")
+
+        self.horizontalLayout_2.addWidget(self.log_button)
+
         self.change_state_button = QPushButton(Dialog)
         self.change_state_button.setObjectName(u"change_state_button")
 
@@ -97,7 +102,8 @@ class Ui_Dialog(object):
         self.wait_label.setBuddy(self.wait_line_edit)
 #endif // QT_CONFIG(shortcut)
         QWidget.setTabOrder(self.drives_line_edit, self.wait_line_edit)
-        QWidget.setTabOrder(self.wait_line_edit, self.change_state_button)
+        QWidget.setTabOrder(self.wait_line_edit, self.log_button)
+        QWidget.setTabOrder(self.log_button, self.change_state_button)
         QWidget.setTabOrder(self.change_state_button, self.ok_button)
         QWidget.setTabOrder(self.ok_button, self.cancel_button)
 
@@ -114,8 +120,8 @@ class Ui_Dialog(object):
         Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"HD Active", None))
         self.drives_label.setText(QCoreApplication.translate("Dialog", u"Drives", None))
         self.wait_label.setText(QCoreApplication.translate("Dialog", u"Wait", None))
+        self.log_button.setText(QCoreApplication.translate("Dialog", u"Log", None))
         self.change_state_button.setText(QCoreApplication.translate("Dialog", u"Start/Stop", None))
         self.ok_button.setText(QCoreApplication.translate("Dialog", u"Ok", None))
         self.cancel_button.setText(QCoreApplication.translate("Dialog", u"Cancel", None))
     # retranslateUi
-

@@ -1,7 +1,8 @@
 import os
 from pathlib import Path
+from typing import List, Optional
 
-from invoke import Collection, Exit, task
+from invoke import Collection, task
 
 from app.utils import get_asset
 
@@ -73,8 +74,9 @@ def _get_requirements_files(requirements: str | None, extension: str) -> list[st
 
 @task(
     help={
-        'file': '`.ui` file to be converted to `.py`. `.ui` extension not required. Can be a comma separated. '
-        f'If not supplied, all files will be converted. Available files: {", ".join(p.stem for p in UI_FILES)}.'
+        'file': '`.ui` file to be converted to `.py`. `.ui` extension not required. Can be a comma '
+        'separated. If not supplied, all files will be converted. Available files: '
+        f'{", ".join(p.stem for p in UI_FILES)}.'
     }
 )
 def ui_py(c, file=None):
@@ -87,21 +89,32 @@ def ui_py(c, file=None):
         file_stems = [p.stem for p in UI_FILES]
 
     for file_stem in file_stems:
-        ui_file_path = next(p for p in UI_FILES if p.stem == file_stem)
-        py_file_path = PROJECT_ROOT / 'app/ui/forms' / f'{file_stem}_ui.py'
+        ui_file_path = next((p for p in UI_FILES if p.stem == file_stem), None)
+        if not ui_file_path:
+            raise Exit(
+                f'File "{file}" not found. Available files: ", ".join(p.stem for p in UI_FILES)'
+            )
+
+        py_file_path = PROJECT_DIR / 'app/ui/forms' / f'{file_stem}_ui.py'
 
         c.run(f'pyside6-uic {ui_file_path} -o {py_file_path}')
 
 
-@task(help={'file': f'`.ui` file to be edited. Available files: {", ".join(p.stem for p in UI_FILES)}.'})
+@task(
+    help={
+        'file': f'`.ui` file to be edited. Available files: {", ".join(p.stem for p in UI_FILES)}.'
+    }
+)
 def ui_edit(c, file):
     """
     Edit a file in QT Designer.
     """
     file_stem = file[:-3] if file.lower().endswith('.ui') else file
-    file_path = next(p for p in UI_FILES if p.stem == file_stem)
+    ui_file_path = next((p for p in UI_FILES if p.stem == file_stem), None)
+    if not ui_file_path:
+        raise Exit(f'File "{file}" not found. Available files: ", ".join(p.stem for p in UI_FILES)')
 
-    c.run(f'pyside6-designer {file_path}', asynchronous=True)
+    c.run(f'pyside6-designer {ui_file_path}', asynchronous=True)
 
 
 @task
@@ -193,9 +206,39 @@ def pip_package(c, requirements, package):
 def pip_upgrade(c, requirements):
     """
     Try to upgrade all dependencies to their latest versions.
+
+    Use `pip-compile <filename> --upgrade-package <package>` to only upgrade one package.
+    Ex `pip-compile dev-requirements.in --upgrade-package safety`
     """
     for filename in _get_requirements_files(requirements, 'in'):
         c.run(f'pip-compile --upgrade {filename}')
+
+
+@task
+def precommit_install(c):
+    """
+    Install pre-commit into the git hooks, which will cause pre-commit to run on automatically.
+    This should be the first thing to do after cloning this project and installing requirements.
+    """
+    c.run('pre-commit install')
+
+
+@task
+# `upgrade` instead of `update` to maintain similar naming to `pip-compile upgrade`
+def precommit_upgrade(c):
+    """
+    Upgrade pre-commit config to the latest repos' versions.
+    """
+    c.run('pre-commit autoupdate')
+
+
+@task(help={'hook': 'Name of hook to run. Default is to run all.'})
+def precommit_run(c, hook=None):
+    """
+    Manually run pre-commit hooks.
+    """
+    hook = hook or '--all-files'
+    c.run(f'pre-commit run {hook}')
 
 
 ns = Collection()  # Main namespace
@@ -215,10 +258,16 @@ pip.add_task(pip_compile, 'compile')
 pip.add_task(pip_package, 'package')
 pip.add_task(pip_sync, 'sync')
 pip.add_task(pip_upgrade, 'upgrade')
+precommit = Collection('precommit')
+precommit.add_task(precommit_run, 'run')
+precommit.add_task(precommit_install, 'install')
+precommit.add_task(precommit_upgrade, 'upgrade')
 ui = Collection('ui')
 ui.add_task(ui_py, 'py')
 ui.add_task(ui_edit, 'edit')
+
 ns.add_collection(docs)
 ns.add_collection(lint)
 ns.add_collection(pip)
+ns.add_collection(precommit)
 ns.add_collection(ui)

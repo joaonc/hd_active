@@ -20,11 +20,18 @@ class HdActiveConfig:
         self.wait: Union[int, float] = 60
         self.drive_paths: List[str] = []
 
-        self.config = configparser.ConfigParser(converters={'list': lambda x: [i.strip(' "\'') for i in x.split(',')]})
+        self.config = configparser.ConfigParser(
+            converters={'list': lambda x: [i.strip(' "\'') for i in x.split(',')]}
+        )
         self.read()
 
+    def __str__(self):
+        return f'drive paths: {", ".join(self.drive_paths)}' f'\nwait: {self.wait}s'
+
     def read(self):
-        self.config.read(self.file_name)
+        files_read = self.config.read(self.file_name)
+        if not files_read:
+            raise FileNotFoundError(self.file_name)
         try:
             section = self.config[self.SECTION_NAME]
             self.run = section.getboolean(self.OPTION_RUN, self.run)
@@ -38,7 +45,9 @@ class HdActiveConfig:
         section = self.config[self.SECTION_NAME]
         section[self.OPTION_RUN] = str(self.run)
         section[self.OPTION_WAIT] = str(self.wait)
-        section[self.OPTION_DRIVE_PATHS] = ', '.join(str(drive_path) for drive_path in self.drive_paths)
+        section[self.OPTION_DRIVE_PATHS] = ', '.join(
+            str(drive_path) for drive_path in self.drive_paths
+        )
 
         with open(self.file_name) as configfile:
             self.config.write(configfile)

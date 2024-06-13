@@ -23,7 +23,7 @@ class HdActiveTest(HdActive):
         super().__init__(drive_paths, run, wait=wait)
 
 
-@patch('app.hd_active.HdActive._write_hd')
+@patch('app.hd_active.HdActive._write_hd', return_value=1000)
 class TestHdActive:
     def test_instantiate_not_started(self, mock_write_hd):
         hd_active = HdActiveTest(drive_paths=['z'], run=False)
@@ -72,13 +72,17 @@ class TestHdActive:
         expected_drive_paths = {Path(drive_path).drive for drive_path in drive_paths}
         assert {drive_path.drive for drive_path in hd_active.drive_paths} == expected_drive_paths
 
-    @pytest.mark.parametrize('run, expected_change_state', [(True, HdActionState.Stop), (False, HdActionState.Start)])
+    @pytest.mark.parametrize(
+        'run, expected_change_state', [(True, HdActionState.Stop), (False, HdActionState.Start)]
+    )
     def test_get_change_state(self, mock_write_hd, run, expected_change_state):
         hd_active = HdActiveTest(drive_paths=['z'], run=run)
         assert hd_active.get_change_state() is expected_change_state
         hd_active.stop(wait=True)
 
-    @pytest.mark.parametrize('run, expected_change_state', [(True, HdActionState.Start), (False, HdActionState.Stop)])
+    @pytest.mark.parametrize(
+        'run, expected_change_state', [(True, HdActionState.Start), (False, HdActionState.Stop)]
+    )
     def test_change_state(self, mock_write_hd, run, expected_change_state):
         hd_active = HdActiveTest(drive_paths=['z'], run=run)
         assert hd_active.is_running is run
@@ -87,4 +91,15 @@ class TestHdActive:
 
         check.equal(actual_change_state, expected_change_state)
         check.equal(hd_active.is_running, not run)
+        hd_active.stop(wait=True)
+
+    def test_log(self, mock_write_hd):
+        hd_active = HdActiveTest(drive_paths=['z'], run=True)
+
+        time.sleep(WAIT_TEST)
+        len_1 = len(hd_active.log)
+        assert len_1 > 0
+        time.sleep(WAIT_TEST)
+        len_2 = len(hd_active.log)
+        assert len_2 > len_1
         hd_active.stop(wait=True)
