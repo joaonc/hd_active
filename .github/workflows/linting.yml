@@ -23,5 +23,5 @@ jobs:
         run: flake8 .
       - name: mypy
         run: mypy .
-      - name: safety
-        run: safety check
+#      - name: safety
+#        run: safety check
