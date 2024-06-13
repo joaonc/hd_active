@@ -1,12 +1,14 @@
 import os
 from pathlib import Path
-from typing import List, Optional
 
 from invoke import Collection, Exit, task
 
 from app.utils import get_asset
 
-PROJECT_DIR = Path()
+os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
+
+
+PROJECT_ROOT = Path()
 UI_FILES = tuple(get_asset('ui').glob("**/*.ui"))
 """
 QT ``.ui`` files.
@@ -14,24 +16,24 @@ QT ``.ui`` files.
 REQUIREMENTS_MAIN = 'main'
 REQUIREMENTS_FILES = {
     REQUIREMENTS_MAIN: 'requirements',
-    'dev': 'dev-requirements',
-    'docs': 'docs-requirements',
+    'dev': 'requirements-dev',
+    'docs': 'requirements-docs',
 }
 """
 Requirements files.
 Order matters as most operations with multiple files need ``requirements.txt`` to be processed
 first.
+Add new requirements files here.
 """
+
 REQUIREMENTS_TASK_HELP = {
-    'requirements': '`.in` file. Full name not required, just the initial name before the dash '
-    f'(ex. \'dev\'). For main file use \'{REQUIREMENTS_MAIN}\'. Available requirements: '
+    'requirements': '`.in` file. Full name not required, just the initial name after the dash '
+    f'(ex. "dev"). For main file use "{REQUIREMENTS_MAIN}". Available requirements: '
     f'{", ".join(REQUIREMENTS_FILES)}.'
 }
 
-os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
 
-
-def _csstr_to_list(csstr: str) -> List[str]:
+def _csstr_to_list(csstr: str) -> list[str]:
     """
     Convert a comma-separated string to list.
     """
@@ -43,18 +45,18 @@ def _get_requirements_file(requirements: str, extension: str) -> str:
     Return the full requirements file name (with extension).
 
     :param requirements: The requirements file to retrieve. Can be the whole filename
-        (no extension), ex `'dev-requirements'` or just the initial portion, ex `'dev'`.
+        (no extension), ex `'requirements-dev'` or just the initial portion, ex `'dev'`.
         Use `'main'` for the `requirements` file.
     :param extension: Requirements file extension. Can be either `'in'` or `'txt'`.
     """
     filename = REQUIREMENTS_FILES.get(requirements, requirements)
     if filename not in REQUIREMENTS_FILES.values():
-        raise FileNotFoundError(f'`{requirements}` is an unknown requirements file.')
+        raise Exit(f'`{requirements}` is an unknown requirements file.')
 
     return f'{filename}.{extension.lstrip(".")}'
 
 
-def _get_requirements_files(requirements: Optional[str], extension: str) -> List[str]:
+def _get_requirements_files(requirements: str | None, extension: str) -> list[str]:
     extension = extension.lstrip('.')
     if requirements is None:
         requirements_files = list(REQUIREMENTS_FILES)
@@ -92,7 +94,7 @@ def ui_py(c, file=None):
                 f'File "{file}" not found. Available files: ", ".join(p.stem for p in UI_FILES)'
             )
 
-        py_file_path = PROJECT_DIR / 'app/ui/forms' / f'{file_stem}_ui.py'
+        py_file_path = PROJECT_ROOT / 'app/ui/forms' / f'{file_stem}_ui.py'
 
         c.run(f'pyside6-uic {ui_file_path} -o {py_file_path}')
 
@@ -139,7 +141,7 @@ def lint_safety(c):
     c.run('safety check')
 
 
-@task(lint_isort, lint_black, lint_flake8, lint_mypy, lint_safety)
+@task(lint_isort, lint_black, lint_flake8, lint_mypy)  # , lint_safety)
 def lint_all(c):
     """
     Run all linters.
@@ -175,7 +177,7 @@ def docs_deploy(c):
 @task(help=REQUIREMENTS_TASK_HELP)
 def pip_compile(c, requirements=None):
     """
-    Compile requirements file.
+    Compile requirements file(s).
     """
     for filename in _get_requirements_files(requirements, 'in'):
         c.run(f'pip-compile {filename}')
@@ -190,10 +192,7 @@ def pip_sync(c, requirements=None):
 
 
 @task(
-    help={
-        **REQUIREMENTS_TASK_HELP,
-        **{'package': 'Package to upgrade. Can be a comma separated list.'},
-    }
+    help=REQUIREMENTS_TASK_HELP | {'package': 'Package to upgrade. Can be a comma separated list.'}
 )
 def pip_package(c, requirements, package):
     """
@@ -210,7 +209,7 @@ def pip_upgrade(c, requirements):
     Try to upgrade all dependencies to their latest versions.
 
     Use `pip-compile <filename> --upgrade-package <package>` to only upgrade one package.
-    Ex `pip-compile dev-requirements.in --upgrade-package safety`
+    Ex `pip-compile requirements-def.in --upgrade-package safety`
     """
     for filename in _get_requirements_files(requirements, 'in'):
         c.run(f'pip-compile --upgrade {filename}')

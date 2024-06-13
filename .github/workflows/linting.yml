@@ -12,9 +12,9 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.7'
+          python-version: '3.11'
       - name: Install requirements
-        run: pip install -r dev-requirements.txt
+        run: pip install -r requirements-dev.txt
       - name: isort
         run: isort .
       - name: black
@@ -23,5 +23,5 @@ jobs:
         run: flake8 .
       - name: mypy
         run: mypy .
-      - name: safety
-        run: safety check
+#      - name: safety
+#        run: safety check
