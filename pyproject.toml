@@ -6,7 +6,7 @@ target-version = ['py311']
 skip-string-normalization = true
 extend-exclude='''
 /(
-    src/ui/forms
+    app/ui/forms
   | \.venv.*
   | \venv.*
 )/
