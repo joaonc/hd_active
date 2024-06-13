@@ -1,11 +1,14 @@
 import os
 from pathlib import Path
 
-from invoke import Collection, task
+from invoke import Collection, Exit, task
 
 from app.utils import get_asset
 
-PROJECT_DIR = Path()
+os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
+
+
+PROJECT_ROOT = Path()
 UI_FILES = tuple(get_asset('ui').glob("**/*.ui"))
 """
 QT ``.ui`` files.
@@ -18,35 +21,52 @@ REQUIREMENTS_FILES = {
 }
 """
 Requirements files.
-Order matters as most operations with multiple files need ``requirements.txt`` to be processed first.
+Order matters as most operations with multiple files need ``requirements.txt`` to be processed
+first.
+Add new requirements files here.
 """
-REQUIREMENTS_TASK_HELP = {
-    'requirements': '`.in` file. Full name not required, just the initial name before the dash (ex. \'dev\'). '
-    f'For main file use \'{REQUIREMENTS_MAIN}\'. Available requirements: {", ".join(REQUIREMENTS_FILES)}.'
-}
 
-os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
+REQUIREMENTS_TASK_HELP = {
+    'requirements': '`.in` file. Full name not required, just the initial name after the dash '
+    f'(ex. "dev"). For main file use "{REQUIREMENTS_MAIN}". Available requirements: '
+    f'{", ".join(REQUIREMENTS_FILES)}.'
+}
 
 
 def _csstr_to_list(csstr: str) -> list[str]:
+    """
+    Convert a comma-separated string to list.
+    """
     return [s.strip() for s in csstr.split(',')]
 
 
-def _get_requirements_file(requirements: str) -> str:
+def _get_requirements_file(requirements: str, extension: str) -> str:
+    """
+    Return the full requirements file name (with extension).
+
+    :param requirements: The requirements file to retrieve. Can be the whole filename
+        (no extension), ex `'requirements-dev'` or just the initial portion, ex `'dev'`.
+        Use `'main'` for the `requirements` file.
+    :param extension: Requirements file extension. Can be either `'in'` or `'txt'`.
+    """
     filename = REQUIREMENTS_FILES.get(requirements, requirements)
     if filename not in REQUIREMENTS_FILES.values():
-        raise FileNotFoundError(f'`{requirements}` is an unknown requirements file.')
+        raise Exit(f'`{requirements}` is an unknown requirements file.')
 
-    return filename
+    return f'{filename}.{extension.lstrip(".")}'
 
 
-def _get_requirements_files(requirements: str | None) -> list[str]:
+def _get_requirements_files(requirements: str | None, extension: str) -> list[str]:
+    extension = extension.lstrip('.')
     if requirements is None:
-        filenames = list(REQUIREMENTS_FILES.values())
+        requirements_files = list(REQUIREMENTS_FILES)
     else:
-        filenames = [_get_requirements_file(r) for r in _csstr_to_list(requirements)]
-        # Sort by the order defined in `REQUIREMENTS_FILES`
-        filenames = [f for f in REQUIREMENTS_FILES.values() if f in filenames]
+        requirements_files = _csstr_to_list(requirements)
+
+    # Get full filename+extension and sort by the order defined in `REQUIREMENTS_FILES`
+    filenames = [
+        _get_requirements_file(r, extension) for r in REQUIREMENTS_FILES if r in requirements_files
+    ]
 
     return filenames
 
@@ -68,7 +88,7 @@ def ui_py(c, file=None):
 
     for file_stem in file_stems:
         ui_file_path = next(p for p in UI_FILES if p.stem == file_stem)
-        py_file_path = PROJECT_DIR / 'app/ui/forms' / f'{file_stem}_ui.py'
+        py_file_path = PROJECT_ROOT / 'app/ui/forms' / f'{file_stem}_ui.py'
 
         c.run(f'pyside6-uic {ui_file_path} -o {py_file_path}')
 
@@ -147,7 +167,7 @@ def pip_compile(c, requirements=None):
     """
     Compile requirements file.
     """
-    for filename in _get_requirements_files(requirements):
+    for filename in _get_requirements_files(requirements, 'in'):
         c.run(f'pip-compile {filename}')
 
 
@@ -156,7 +176,7 @@ def pip_sync(c, requirements=None):
     """
     Synchronize environment with requirements file.
     """
-    c.run(f'pip-sync {" ".join(_get_requirements_files(requirements))}')
+    c.run(f'pip-sync {" ".join(_get_requirements_files(requirements, "txt"))}')
 
 
 @task(help=REQUIREMENTS_TASK_HELP | {'package': 'Package to upgrade. Can be a comma separated list.'})
@@ -165,7 +185,7 @@ def pip_package(c, requirements, package):
     Upgrade package.
     """
     packages = [p.strip() for p in package.split(',')]
-    for filename in _get_requirements_files(requirements):
+    for filename in _get_requirements_files(requirements, 'in'):
         c.run(f'pip-compile --upgrade-package {" --upgrade-package ".join(packages)} {filename}')
 
 
@@ -174,7 +194,7 @@ def pip_upgrade(c, requirements):
     """
     Try to upgrade all dependencies to their latest versions.
     """
-    for filename in _get_requirements_files(requirements):
+    for filename in _get_requirements_files(requirements, 'in'):
         c.run(f'pip-compile --upgrade {filename}')
 
 
