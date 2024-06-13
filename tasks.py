@@ -13,8 +13,8 @@ QT ``.ui`` files.
 REQUIREMENTS_MAIN = 'main'
 REQUIREMENTS_FILES = {
     REQUIREMENTS_MAIN: 'requirements.txt',
-    'dev': 'dev-requirements.txt',
-    'docs': 'docs-requirements.txt',
+    'dev': 'requirements-dev.txt',
+    'docs': 'requirements-docs.txt',
 }
 """
 Requirements files.
