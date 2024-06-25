@@ -42,9 +42,9 @@ dparse==0.6.4b0
     # via
     #   safety
     #   safety-schemas
-filelock==3.15.1
+filelock==3.15.4
     # via virtualenv
-flake8==7.0.0
+flake8==7.1.0
     # via -r requirements-dev.in
 identify==2.5.36
     # via pre-commit
@@ -68,7 +68,7 @@ mccabe==0.7.0
     # via flake8
 mdurl==0.1.2
     # via markdown-it-py
-mypy==1.10.0
+mypy==1.10.1
     # via -r requirements-dev.in
 mypy-extensions==1.0.0
     # via
@@ -99,7 +99,7 @@ pluggy==1.5.0
     # via pytest
 pre-commit==3.7.1
     # via -r requirements-dev.in
-pycodestyle==2.11.1
+pycodestyle==2.12.0
     # via flake8
 pycparser==2.22
     # via cffi
@@ -117,13 +117,13 @@ pyproject-hooks==1.1.0
     # via
     #   build
     #   pip-tools
-pyside6==6.7.1
+pyside6==6.7.2
     # via -r requirements.txt
-pyside6-addons==6.7.1
+pyside6-addons==6.7.2
     # via
     #   -r requirements.txt
     #   pyside6
-pyside6-essentials==6.7.1
+pyside6-essentials==6.7.2
     # via
     #   -r requirements.txt
     #   pyside6
@@ -157,7 +157,7 @@ safety-schemas==0.0.2
     # via safety
 shellingham==1.5.4
     # via typer
-shiboken6==6.7.1
+shiboken6==6.7.2
     # via
     #   -r requirements.txt
     #   pyside6
@@ -175,11 +175,11 @@ typing-extensions==4.12.2
     #   safety
     #   safety-schemas
     #   typer
-urllib3==2.2.1
+urllib3==2.2.2
     # via
     #   requests
     #   safety
-virtualenv==20.26.2
+virtualenv==20.26.3
     # via pre-commit
 wheel==0.43.0
     # via pip-tools
