@@ -1,18 +1,27 @@
 -r requirements.txt
 
-# Tools
-invoke
-pip-tools
-pre-commit
+# Dev tools
+invoke              # Tasks
+pip-tools           # Package management
+pre-commit          # Pre-commit hooks
 
 # Linting
-bandit
-black
-flake8
-isort
-mypy
-safety
+bandit              # Linter
+black               # Linter
+flake8              # Linter
+isort               # Linter
+mypy                # Code inspector
 
 # Test
-pytest
-pytest-check
+pytest              # Test framework
+pytest-params       # Easier test case parameters
+pytest-qt           # Qt plugin to allow user interaction
+
+# Build and publish
+flit                # Build, install and upload to Pypi
+
+# Installer
+pyinstaller         # Installer framework
+
+# Other
+semantic-version    # Semantic versioning, more useful than `packaging.version`
