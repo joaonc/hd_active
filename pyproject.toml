@@ -6,14 +6,14 @@ target-version = ['py311']
 skip-string-normalization = true
 extend-exclude='''
 (
-    app/ui/forms
+    src/app/ui/forms
   | \.venv.*
   | \venv.*
 )
 '''
 
 [tool.isort]
-extend_skip = ['app/ui/forms']
+extend_skip = ['src/app/ui/forms']
 known_first_party = 'app'
 profile = 'black'
 sections = 'FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER'
