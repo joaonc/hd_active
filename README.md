@@ -18,7 +18,7 @@ This page doesn't go into how to do that.
 
 Install the development packages:
 ```
-python -m pip install -r requirements-def.txt
+python -m pip install -r requirements-dev.txt
 ```
 
 This project uses [pyinvoke](https://www.pyinvoke.org/) to facilitate common tasks.
