@@ -136,12 +136,7 @@ def lint_mypy(c):
     c.run('mypy .')
 
 
-@task
-def lint_safety(c):
-    c.run('safety check')
-
-
-@task(lint_isort, lint_black, lint_flake8, lint_mypy)  # , lint_safety)
+@task(lint_isort, lint_black, lint_flake8, lint_mypy)
 def lint_all(c):
     """
     Run all linters.
@@ -209,7 +204,7 @@ def pip_upgrade(c, requirements):
     Try to upgrade all dependencies to their latest versions.
 
     Use `pip-compile <filename> --upgrade-package <package>` to only upgrade one package.
-    Ex `pip-compile requirements-def.in --upgrade-package safety`
+    Ex `pip-compile requirements-def.in --upgrade-package mypy`
     """
     for filename in _get_requirements_files(requirements, 'in'):
         c.run(f'pip-compile --upgrade {filename}')
@@ -253,7 +248,6 @@ lint.add_task(lint_black, 'black')
 lint.add_task(lint_flake8, 'flake8')
 lint.add_task(lint_isort, 'isort')
 lint.add_task(lint_mypy, 'mypy')
-lint.add_task(lint_safety, 'safety')
 pip = Collection('pip')
 pip.add_task(pip_compile, 'compile')
 pip.add_task(pip_package, 'package')
