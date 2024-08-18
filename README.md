@@ -1,12 +1,15 @@
 # HD Active
 
+[![pypi](https://img.shields.io/pypi/v/hd_active.svg)](https://pypi.python.org/pypi/hd_active)
+[![Project License - MIT](https://img.shields.io/pypi/l/hd_active.svg)](https://github.com/joaonc/show_dialog/blob/main/LICENSE.txt)
+
 Prevent external HD's from becoming inactive (sleeping).
 
 **[https://joaonc.github.io/hd_active](https://joaonc.github.io/hd_active)**
 
 ## Quick start
 ```
-python -m app.hd_active --conf app/hd_active.ini
+python -m src.hd_active.hd_active --conf src/hd_active/hd_active.ini
 ```
 
 ## Development
