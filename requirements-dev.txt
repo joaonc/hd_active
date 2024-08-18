@@ -4,14 +4,20 @@
 #
 #    pip-compile requirements-dev.in
 #
+altgraph==0.17.4
+    # via pyinstaller
 bandit==1.7.9
     # via -r requirements-dev.in
 black==24.8.0
     # via -r requirements-dev.in
 build==1.2.1
     # via pip-tools
+certifi==2024.7.4
+    # via requests
 cfgv==3.4.0
     # via pre-commit
+charset-normalizer==3.3.2
+    # via requests
 click==8.1.7
     # via
     #   black
@@ -24,12 +30,20 @@ colorama==0.4.6
     #   pytest
 distlib==0.3.8
     # via virtualenv
+docutils==0.21.2
+    # via flit
 filelock==3.12.4
     # via virtualenv
 flake8==7.1.1
     # via -r requirements-dev.in
+flit==3.9.0
+    # via -r requirements-dev.in
+flit-core==3.9.0
+    # via flit
 identify==2.6.0
     # via pre-commit
+idna==3.7
+    # via requests
 iniconfig==2.0.0
     # via pytest
 invoke==2.2.0
@@ -54,11 +68,15 @@ packaging==24.1
     # via
     #   black
     #   build
+    #   pyinstaller
+    #   pyinstaller-hooks-contrib
     #   pytest
 pathspec==0.12.1
     # via black
 pbr==6.0.0
     # via stevedore
+pefile==2023.2.7
+    # via pyinstaller
 pip-tools==7.4.1
     # via -r requirements-dev.in
 platformdirs==4.2.2
@@ -77,6 +95,10 @@ pyflakes==3.2.0
     # via flake8
 pygments==2.18.0
     # via rich
+pyinstaller==6.10.0
+    # via -r requirements-dev.in
+pyinstaller-hooks-contrib==2024.8
+    # via pyinstaller
 pyproject-hooks==1.1.0
     # via
     #   build
@@ -101,12 +123,18 @@ pytest-params==0.2.0
     # via -r requirements-dev.in
 pytest-qt==4.4.0
     # via -r requirements-dev.in
+pywin32-ctypes==0.2.3
+    # via pyinstaller
 pyyaml==6.0.2
     # via
     #   bandit
     #   pre-commit
+requests==2.32.3
+    # via flit
 rich==13.7.1
     # via bandit
+semantic-version==2.10.0
+    # via -r requirements-dev.in
 shiboken6==6.7.2
     # via
     #   -r requirements.txt
@@ -115,8 +143,12 @@ shiboken6==6.7.2
     #   pyside6-essentials
 stevedore==5.2.0
     # via bandit
+tomli-w==1.0.0
+    # via flit
 typing-extensions==4.12.2
     # via mypy
+urllib3==2.2.2
+    # via requests
 virtualenv==20.26.3
     # via pre-commit
 wheel==0.44.0

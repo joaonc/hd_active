@@ -16,3 +16,12 @@ mypy                # Code inspector
 pytest              # Test framework
 pytest-params       # Easier test case parameters
 pytest-qt           # Qt plugin to allow user interaction
+
+# Build and publish
+flit                # Build, install and upload to Pypi
+
+# Installer
+pyinstaller         # Installer framework
+
+# Other
+semantic-version    # Semantic versioning, more useful than `packaging.version`
