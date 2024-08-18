@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Any
 
-PROJECT_ROOT = Path(__file__).parents[1].resolve()
+PROJECT_ROOT = Path(__file__).parents[2].resolve()
 ASSETS_ROOT = PROJECT_ROOT / 'assets'
 
 

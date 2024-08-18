@@ -1,6 +1,14 @@
 import pytest
 
-from src.hd_active.utils import get_asset, is_truthy
+from src.hd_active.utils import get_asset, is_truthy, PROJECT_ROOT, ASSETS_ROOT
+
+
+class TestGlobals:
+    def test_project_root(self):
+        assert PROJECT_ROOT.name == 'hd_active'
+
+    def test_assets_root(self):
+        assert ASSETS_ROOT.name == 'assets'
 
 
 class TestGetAsset:
