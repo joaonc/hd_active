@@ -1,0 +1,91 @@
+# Create a GitHub release and publish to Pypi.
+#
+# This action does the following:
+#
+# 1. Bump version.
+#    This creates a new PR and merges it.
+# 2. Create release in GitHub.
+# 3. Publish to Pypi.
+#
+# At this point, does not add assets to the release.
+# Use the `build-asset` action.
+#
+# Requires the Pypi token in the `PYPI_TOKEN` secret.
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_bump:
+        description: 'Version to bump'
+        required: true
+        default: Minor
+        type: choice
+        options:
+          - Major
+          - Minor
+          - Patch
+      create_release:
+        description: 'Create release in GitHub'
+        required: true
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      release_notes:
+        description: 'If creating a release, add notes here'
+        required: false
+        default: ''
+      publish:
+        description: 'Publish to Pypi'
+        required: true
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+permissions:
+  contents: write
+  actions: read
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install requirements
+        run: pip install -r requirements-dev.txt
+
+      - name: Set git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: inv build.version --bump ${{ github.event.inputs.version_bump }} --mode pr --yes
+
+      - name: Create release
+        if: github.event.inputs.create_release == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: inv build.release --notes "${{ github.event.inputs.release_notes }}" --yes
+
+      - name: Publish to Pypi
+        if: github.event.inputs.publish == 'true'
+        env:
+          FLIT_USERNAME: "__token__"
+          FLIT_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: inv build.publish --yes

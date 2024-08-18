@@ -1,0 +1,115 @@
+# Build executable app and upload to GitHub release (under Assets).
+# This Action is purposefully kept manual as to not potentially create assets by mistake.
+name: Build app
+
+on:
+  workflow_dispatch:
+    inputs:
+      mac_os:
+        description: 'MacOs'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      windows:
+        description: 'Windows'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      linux:
+        description: 'Linux'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  mac_os:
+    runs-on: macos-latest
+    if: github.event.inputs.mac_os == 'true'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install requirements
+        run: pip install -r requirements-dev.txt
+
+      - name: Build app
+        run: inv build.app
+
+      - name: Upload to GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: inv build.upload
+
+  windows:
+    runs-on: windows-latest
+    if: github.event.inputs.windows == 'true'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install requirements
+        run: pip install -r requirements-dev.txt
+
+      - name: Build app
+        run: inv build.app
+
+      - name: Upload to GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: inv build.upload
+
+  linux:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.linux == 'true'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install libEGL
+        # Implementation of the EGL (Embedded-Systems Graphics Library) API.
+        # Linux only. No need to install on Windows or Mac.
+        run: |
+          sudo apt-get update -yqq
+          sudo apt-get install -y libegl1-mesa
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install requirements
+        run: pip install -r requirements-dev.txt
+
+      - name: Build app
+        run: inv build.app
+
+      - name: Upload to GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: inv build.upload
