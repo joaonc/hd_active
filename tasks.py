@@ -3,7 +3,7 @@ from pathlib import Path
 
 from invoke import Collection, Exit, task
 
-from src.app.utils import get_asset
+from src.hd_active.utils import get_asset
 
 os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
 
@@ -94,7 +94,7 @@ def ui_py(c, file=None):
                 f'File "{file}" not found. Available files: ", ".join(p.stem for p in UI_FILES)'
             )
 
-        py_file_path = PROJECT_ROOT / 'app/ui/forms' / f'{file_stem}_ui.py'
+        py_file_path = PROJECT_ROOT / 'src/hd_activehd_active/ui/forms' / f'{file_stem}_ui.py'
 
         c.run(f'pyside6-uic {ui_file_path} -o {py_file_path}')
 

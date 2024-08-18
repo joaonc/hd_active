@@ -7,7 +7,7 @@ from os import PathLike, urandom
 from pathlib import Path
 from typing import Deque, Iterable, Optional, Set, Union
 
-from src.app.hd_action_state import HdActionState
+from src.hd_active.hd_action_state import HdActionState
 
 FILE_NAME = '_hd_active.txt'
 logger = logging.getLogger(__name__)
@@ -148,7 +148,7 @@ if __name__ == '__main__':
     import argparse
     import sys
 
-    from src.app.hd_active_config import HdActiveConfig
+    from src.hd_active.hd_active_config import HdActiveConfig
 
     parser = argparse.ArgumentParser(description='Keep HDs active.')
     parser.add_argument(
