@@ -2,7 +2,6 @@ from typing import List, Tuple
 from unittest.mock import patch
 
 import pytest
-import pytest_check as check
 
 from app.hd_active_config import HdActiveConfig
 
@@ -26,9 +25,9 @@ def test_defaults(read_mock):
     Skip reading file (so defaults are not overwritten) and verify defaults.
     """
     config = HdActiveConfig('foo.ini')
-    check.is_false(config.run)
-    check.equal(config.wait, 60)
-    check.equal(config.drive_paths, [])
+    assert config.run is False
+    assert config.wait == 60
+    assert config.drive_paths == []
 
 
 @pytest.mark.parametrize(

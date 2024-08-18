@@ -5,7 +5,6 @@ from typing import List
 from unittest.mock import patch
 
 import pytest
-import pytest_check as check
 
 from app.hd_action_state import HdActionState
 from app.hd_active import HdActive
@@ -89,8 +88,8 @@ class TestHdActive:
 
         actual_change_state = hd_active.change_state()
 
-        check.equal(actual_change_state, expected_change_state)
-        check.equal(hd_active.is_running, not run)
+        assert actual_change_state == expected_change_state
+        assert hd_active.is_running is not run
         hd_active.stop(wait=True)
 
     def test_log(self, mock_write_hd):

@@ -5,11 +5,11 @@ line-length = 100
 target-version = ['py311']
 skip-string-normalization = true
 extend-exclude='''
-/(
+(
     app/ui/forms
   | \.venv.*
   | \venv.*
-)/
+)
 '''
 
 [tool.isort]
@@ -17,7 +17,7 @@ extend_skip = ['app/ui/forms']
 known_first_party = 'app'
 profile = 'black'
 sections = 'FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER'
-skip_glob = ['**/.venv*', '**/venv*']
+skip_glob = ['**/.venv*', '**/venv*', '/build']
 
 [tool.pytest.ini_options]
 # Markers: See documentation on what markers represent.
@@ -38,4 +38,4 @@ disable_error_code = 'annotation-unchecked'
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
-module = ['invoke', 'factory', 'pytest_check', 'PySide6.*']
+module = ['invoke', 'factory', 'pytest_check', 'pytest_params', 'semantic_version', 'PySide6.*']
