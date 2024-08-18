@@ -1,7 +1,7 @@
 from PySide6 import QtGui, QtWidgets
 
-from app.hd_active import HdActive
-from app.ui.forms.log_ui import Ui_LogDialog
+from src.app.hd_active import HdActive
+from src.app.ui.forms.log_ui import Ui_LogDialog
 
 
 class LogDialog(QtWidgets.QDialog):

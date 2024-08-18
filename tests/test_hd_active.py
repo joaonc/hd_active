@@ -6,8 +6,8 @@ from unittest.mock import patch
 
 import pytest
 
-from app.hd_action_state import HdActionState
-from app.hd_active import HdActive
+from src.app.hd_action_state import HdActionState
+from src.app.hd_active import HdActive
 
 WAIT = 0.1
 WAIT_TEST = 2 * WAIT

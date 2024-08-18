@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
-from app.hd_active_config import HdActiveConfig
+from src.app.hd_active_config import HdActiveConfig
 
 
 @pytest.fixture

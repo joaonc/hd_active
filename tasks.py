@@ -3,7 +3,7 @@ from pathlib import Path
 
 from invoke import Collection, Exit, task
 
-from app.utils import get_asset
+from src.app.utils import get_asset
 
 os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
 

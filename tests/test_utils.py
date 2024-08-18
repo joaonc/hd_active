@@ -1,6 +1,6 @@
 import pytest
 
-from app.utils import get_asset, is_truthy
+from src.app.utils import get_asset, is_truthy
 
 
 class TestGetAsset:

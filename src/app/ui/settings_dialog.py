@@ -2,10 +2,10 @@ from os import PathLike
 
 from PySide6 import QtGui, QtWidgets
 
-from app.hd_active import HdActive
-from app.ui.forms.settings_ui import Ui_Dialog
-from app.ui.log_dialog import LogDialog
-from app.utils import get_asset
+from src.app.hd_active import HdActive
+from src.app.ui.forms.settings_ui import Ui_Dialog
+from src.app.ui.log_dialog import LogDialog
+from src.app.utils import get_asset
 
 
 class SettingsDialog(QtWidgets.QDialog):
