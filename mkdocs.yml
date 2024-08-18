@@ -7,8 +7,13 @@ theme:
   name: material
   logo: images/logo.png
   favicon: images/favicon.ico
+  font:
+    text: Arimo                 # Google font, replaces the default Arial
   features:
     - content.code.annotate
+    - content.code.copy         # Copy button on top right of code blocks
+    - navigation.expand         # Expand navigation menus by default
+#    - navigation.tabs           # Enable tabs on top https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#navigation-tabs
   palette:
     - media: "(prefers-color-scheme: light"
       scheme: default
@@ -23,19 +28,24 @@ theme:
 
 markdown_extensions:
   - abbr
-  - admonition
-  - pymdownx.details
+  - admonition                  # Info boxes
+  - pymdownx.details            # Info boxes
   - pymdownx.highlight
-  - pymdownx.superfences
+  - pymdownx.superfences        # Info boxes, tabs
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji  # https://emojipedia.org/twitter/
-      emoji_generator: !!python/name:materialx.emoji.to_svg
-  - tables
+      emoji_index: !!python/name:material.extensions.emoji.twemoji  # https://emojipedia.org/twitter/
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - tables                      # Create tables in Markdown by using a simple syntax
+  - mdx_truly_sane_lists        # 2-space indented nested lists
+  - attr_list                   # More functionality for images (align, lazy load, etc.)
+  - md_in_html                  # MD/HTML interop. Also helps with images (caption, center alignment)
 
 plugins:
-  - search
+  - search                      # Search box at the top
+  - glightbox                   # Image lightbox (for zooming). Requires `mkdocs-glightbox` package
 
-dev_addr: 127.0.0.1:7000
+dev_addr: 127.0.0.1:7007        # Default 8000 may compete with other frameworks
 
+site_url: https://github.com/joaonc/hd_active
 repo_url: https://github.com/joaonc/hd_active
 copyright: Copyright &copy; 2024 Joao Coelho
