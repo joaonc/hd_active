@@ -18,9 +18,9 @@ from PySide6.QtCore import (
     QPoint,
     QRect,
     QSize,
+    Qt,
     QTime,
     QUrl,
-    Qt,
 )
 from PySide6.QtGui import (
     QBrush,
@@ -40,7 +40,14 @@ from PySide6.QtGui import (
     QRadialGradient,
     QTransform,
 )
-from PySide6.QtWidgets import QApplication, QDialog, QPushButton, QSizePolicy, QTextBrowser, QWidget
+from PySide6.QtWidgets import (
+    QApplication,
+    QDialog,
+    QPushButton,
+    QSizePolicy,
+    QTextBrowser,
+    QWidget,
+)
 
 
 class Ui_LogDialog(object):

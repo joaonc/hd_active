@@ -2,10 +2,10 @@ import os
 
 from PySide6 import QtWidgets
 
-from app.hd_active import HdActive
-from app.hd_active_config import HdActiveConfig
-from app.ui.settings_dialog import SettingsDialog
-from app.utils import is_truthy
+from src.hd_active.hd_active import HdActive
+from src.hd_active.hd_active_config import HdActiveConfig
+from src.hd_active.ui.settings_dialog import SettingsDialog
+from src.hd_active.utils import is_truthy
 
 HD_ACTION_DEBUG = is_truthy(os.getenv('HD_ACTION_DEBUG', 'True'))
 """
