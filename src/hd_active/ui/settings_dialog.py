@@ -4,7 +4,7 @@ from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QDialog
 
 from src.hd_active.hd_active import HdActive
-from src.hd_active.ui.forms.settings_ui import Ui_Dialog
+from src.hd_active.ui.forms.ui_settings_dialog import Ui_Dialog
 from src.hd_active.ui.log_dialog import LogDialog
 from src.hd_active.utils import get_asset
 
