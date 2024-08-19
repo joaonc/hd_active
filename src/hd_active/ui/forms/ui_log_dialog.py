@@ -17,12 +17,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QDialog, QPushButton, QSizePolicy,
     QTextBrowser, QWidget)
+from . import resources_rc
 
 class Ui_LogDialog(object):
     def setupUi(self, LogDialog):
         if not LogDialog.objectName():
             LogDialog.setObjectName(u"LogDialog")
         LogDialog.resize(719, 411)
+        icon = QIcon()
+        icon.addFile(u":/images/hard_drive_icon.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        LogDialog.setWindowIcon(icon)
         self.ok_button = QPushButton(LogDialog)
         self.ok_button.setObjectName(u"ok_button")
         self.ok_button.setGeometry(QRect(630, 380, 75, 24))

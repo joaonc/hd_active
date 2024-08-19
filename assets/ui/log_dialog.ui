@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>HD Active Log</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/images/hard_drive_icon.png</normaloff>:/images/hard_drive_icon.png</iconset>
+  </property>
   <widget class="QPushButton" name="ok_button">
    <property name="geometry">
     <rect>
@@ -37,6 +41,8 @@
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
