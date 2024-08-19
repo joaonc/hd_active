@@ -1,6 +1,6 @@
 import os
 
-from PySide6 import QtWidgets
+from PySide6.QtWidgets import QApplication, QMenu, QSystemTrayIcon
 
 from src.hd_active.hd_active import HdActive
 from src.hd_active.hd_active_config import HdActiveConfig
@@ -13,7 +13,7 @@ If truthy, HDs are not accessed. Used for testing purposes.
 """
 
 
-class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
+class SystemTrayIcon(QSystemTrayIcon):
     def __init__(self, icon, parent=None, hd_active_file_name: str = 'hd_active.ini'):
         super().__init__(icon=icon, parent=parent)
 
@@ -25,14 +25,14 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
             self.hd_active.write_hds = lambda: None  # type: ignore
 
         # Menu
-        menu = QtWidgets.QMenu(parent)
+        menu = QMenu(parent)
         change_state_action = menu.addAction(self.hd_active.get_change_state())
         change_state_action.triggered.connect(self.change_state)
         show_settings_action = menu.addAction('Settings')
         show_settings_action.triggered.connect(self._show_settings_dialog)
         menu.addSeparator()
         quit_action = menu.addAction('Exit')
-        quit_action.triggered.connect(QtWidgets.QApplication.instance().quit)  # type: ignore
+        quit_action.triggered.connect(QApplication.instance().quit)  # type: ignore
         self.setContextMenu(menu)
 
         # Other events
