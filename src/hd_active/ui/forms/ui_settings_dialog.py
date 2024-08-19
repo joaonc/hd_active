@@ -18,6 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QDialog, QGridLayout, QHBoxLayout,
     QLabel, QLayout, QLineEdit, QPushButton,
     QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
+from . import resources_rc
 
 class Ui_SettingsDialog(object):
     def setupUi(self, SettingsDialog):
@@ -26,6 +27,9 @@ class Ui_SettingsDialog(object):
         SettingsDialog.resize(300, 151)
         SettingsDialog.setMinimumSize(QSize(300, 150))
         SettingsDialog.setMaximumSize(QSize(800, 300))
+        icon = QIcon()
+        icon.addFile(u":/images/hard_drive_icon.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        SettingsDialog.setWindowIcon(icon)
         self.verticalLayout = QVBoxLayout(SettingsDialog)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()

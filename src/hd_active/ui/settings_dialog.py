@@ -1,12 +1,10 @@
 from os import PathLike
 
-from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QDialog
 
 from src.hd_active.hd_active import HdActive
 from src.hd_active.ui.forms.ui_settings_dialog import Ui_SettingsDialog
 from src.hd_active.ui.log_dialog import LogDialog
-from src.hd_active.utils import get_asset
 
 
 class SettingsDialog(QDialog):
@@ -18,7 +16,6 @@ class SettingsDialog(QDialog):
         self.ui.setupUi(self)
         self._update_change_state_button_text()
 
-        self.setWindowIcon(QIcon(str(get_asset('images', 'hard_drive_icon.png'))))
         self.set_values()
 
         # UI bindings
