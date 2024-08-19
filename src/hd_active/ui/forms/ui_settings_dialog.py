@@ -19,34 +19,34 @@ from PySide6.QtWidgets import (QApplication, QDialog, QGridLayout, QHBoxLayout,
     QLabel, QLayout, QLineEdit, QPushButton,
     QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 
-class Ui_Dialog(object):
-    def setupUi(self, Dialog):
-        if not Dialog.objectName():
-            Dialog.setObjectName(u"Dialog")
-        Dialog.resize(300, 151)
-        Dialog.setMinimumSize(QSize(300, 150))
-        Dialog.setMaximumSize(QSize(800, 300))
-        self.verticalLayout = QVBoxLayout(Dialog)
+class Ui_SettingsDialog(object):
+    def setupUi(self, SettingsDialog):
+        if not SettingsDialog.objectName():
+            SettingsDialog.setObjectName(u"SettingsDialog")
+        SettingsDialog.resize(300, 151)
+        SettingsDialog.setMinimumSize(QSize(300, 150))
+        SettingsDialog.setMaximumSize(QSize(800, 300))
+        self.verticalLayout = QVBoxLayout(SettingsDialog)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.gridLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.drives_label = QLabel(Dialog)
+        self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
+        self.drives_label = QLabel(SettingsDialog)
         self.drives_label.setObjectName(u"drives_label")
 
         self.gridLayout.addWidget(self.drives_label, 0, 0, 1, 1)
 
-        self.drives_line_edit = QLineEdit(Dialog)
+        self.drives_line_edit = QLineEdit(SettingsDialog)
         self.drives_line_edit.setObjectName(u"drives_line_edit")
 
         self.gridLayout.addWidget(self.drives_line_edit, 0, 1, 1, 1)
 
-        self.wait_label = QLabel(Dialog)
+        self.wait_label = QLabel(SettingsDialog)
         self.wait_label.setObjectName(u"wait_label")
 
         self.gridLayout.addWidget(self.wait_label, 1, 0, 1, 1)
 
-        self.wait_line_edit = QLineEdit(Dialog)
+        self.wait_line_edit = QLineEdit(SettingsDialog)
         self.wait_line_edit.setObjectName(u"wait_line_edit")
         self.wait_line_edit.setMaximumSize(QSize(40, 16777215))
 
@@ -65,12 +65,12 @@ class Ui_Dialog(object):
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
 
-        self.log_button = QPushButton(Dialog)
+        self.log_button = QPushButton(SettingsDialog)
         self.log_button.setObjectName(u"log_button")
 
         self.horizontalLayout_2.addWidget(self.log_button)
 
-        self.change_state_button = QPushButton(Dialog)
+        self.change_state_button = QPushButton(SettingsDialog)
         self.change_state_button.setObjectName(u"change_state_button")
 
         self.horizontalLayout_2.addWidget(self.change_state_button)
@@ -84,12 +84,12 @@ class Ui_Dialog(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
-        self.ok_button = QPushButton(Dialog)
+        self.ok_button = QPushButton(SettingsDialog)
         self.ok_button.setObjectName(u"ok_button")
 
         self.horizontalLayout.addWidget(self.ok_button)
 
-        self.cancel_button = QPushButton(Dialog)
+        self.cancel_button = QPushButton(SettingsDialog)
         self.cancel_button.setObjectName(u"cancel_button")
 
         self.horizontalLayout.addWidget(self.cancel_button)
@@ -107,22 +107,22 @@ class Ui_Dialog(object):
         QWidget.setTabOrder(self.change_state_button, self.ok_button)
         QWidget.setTabOrder(self.ok_button, self.cancel_button)
 
-        self.retranslateUi(Dialog)
+        self.retranslateUi(SettingsDialog)
 
         self.ok_button.setDefault(True)
         self.cancel_button.setDefault(False)
 
 
-        QMetaObject.connectSlotsByName(Dialog)
+        QMetaObject.connectSlotsByName(SettingsDialog)
     # setupUi
 
-    def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"HD Active", None))
-        self.drives_label.setText(QCoreApplication.translate("Dialog", u"Drives", None))
-        self.wait_label.setText(QCoreApplication.translate("Dialog", u"Wait", None))
-        self.log_button.setText(QCoreApplication.translate("Dialog", u"Log", None))
-        self.change_state_button.setText(QCoreApplication.translate("Dialog", u"Start/Stop", None))
-        self.ok_button.setText(QCoreApplication.translate("Dialog", u"Ok", None))
-        self.cancel_button.setText(QCoreApplication.translate("Dialog", u"Cancel", None))
+    def retranslateUi(self, SettingsDialog):
+        SettingsDialog.setWindowTitle(QCoreApplication.translate("SettingsDialog", u"HD Active", None))
+        self.drives_label.setText(QCoreApplication.translate("SettingsDialog", u"Drives", None))
+        self.wait_label.setText(QCoreApplication.translate("SettingsDialog", u"Wait", None))
+        self.log_button.setText(QCoreApplication.translate("SettingsDialog", u"Log", None))
+        self.change_state_button.setText(QCoreApplication.translate("SettingsDialog", u"Start/Stop", None))
+        self.ok_button.setText(QCoreApplication.translate("SettingsDialog", u"Ok", None))
+        self.cancel_button.setText(QCoreApplication.translate("SettingsDialog", u"Cancel", None))
     # retranslateUi
 

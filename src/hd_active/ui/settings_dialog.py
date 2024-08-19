@@ -4,7 +4,7 @@ from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QDialog
 
 from src.hd_active.hd_active import HdActive
-from src.hd_active.ui.forms.ui_settings_dialog import Ui_Dialog
+from src.hd_active.ui.forms.ui_settings_dialog import Ui_SettingsDialog
 from src.hd_active.ui.log_dialog import LogDialog
 from src.hd_active.utils import get_asset
 
@@ -14,13 +14,11 @@ class SettingsDialog(QDialog):
     def __init__(self, hd_active: HdActive, parent):
         super().__init__(parent)
         self.hd_active = hd_active
-        self.ui = Ui_Dialog()
+        self.ui = Ui_SettingsDialog()
         self.ui.setupUi(self)
         self._update_change_state_button_text()
 
-        self.setWindowIcon(
-            QIcon(str(get_asset('images', 'drive-harddisk-usb_36212_32px.png')))
-        )
+        self.setWindowIcon(QIcon(str(get_asset('images', 'drive-harddisk-usb_36212_32px.png'))))
         self.set_values()
 
         # UI bindings
