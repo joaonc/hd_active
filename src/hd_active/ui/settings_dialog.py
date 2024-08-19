@@ -18,7 +18,7 @@ class SettingsDialog(QDialog):
         self.ui.setupUi(self)
         self._update_change_state_button_text()
 
-        self.setWindowIcon(QIcon(str(get_asset('images', 'drive-harddisk-usb_36212_32px.png'))))
+        self.setWindowIcon(QIcon(str(get_asset('images', 'hard_drive_icon.png'))))
         self.set_values()
 
         # UI bindings
