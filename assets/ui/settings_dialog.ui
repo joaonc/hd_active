@@ -157,6 +157,8 @@
   <tabstop>ok_button</tabstop>
   <tabstop>cancel_button</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
