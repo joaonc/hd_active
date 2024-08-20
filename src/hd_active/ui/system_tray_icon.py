@@ -36,14 +36,14 @@ class SystemTrayIcon(QSystemTrayIcon):
         self.setContextMenu(menu)
 
         # Other events
-        self.activated.connect(self.onTrayIconActivated)
+        self.activated.connect(self.on_tray_icon_activated)
 
     def _show_settings_dialog(self):
         settings_dialog = SettingsDialog(hd_active=self.hd_active, parent=self.parent())
         settings_dialog.exec()
 
-    def onTrayIconActivated(self, reason):
-        if reason == self.DoubleClick:
+    def on_tray_icon_activated(self, reason):
+        if reason == QSystemTrayIcon.ActivationReason.DoubleClick:
             self._show_settings_dialog()
 
     def change_state(self):
