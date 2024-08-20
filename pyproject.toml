@@ -45,7 +45,7 @@ build-backend = 'flit_core.buildapi'
 
 [project]
 name = 'hd_active'
-version = '0.1.0'
+version = '0.1.1'
 description = 'Prevent external HDs from becoming inactive (sleeping).'
 readme = 'README.md'
 authors = [{name = 'Joao Coelho'}]
