@@ -22,6 +22,3 @@ flit                # Build, install and upload to Pypi
 
 # Installer
 pyinstaller         # Installer framework
-
-# Other
-semantic-version    # Semantic versioning, more useful than `packaging.version`

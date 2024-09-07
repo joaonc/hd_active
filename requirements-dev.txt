@@ -10,9 +10,9 @@ bandit==1.7.9
     # via -r requirements-dev.in
 black==24.8.0
     # via -r requirements-dev.in
-build==1.2.1
+build==1.2.2
     # via pip-tools
-certifi==2024.7.4
+certifi==2024.8.30
     # via requests
 cfgv==3.4.0
     # via pre-commit
@@ -32,7 +32,7 @@ distlib==0.3.8
     # via virtualenv
 docutils==0.21.2
     # via flit
-filelock==3.12.4
+filelock==3.15.4
     # via virtualenv
 flake8==7.1.1
     # via -r requirements-dev.in
@@ -42,7 +42,7 @@ flit-core==3.9.0
     # via flit
 identify==2.6.0
     # via pre-commit
-idna==3.7
+idna==3.8
     # via requests
 iniconfig==2.0.0
     # via pytest
@@ -56,7 +56,7 @@ mccabe==0.7.0
     # via flake8
 mdurl==0.1.2
     # via markdown-it-py
-mypy==1.11.1
+mypy==1.11.2
     # via -r requirements-dev.in
 mypy-extensions==1.0.0
     # via
@@ -73,9 +73,9 @@ packaging==24.1
     #   pytest
 pathspec==0.12.1
     # via black
-pbr==6.0.0
+pbr==6.1.0
     # via stevedore
-pefile==2023.2.7
+pefile==2024.8.26
     # via pyinstaller
 pip-tools==7.4.1
     # via -r requirements-dev.in
@@ -131,17 +131,15 @@ pyyaml==6.0.2
     #   pre-commit
 requests==2.32.3
     # via flit
-rich==13.7.1
+rich==13.8.0
     # via bandit
-semantic-version==2.10.0
-    # via -r requirements-dev.in
 shiboken6==6.7.2
     # via
     #   -r requirements.txt
     #   pyside6
     #   pyside6-addons
     #   pyside6-essentials
-stevedore==5.2.0
+stevedore==5.3.0
     # via bandit
 tomli-w==1.0.0
     # via flit

@@ -185,6 +185,7 @@ def _get_next_version(current_version, part):
 
     return new_version
 
+
 def _re_sub_file(file: str | Path, regex: str, repl: str, save: bool = True) -> str:
     """
     Regex search/replace text in a file.
