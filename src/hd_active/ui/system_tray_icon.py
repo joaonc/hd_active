@@ -1,7 +1,8 @@
 import os
 
-from PySide6.QtWidgets import QApplication, QMenu, QSystemTrayIcon
+from PySide6.QtWidgets import QApplication, QMenu, QMessageBox, QSystemTrayIcon
 
+from src.hd_active import __version__
 from src.hd_active.hd_active import HdActive
 from src.hd_active.hd_active_config import HdActiveConfig
 from src.hd_active.ui.settings_dialog import SettingsDialog
@@ -31,6 +32,8 @@ class SystemTrayIcon(QSystemTrayIcon):
         show_settings_action = menu.addAction('Settings')
         show_settings_action.triggered.connect(self._show_settings_dialog)
         menu.addSeparator()
+        about_action = menu.addAction('About')
+        about_action.triggered.connect(self.about)
         quit_action = menu.addAction('Exit')
         quit_action.triggered.connect(QApplication.instance().quit)  # type: ignore
         self.setContextMenu(menu)
@@ -41,6 +44,9 @@ class SystemTrayIcon(QSystemTrayIcon):
     def _show_settings_dialog(self):
         settings_dialog = SettingsDialog(hd_active=self.hd_active, parent=self.parent())
         settings_dialog.exec()
+
+    def about(self):
+        QMessageBox.information(self.parent(), 'About', f'HD Active {__version__}')
 
     def on_tray_icon_activated(self, reason):
         if reason == QSystemTrayIcon.ActivationReason.DoubleClick:

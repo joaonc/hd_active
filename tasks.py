@@ -169,6 +169,23 @@ def _get_project_version() -> str:
     return list(versions.values())[0]
 
 
+def _get_next_version(current_version, part):
+    from packaging.version import Version
+
+    version = Version(str(current_version))
+
+    if part == 'major':
+        new_version = Version(f'{version.major + 1}.0.0')
+    elif part == 'minor':
+        new_version = Version(f'{version.major}.{version.minor + 1}.0')
+    elif part == 'patch':
+        new_version = Version(f'{version.major}.{version.minor}.{version.micro + 1}')
+    else:
+        raise ValueError('`part` must be "major", "minor", or "patch"')
+
+    return new_version
+
+
 def _re_sub_file(file: str | Path, regex: str, repl: str, save: bool = True) -> str:
     """
     Regex search/replace text in a file.
@@ -349,7 +366,7 @@ def build_version(c, version: str = '', bump: str = '', mode: str = 'nothing', y
 
     Optionally, commit the changes, create a PR and merge it after checks pass.
     """
-    from semantic_version import Version
+    from packaging.version import Version
 
     mode = mode.strip().lower()
     if mode not in ['nothing', 'commit', 'pr']:
@@ -375,7 +392,7 @@ def build_version(c, version: str = '', bump: str = '', mode: str = 'nothing', y
             raise Exit(f'New version `{v2}` needs to be greater than the existing version `{v1}`.')
     else:
         try:
-            v2 = getattr(v1, f'next_{bump.strip().lower()}')()
+            v2 = _get_next_version(v1, bump.strip().lower())
         except AttributeError:
             raise Exit('Invalid `bump` choice.')
 
