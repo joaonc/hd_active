@@ -6,19 +6,19 @@
 #
 altgraph==0.17.4
     # via pyinstaller
-bandit==1.7.9
+bandit==1.8.2
     # via -r requirements-dev.in
-black==24.8.0
+black==24.10.0
     # via -r requirements-dev.in
-build==1.2.2
+build==1.2.2.post1
     # via pip-tools
-certifi==2024.8.30
+certifi==2024.12.14
     # via requests
 cfgv==3.4.0
     # via pre-commit
-charset-normalizer==3.3.2
+charset-normalizer==3.4.1
     # via requests
-click==8.1.7
+click==8.1.8
     # via
     #   black
     #   pip-tools
@@ -28,21 +28,21 @@ colorama==0.4.6
     #   build
     #   click
     #   pytest
-distlib==0.3.8
+distlib==0.3.9
     # via virtualenv
 docutils==0.21.2
     # via flit
-filelock==3.15.4
+filelock==3.16.1
     # via virtualenv
 flake8==7.1.1
     # via -r requirements-dev.in
-flit==3.9.0
+flit==3.10.1
     # via -r requirements-dev.in
-flit-core==3.9.0
+flit-core==3.10.1
     # via flit
-identify==2.6.0
+identify==2.6.5
     # via pre-commit
-idna==3.8
+idna==3.10
     # via requests
 iniconfig==2.0.0
     # via pytest
@@ -56,7 +56,7 @@ mccabe==0.7.0
     # via flake8
 mdurl==0.1.2
     # via markdown-it-py
-mypy==1.11.2
+mypy==1.14.1
     # via -r requirements-dev.in
 mypy-extensions==1.0.0
     # via
@@ -64,7 +64,7 @@ mypy-extensions==1.0.0
     #   mypy
 nodeenv==1.9.1
     # via pre-commit
-packaging==24.1
+packaging==24.2
     # via
     #   black
     #   build
@@ -75,11 +75,11 @@ pathspec==0.12.1
     # via black
 pbr==6.1.0
     # via stevedore
-pefile==2024.8.26
+pefile==2023.2.7
     # via pyinstaller
 pip-tools==7.4.1
     # via -r requirements-dev.in
-platformdirs==4.2.2
+platformdirs==4.3.6
     # via
     #   black
     #   virtualenv
@@ -87,34 +87,34 @@ pluggy==1.5.0
     # via
     #   pytest
     #   pytest-qt
-pre-commit==3.8.0
+pre-commit==4.0.1
     # via -r requirements-dev.in
 pycodestyle==2.12.1
     # via flake8
 pyflakes==3.2.0
     # via flake8
-pygments==2.18.0
+pygments==2.19.1
     # via rich
-pyinstaller==6.10.0
+pyinstaller==6.11.1
     # via -r requirements-dev.in
-pyinstaller-hooks-contrib==2024.8
+pyinstaller-hooks-contrib==2025.0
     # via pyinstaller
-pyproject-hooks==1.1.0
+pyproject-hooks==1.2.0
     # via
     #   build
     #   pip-tools
-pyside6==6.7.2
+pyside6==6.8.1.1
     # via -r requirements.txt
-pyside6-addons==6.7.2
+pyside6-addons==6.8.1.1
     # via
     #   -r requirements.txt
     #   pyside6
-pyside6-essentials==6.7.2
+pyside6-essentials==6.8.1.1
     # via
     #   -r requirements.txt
     #   pyside6
     #   pyside6-addons
-pytest==8.3.2
+pytest==8.3.4
     # via
     #   -r requirements-dev.in
     #   pytest-params
@@ -131,25 +131,25 @@ pyyaml==6.0.2
     #   pre-commit
 requests==2.32.3
     # via flit
-rich==13.8.0
+rich==13.9.4
     # via bandit
-shiboken6==6.7.2
+shiboken6==6.8.1.1
     # via
     #   -r requirements.txt
     #   pyside6
     #   pyside6-addons
     #   pyside6-essentials
-stevedore==5.3.0
+stevedore==5.4.0
     # via bandit
-tomli-w==1.0.0
+tomli-w==1.2.0
     # via flit
 typing-extensions==4.12.2
     # via mypy
-urllib3==2.2.2
+urllib3==2.3.0
     # via requests
-virtualenv==20.26.3
+virtualenv==20.29.1
     # via pre-commit
-wheel==0.44.0
+wheel==0.45.1
     # via pip-tools
 
 # The following packages are considered to be unsafe in a requirements file:
