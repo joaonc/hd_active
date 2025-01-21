@@ -1,6 +1,6 @@
 # HD Active
 
-[![pypi](https://img.shields.io/pypi/v/hd_active.svg)](https://pypi.python.org/pypi/hd_active)
+[![pypi](https://img.shields.io/pypi/v/hd_active.svg)](https://pypi.org/project/hd_active/)
 [![Project License - MIT](https://img.shields.io/pypi/l/hd_active.svg)](https://github.com/joaonc/show_dialog/blob/main/LICENSE.txt)
 
 Prevent external HD's from becoming inactive (sleeping).

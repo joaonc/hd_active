@@ -2,6 +2,7 @@ site_name: HD Active
 nav:
   - Notes: index.md
   - Development: development.md
+  - Release: release.md
 
 theme:
   name: material
@@ -48,4 +49,4 @@ dev_addr: 127.0.0.1:7007        # Default 8000 may compete with other frameworks
 
 site_url: https://github.com/joaonc/hd_active
 repo_url: https://github.com/joaonc/hd_active
-copyright: Copyright &copy; 2024 Joao Coelho
+copyright: Copyright &copy; 2025 Joao Coelho
