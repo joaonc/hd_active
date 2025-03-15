@@ -1,5 +1,3 @@
-from os import PathLike
-
 from PySide6.QtWidgets import QDialog, QWidget
 
 from src.hd_active.hd_active import HdActive
@@ -22,10 +20,6 @@ class SettingsDialog(QDialog, Ui_SettingsDialog):
         self.change_state_button.clicked.connect(self.change_state)
         self.log_button.clicked.connect(self.show_log)
 
-    @staticmethod
-    def _path_to_str(drive_path: PathLike) -> str:
-        return str(drive_path)
-
     def _update_change_state_button_text(self):
         self.change_state_button.setText(self.hd_active.get_change_state())
 
@@ -35,7 +29,7 @@ class SettingsDialog(QDialog, Ui_SettingsDialog):
 
     def set_values(self):
         self.drives_line_edit.setText(
-            ','.join(self._path_to_str(drive_path) for drive_path in self.hd_active.drive_paths)
+            ','.join(str(drive_path) for drive_path in self.hd_active.drive_paths)
         )
         self.wait_line_edit.setText(str(self.hd_active.wait))
 
