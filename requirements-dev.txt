@@ -6,17 +6,17 @@
 #
 altgraph==0.17.4
     # via pyinstaller
-bandit==1.8.2
+bandit==1.8.3
     # via -r requirements-dev.in
-black==24.10.0
+black==25.1.0
     # via -r requirements-dev.in
 build==1.2.2.post1
     # via pip-tools
-certifi==2024.12.14
+certifi==2025.4.26
     # via requests
 cfgv==3.4.0
     # via pre-commit
-charset-normalizer==3.4.1
+charset-normalizer==3.4.2
     # via requests
 click==8.1.8
     # via
@@ -32,23 +32,23 @@ distlib==0.3.9
     # via virtualenv
 docutils==0.21.2
     # via flit
-filelock==3.16.1
+filelock==3.18.0
     # via virtualenv
-flake8==7.1.1
+flake8==7.2.0
     # via -r requirements-dev.in
-flit==3.10.1
+flit==3.12.0
     # via -r requirements-dev.in
-flit-core==3.10.1
+flit-core==3.12.0
     # via flit
-identify==2.6.5
+identify==2.6.12
     # via pre-commit
 idna==3.10
     # via requests
-iniconfig==2.0.0
+iniconfig==2.1.0
     # via pytest
 invoke==2.2.0
     # via -r requirements-dev.in
-isort==5.13.2
+isort==6.0.1
     # via -r requirements-dev.in
 markdown-it-py==3.0.0
     # via rich
@@ -56,15 +56,15 @@ mccabe==0.7.0
     # via flake8
 mdurl==0.1.2
     # via markdown-it-py
-mypy==1.14.1
+mypy==1.16.0
     # via -r requirements-dev.in
-mypy-extensions==1.0.0
+mypy-extensions==1.1.0
     # via
     #   black
     #   mypy
 nodeenv==1.9.1
     # via pre-commit
-packaging==24.2
+packaging==25.0
     # via
     #   black
     #   build
@@ -72,54 +72,58 @@ packaging==24.2
     #   pyinstaller-hooks-contrib
     #   pytest
 pathspec==0.12.1
-    # via black
-pbr==6.1.0
+    # via
+    #   black
+    #   mypy
+pbr==6.1.1
     # via stevedore
 pefile==2023.2.7
     # via pyinstaller
 pip-tools==7.4.1
     # via -r requirements-dev.in
-platformdirs==4.3.6
+platformdirs==4.3.8
     # via
     #   black
     #   virtualenv
-pluggy==1.5.0
+pluggy==1.6.0
     # via
     #   pytest
     #   pytest-qt
-pre-commit==4.0.1
+pre-commit==4.2.0
     # via -r requirements-dev.in
-pycodestyle==2.12.1
+pycodestyle==2.13.0
     # via flake8
-pyflakes==3.2.0
+pyflakes==3.3.2
     # via flake8
 pygments==2.19.1
-    # via rich
-pyinstaller==6.11.1
+    # via
+    #   pytest
+    #   rich
+pyinstaller==6.14.0
     # via -r requirements-dev.in
-pyinstaller-hooks-contrib==2025.0
+pyinstaller-hooks-contrib==2025.4
     # via pyinstaller
 pyproject-hooks==1.2.0
     # via
     #   build
     #   pip-tools
-pyside6==6.8.1.1
+pyside6==6.9.1
     # via -r requirements.txt
-pyside6-addons==6.8.1.1
+pyside6-addons==6.9.1
     # via
     #   -r requirements.txt
     #   pyside6
-pyside6-essentials==6.8.1.1
+pyside6-essentials==6.9.1
     # via
     #   -r requirements.txt
     #   pyside6
     #   pyside6-addons
-pytest==8.3.4
+pytest==8.4.0
     # via
     #   -r requirements-dev.in
     #   pytest-params
     #   pytest-qt
-pytest-params==0.2.0
+pytest-params==0.3.0
     # via -r requirements-dev.in
 pytest-qt==4.4.0
     # via -r requirements-dev.in
@@ -131,23 +135,23 @@ pyyaml==6.0.2
     #   pre-commit
 requests==2.32.3
     # via flit
-rich==13.9.4
+rich==14.0.0
     # via bandit
-shiboken6==6.8.1.1
+shiboken6==6.9.1
     # via
     #   -r requirements.txt
     #   pyside6
     #   pyside6-addons
     #   pyside6-essentials
-stevedore==5.4.0
+stevedore==5.4.1
     # via bandit
 tomli-w==1.2.0
     # via flit
-typing-extensions==4.12.2
+typing-extensions==4.14.0
     # via mypy
-urllib3==2.3.0
+urllib3==2.4.0
     # via requests
-virtualenv==20.29.1
+virtualenv==20.31.2
     # via pre-commit
 wheel==0.45.1
     # via pip-tools
