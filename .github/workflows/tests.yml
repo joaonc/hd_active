@@ -20,7 +20,7 @@ jobs:
         # No need to install on Windows or Mac.
         run: |
           sudo apt-get update -yqq
-          sudo apt-get install -y libegl1-mesa
+          sudo apt-get install -y libegl-mesa0 || sudo apt-get install -y libegl1-mesa
         if: runner.os == 'Linux'
 
       - name: Set up Python
