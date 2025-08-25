@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 
 from invoke import Collection, Exit, task
@@ -8,12 +9,14 @@ os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
 
 PROJECT_ROOT = Path(__file__).parent
 PROJECT_NAME = PROJECT_ROOT.name
-PROJECT_SOURCE_RELATIVE_DIR = 'src'
-PROJECT_SOURCE_DIR = PROJECT_ROOT / PROJECT_SOURCE_RELATIVE_DIR
+PROJECT_SOURCE_DIR = PROJECT_ROOT / 'src'
 """Source code for the whole project."""
 SOURCE_DIR = PROJECT_SOURCE_DIR / PROJECT_NAME
 """Source code for the this project's package."""
 ASSETS_DIR = PROJECT_ROOT / 'assets'
+
+if str(PROJECT_SOURCE_DIR) not in sys.path:
+    sys.path.insert(0, str(PROJECT_SOURCE_DIR))
 
 # Requirements files
 REQUIREMENTS_MAIN = 'main'
