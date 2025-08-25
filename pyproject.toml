@@ -31,6 +31,8 @@ exclude = '^venv*|^.venv*|.git|.eggs|build|dist|.cache|.pytest_cache|.mypy_cache
 python_version = '3.11'
 warn_return_any = true
 warn_unused_configs = true
+# Let mypy find modules inside the 'src' directory when importing 'hd_active'.
+mypy_path = 'src'
 # Disable the warning below, from type hinting variables in a function.
 # By default, the bodies of untyped functions are not checked, consider using --check-untyped-defs
 disable_error_code = 'annotation-unchecked'

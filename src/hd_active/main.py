@@ -2,8 +2,8 @@ import sys
 
 from PySide6 import QtGui, QtWidgets
 
-from src.hd_active.ui.system_tray_icon import SystemTrayIcon
-from src.hd_active.utils import get_asset
+from .ui.system_tray_icon import SystemTrayIcon
+from .utils import get_asset
 
 
 def main():

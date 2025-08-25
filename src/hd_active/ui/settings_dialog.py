@@ -1,8 +1,8 @@
 from PySide6.QtWidgets import QDialog, QWidget
 
-from src.hd_active.hd_active import HdActive
-from src.hd_active.ui.forms.ui_settings_dialog import Ui_SettingsDialog
-from src.hd_active.ui.log_dialog import LogDialog
+from ..hd_active import HdActive
+from .forms.ui_settings_dialog import Ui_SettingsDialog
+from .log_dialog import LogDialog
 
 
 class SettingsDialog(QDialog, Ui_SettingsDialog):

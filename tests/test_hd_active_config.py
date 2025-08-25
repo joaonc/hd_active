@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
-from src.hd_active.hd_active_config import HdActiveConfig
+from hd_active.hd_active_config import HdActiveConfig
 
 
 @pytest.fixture
@@ -19,7 +19,7 @@ def config_file(request, tmp_path) -> Tuple[str, List[str]]:
     return str(file), request.param[1]
 
 
-@patch('src.hd_active.hd_active_config.configparser.ConfigParser.read')
+@patch('hd_active.hd_active_config.configparser.ConfigParser.read')
 def test_defaults(read_mock):
     """
     Skip reading file (so defaults are not overwritten) and verify defaults.

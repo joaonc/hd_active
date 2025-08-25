@@ -123,9 +123,9 @@ def _get_os_name():
 
 
 def _get_build_app_files() -> tuple[Path, Path]:
-    import src.hd_active
+    import hd_active
 
-    version = src.hd_active.__version__
+    version = hd_active.__version__
 
     # Assumes the distribution directory is empty prior to creating the app
     files = [f for f in BUILD_DIST_APP_DIR.glob('*') if f.is_file() and f.suffix.lower() != '.zip']
@@ -583,10 +583,10 @@ def build_upload(c, label: str = 'none'):
     """
     from packaging.version import Version
 
-    import src.hd_active
+    import hd_active
 
     _, zip_file = _get_build_app_files()
-    app_version = Version(src.hd_active.__version__)
+    app_version = Version(hd_active.__version__)
 
     if not zip_file.exists():
         raise Exit(

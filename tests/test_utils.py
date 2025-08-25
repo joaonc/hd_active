@@ -1,6 +1,6 @@
 import pytest
 
-from src.hd_active.utils import ASSETS_ROOT, PROJECT_ROOT, get_asset, is_truthy
+from hd_active.utils import ASSETS_ROOT, PROJECT_ROOT, get_asset, is_truthy
 
 
 class TestGlobals:
