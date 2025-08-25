@@ -8,7 +8,8 @@ os.environ.setdefault('INVOKE_RUN_ECHO', '1')  # Show commands by default
 
 PROJECT_ROOT = Path(__file__).parent
 PROJECT_NAME = PROJECT_ROOT.name
-PROJECT_SOURCE_DIR = PROJECT_ROOT / 'src'
+PROJECT_SOURCE_RELATIVE_DIR = 'src'
+PROJECT_SOURCE_DIR = PROJECT_ROOT / PROJECT_SOURCE_RELATIVE_DIR
 """Source code for the whole project."""
 SOURCE_DIR = PROJECT_SOURCE_DIR / PROJECT_NAME
 """Source code for the this project's package."""
@@ -756,12 +757,17 @@ def lint_mypy(c, path='.'):
     c.run(f'mypy {path}')
 
 
-@task(lint_isort, lint_black, lint_flake8, lint_mypy)
+@task
 def lint_all(c):
     """
     Run all linters.
     Config for each of the tools is in ``pyproject.toml`` and ``setup.cfg``.
     """
+    lint_isort(c)
+    lint_black(c)
+    lint_flake8(c)
+    lint_mypy(c, 'src')
+    lint_mypy(c, 'tests')
     print('Done')
 
 
