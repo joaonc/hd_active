@@ -284,7 +284,19 @@ def _update_imports():
             file_path = root_path / file
 
             regex_replace = [
-                (r'''^( *from[ ]+)(\.)( .*)''', module),  # from . import <module>
+                (r'''^( *from[ ]+)(\.{1})( .*)''', module),  # from . import <module>
+                (
+                    r'''^( *from[ ]+)(\.{2})( .*)''',
+                    '.'.join(module.split('.')[:-1]),
+                ),  # from .. import <module>
+                (
+                    r'''^( *from[ ]+)(\.{3})( .*)''',
+                    '.'.join(module.split('.')[:-2]),
+                ),  # from ... import <module>
+                (
+                    r'''^( *from[ ]+)(\.{3})(.*)''',
+                    '.'.join(module.split('.')[:-2]) + '.',
+                ),
                 (
                     r'''^( *from[ ]+)(\.{2})(.*)''',
                     '.'.join(module.split('.')[:-1]) + '.',
