@@ -13,9 +13,11 @@ HD_ACTION_DEBUG = is_truthy(os.getenv('HD_ACTION_DEBUG', 'True'))
 If truthy, HDs are not accessed. Used for testing purposes.
 """
 
+DEFAULT_HD_ACTIVE_FILE_NAME = 'hd_active.ini'
+
 
 class SystemTrayIcon(QSystemTrayIcon):
-    def __init__(self, icon, parent=None, hd_active_file_name: str = 'hd_active.ini'):
+    def __init__(self, icon, parent=None, hd_active_file_name: str = DEFAULT_HD_ACTIVE_FILE_NAME):
         super().__init__(icon=icon, parent=parent)
 
         self.hd_active_file_name = hd_active_file_name
