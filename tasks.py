@@ -824,7 +824,7 @@ def pip_package(c, requirements, package):
 
 
 @task(help=REQUIREMENTS_TASK_HELP)
-def pip_upgrade(c, requirements):
+def pip_upgrade(c, requirements=None):
     """
     Try to upgrade all dependencies to their latest versions.
     """
