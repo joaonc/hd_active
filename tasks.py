@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 
 from invoke import Collection, Exit, task
@@ -13,6 +14,9 @@ PROJECT_SOURCE_DIR = PROJECT_ROOT / 'src'
 SOURCE_DIR = PROJECT_SOURCE_DIR / PROJECT_NAME
 """Source code for the this project's package."""
 ASSETS_DIR = PROJECT_ROOT / 'assets'
+
+if str(PROJECT_SOURCE_DIR) not in sys.path:
+    sys.path.insert(0, str(PROJECT_SOURCE_DIR))
 
 # Requirements files
 REQUIREMENTS_MAIN = 'main'
@@ -123,9 +127,9 @@ def _get_os_name():
 
 
 def _get_build_app_files() -> tuple[Path, Path]:
-    import src.hd_active
+    import hd_active
 
-    version = src.hd_active.__version__
+    version = hd_active.__version__
 
     # Assumes the distribution directory is empty prior to creating the app
     files = [f for f in BUILD_DIST_APP_DIR.glob('*') if f.is_file() and f.suffix.lower() != '.zip']
@@ -280,7 +284,19 @@ def _update_imports():
             file_path = root_path / file
 
             regex_replace = [
-                (r'''^( *from[ ]+)(\.)( .*)''', module),  # from . import <module>
+                (r'''^( *from[ ]+)(\.{1})( .*)''', module),  # from . import <module>
+                (
+                    r'''^( *from[ ]+)(\.{2})( .*)''',
+                    '.'.join(module.split('.')[:-1]),
+                ),  # from .. import <module>
+                (
+                    r'''^( *from[ ]+)(\.{3})( .*)''',
+                    '.'.join(module.split('.')[:-2]),
+                ),  # from ... import <module>
+                (
+                    r'''^( *from[ ]+)(\.{3})(.*)''',
+                    '.'.join(module.split('.')[:-2]) + '.',
+                ),
                 (
                     r'''^( *from[ ]+)(\.{2})(.*)''',
                     '.'.join(module.split('.')[:-1]) + '.',
@@ -583,10 +599,10 @@ def build_upload(c, label: str = 'none'):
     """
     from packaging.version import Version
 
-    import src.hd_active
+    import hd_active
 
     _, zip_file = _get_build_app_files()
-    app_version = Version(src.hd_active.__version__)
+    app_version = Version(hd_active.__version__)
 
     if not zip_file.exists():
         raise Exit(
@@ -644,7 +660,7 @@ def build_run(c):
             raise Exit('Multiple executables found.')
         c.run(str(exes[0]))
     elif os_name == 'mac':
-        app_file, _, _ = _get_build_app_files()
+        app_file, _ = _get_build_app_files()
         c.run(str(app_file))
     elif os_name == 'linux':
         raise Exit('Running on Linux not yet implemented.')
@@ -756,12 +772,17 @@ def lint_mypy(c, path='.'):
     c.run(f'mypy {path}')
 
 
-@task(lint_isort, lint_black, lint_flake8, lint_mypy)
+@task
 def lint_all(c):
     """
     Run all linters.
     Config for each of the tools is in ``pyproject.toml`` and ``setup.cfg``.
     """
+    lint_isort(c)
+    lint_black(c)
+    lint_flake8(c)
+    lint_mypy(c, 'src')
+    lint_mypy(c, 'tests')
     print('Done')
 
 

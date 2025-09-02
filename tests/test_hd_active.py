@@ -6,8 +6,8 @@ from unittest.mock import patch
 
 import pytest
 
-from src.hd_active.hd_action_state import HdActionState
-from src.hd_active.hd_active import HdActive
+from hd_active.hd_action_state import HdActionState
+from hd_active.hd_active import HdActive
 
 WAIT = 0.1
 WAIT_TEST = 2 * WAIT
@@ -22,7 +22,7 @@ class HdActiveTest(HdActive):
         super().__init__(drive_paths, run, wait=wait)
 
 
-@patch('src.hd_active.hd_active.HdActive._write_hd', return_value=1000)
+@patch('hd_active.hd_active.HdActive._write_hd', return_value=1000)
 class TestHdActive:
     def test_instantiate_not_started(self, mock_write_hd):
         hd_active = HdActiveTest(drive_paths=['z'], run=False)
