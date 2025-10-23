@@ -9,6 +9,7 @@ pre-commit          # Pre-commit hooks
 bandit              # Linter
 black               # Linter
 flake8              # Linter
+flake8-pyproject    # Flake8 plugin
 isort               # Linter
 mypy                # Code inspector
 
