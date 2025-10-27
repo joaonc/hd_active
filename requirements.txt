@@ -4,15 +4,15 @@
 #
 #    pip-compile requirements.in
 #
-pyside6==6.9.2
+pyside6==6.10.0
     # via -r requirements.in
-pyside6-addons==6.9.2
+pyside6-addons==6.10.0
     # via pyside6
-pyside6-essentials==6.9.2
+pyside6-essentials==6.10.0
     # via
     #   pyside6
     #   pyside6-addons
-shiboken6==6.9.2
+shiboken6==6.10.0
     # via
     #   pyside6
     #   pyside6-addons

@@ -4,6 +4,7 @@
 invoke              # Tasks
 pip-tools           # Package management
 pre-commit          # Pre-commit hooks
+typer-invoke        # Tasks
 
 # Linting
 bandit              # Linter

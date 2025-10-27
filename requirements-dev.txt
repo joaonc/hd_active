@@ -109,13 +109,13 @@ pyproject-hooks==1.2.0
     # via
     #   build
     #   pip-tools
-pyside6==6.9.1
+pyside6==6.10.0
     # via -r requirements.txt
-pyside6-addons==6.9.1
+pyside6-addons==6.10.0
     # via
     #   -r requirements.txt
     #   pyside6
-pyside6-essentials==6.9.1
+pyside6-essentials==6.10.0
     # via
     #   -r requirements.txt
     #   pyside6
@@ -125,6 +125,7 @@ pytest==8.4.2
     #   -r requirements-dev.in
     #   pytest-params
     #   pytest-qt
+    #   typer-invoke
 pytest-params==0.3.0
     # via -r requirements-dev.in
 pytest-qt==4.5.0
@@ -141,7 +142,7 @@ requests==2.32.5
     # via flit
 rich==14.2.0
     # via bandit
-shiboken6==6.9.1
+shiboken6==6.10.0
     # via
     #   -r requirements.txt
     #   pyside6
@@ -151,6 +152,8 @@ stevedore==5.5.0
     # via bandit
 tomli-w==1.2.0
     # via flit
+typer-invoke==0.0.1
+    # via -r requirements-dev.in
 typing-extensions==4.15.0
     # via
     #   mypy
