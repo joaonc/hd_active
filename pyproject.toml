@@ -47,6 +47,7 @@ modules = [
     'admin.build',
     'admin.lint',
     'admin.pip',
+    'admin.precommit',
     'admin.test',
 ]
 no_args_is_help = true
