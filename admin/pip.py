@@ -11,6 +11,8 @@ import typer
 from admin import PROJECT_ROOT
 from admin.utils import DryAnnotation, install_package, logger, run
 
+REQUIREMENTS_DIR = PROJECT_ROOT / 'admin' / 'requirements'
+
 app = typer.Typer(
     help=__doc__,
     no_args_is_help=True,
@@ -30,6 +32,7 @@ class Requirements(StrEnum):
 
     MAIN = 'requirements'
     DEV = 'requirements-dev'
+    DOCS = 'requirements-docs'
 
 
 class RequirementsType(StrEnum):
@@ -75,8 +78,7 @@ def _get_requirements_file(
     else:
         reqs_type = RequirementsType(requirements_type.lstrip('.').lower())
 
-    base_path = PROJECT_ROOT / 'admin' / 'requirements'
-    return base_path / f'{reqs}.{reqs_type}'
+    return REQUIREMENTS_DIR / f'{reqs}.{reqs_type}'
 
 
 def _get_requirements_files(

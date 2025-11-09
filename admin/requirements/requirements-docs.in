@@ -1,0 +1,6 @@
+-c requirements-dev.txt
+
+mdx_truly_sane_lists
+mkdocs
+mkdocs-glightbox
+mkdocs-material
