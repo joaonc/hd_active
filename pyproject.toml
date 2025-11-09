@@ -41,6 +41,20 @@ disable_error_code = 'annotation-unchecked'
 ignore_missing_imports = true
 module = ['invoke', 'factory', 'pytest_check', 'pytest_params', 'PySide6.*']
 
+[tool.typer-invoke]
+# Paths from where `pyproject.toml` is located (root of project)
+modules = [
+    'admin.build',
+    'admin.lint',
+    'admin.pip',
+    'admin.test',
+]
+no_args_is_help = true
+add_completion = false
+rich_markup_mode = 'markdown'
+logging_level = 'INFO'
+logging_format = '%(message)s'
+
 [build-system]
 requires = ['flit_core >=3.2,<4']
 build-backend = 'flit_core.buildapi'

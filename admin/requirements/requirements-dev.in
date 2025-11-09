@@ -1,0 +1,25 @@
+-r requirements.txt
+
+# Dev tools
+pip-tools           # Package management
+pre-commit          # Pre-commit hooks
+typer-invoke        # Tasks
+
+# Linting
+bandit              # Linter
+black               # Linter
+flake8              # Linter
+flake8-pyproject    # Flake8 plugin
+isort               # Linter
+mypy                # Code inspector
+
+# Test
+pytest              # Test framework
+pytest-params       # Easier test case parameters
+pytest-qt           # Qt plugin to allow user interaction
+
+# Build and publish
+flit                # Build, install and upload to Pypi
+
+# Installer
+pyinstaller         # Installer framework
