@@ -776,7 +776,7 @@ def lint_mypy(c, path='.'):
 def lint_all(c):
     """
     Run all linters.
-    Config for each of the tools is in ``pyproject.toml`` and ``setup.cfg``.
+    Config for each of the tools is in ``pyproject.toml``.
     """
     lint_isort(c)
     lint_black(c)

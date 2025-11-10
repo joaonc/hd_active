@@ -18,13 +18,13 @@ This page doesn't go into how to do that.
 
 Install the development packages:
 ```
-python -m pip install -r requirements-dev.txt
+pip typer-invoke && inv pip sync
 ```
 
-This project uses [pyinvoke](https://www.pyinvoke.org/) to facilitate common tasks.
+This project uses [typer-invoke](https://github.com/joaonc/typer-invoke) to facilitate common tasks.
 For a list of tasks:
 ```
-inv --list
+inv --help
 ```
 
 ## Licensing
