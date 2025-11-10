@@ -6,8 +6,8 @@ from typing import Annotated
 
 import typer
 
-from admin import ASSETS_DIR
-from admin.utils import DryAnnotation, run, run_async, logger
+from admin import ASSETS_DIR, SOURCE_DIR
+from admin.utils import DryAnnotation, logger, run, run_async
 
 UI_FILES = tuple((ASSETS_DIR / 'ui').glob('**/*.ui'))
 """
@@ -27,23 +27,26 @@ app = typer.Typer(
 )
 
 
-
-@task(
-    help={
-        'file': '`.ui` file to be converted to `.py`. `.ui` extension not required. '
-        'Can be a comma separated list. If not supplied, all files will be converted. '
-        f'Available files: {", ".join(p.stem for p in UI_FILES)}.'
-    }
-)
 @app.command(name='py')
-def ui_py(file=None, dry: DryAnnotation = False):
+def ui_py(
+    file: Annotated[
+        list[str] | None,
+        typer.Argument(
+            help='`.ui` file to be converted to `.py`. `.ui` extension not required. '
+            'If not supplied, all files will be converted. '
+            f'Available files: {", ".join(p.stem for p in UI_FILES)}.',
+            show_default=False,
+        ),
+    ] = None,
+    dry: DryAnnotation = False,
+):
     """
     Convert Qt `.ui` files into `.py`.
     """
     if file:
         file_stems = [
             (_f2[:-3] if _f2.lower().endswith('.ui') else _f2)
-            for _f2 in [_f1.strip() for _f1 in file.split(',')]
+            for _f2 in [_f1.strip() for _f1 in file]
         ]
     else:
         file_stems = [p.stem for p in UI_FILES]
@@ -62,21 +65,26 @@ def ui_py(file=None, dry: DryAnnotation = False):
         run(dry, 'pyside6-uic', str(file_path_in), '-o', str(file_path_out), '--from-imports')
 
 
-@task(
-    help={
-        'file': '`.qrc` file to be converted to `.py`. `.qrc` extension not required. '
-        'Can be a coma separated list of filenames. If not supplied, all files will be converted. '
-        f'Available files: {", ".join(p.stem for p in QRC_FILES)}.'
-    }
-)
-def ui_rc(file=None, dry: DryAnnotation = False):
+@app.command(name='rc')
+def ui_rc(
+    file: Annotated[
+        list[str] | None,
+        typer.Argument(
+            help='`.qrc` file(s) to be converted to `.py`. `.qrc` extension not required. '
+            'If not supplied, all files will be converted. '
+            f'Available files: {", ".join(p.stem for p in QRC_FILES)}.',
+            show_default=False,
+        ),
+    ] = None,
+    dry: DryAnnotation = False,
+):
     """
     Convert Qt `.qrc` files into `.py`.
     """
     if file:
         file_stems = [
             (_f2[:-4] if _f2.lower().endswith('.qrc') else _f2)
-            for _f2 in [_f1.strip() for _f1 in file.split(',')]
+            for _f2 in [_f1.strip() for _f1 in file]
         ]
     else:
         file_stems = [p.stem for p in QRC_FILES]
