@@ -65,9 +65,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install requirements
-        run: |
-          pip install typer-invoke
-          inv pip install dev
+        run: pip install -r admin/requirements/requirements-dev.in
 
       - name: Set git user
         run: |
