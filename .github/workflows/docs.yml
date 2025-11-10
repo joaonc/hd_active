@@ -25,9 +25,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install requirements
-        run: |
-          pip install typer-invoke
-          inv pip install docs
+        run: pip install -r admin/requirements/requirements-docs.in
 
       - name: Deploy docs
         run: mkdocs gh-deploy --force

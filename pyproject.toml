@@ -69,6 +69,7 @@ readme = 'README.md'
 authors = [{name = 'Joao Coelho'}]
 license = {file = 'LICENSE.txt'}
 dependencies = ['pyside6']
+requires-python = '>=3.10,<=3.14'
 classifiers = [
     "License :: OSI Approved :: MIT License",
 ]

@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         # Min and max versions supported
-        python-version: ['3.9', '3.12']
+        python-version: ['3.10', '3.13']
     name: Python ${{ matrix.python-version }}
     steps:
       - name: Checkout code
@@ -28,16 +28,17 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
+
       - name: Install requirements
-        run: |
-          pip install typer-invoke
-          inv pip install dev
+        run: pip install -r admin/requirements/requirements-dev.in
+
       - name: Run tests on Linux and Mac
         # Test folder(s) configured in `pyproject.toml`
         # Skip Windows OS tests
         run: |
           python -m pytest . -m "not windows"
         if: runner.os != 'Windows'
+
       - name: Run tests on Windows
         # Test folder(s) configured in `pyproject.toml`
         run: |
