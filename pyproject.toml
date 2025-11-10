@@ -50,6 +50,7 @@ modules = [
     'admin.pip',
     'admin.precommit',
     'admin.test',
+    'admin.ui',
 ]
 no_args_is_help = true
 add_completion = false
