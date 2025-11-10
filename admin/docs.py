@@ -6,7 +6,7 @@ Create and publish documentation.
 import typer
 
 from admin import PROJECT_ROOT
-from admin.utils import DryAnnotation, run, logger
+from admin.utils import DryAnnotation, logger, run
 
 app = typer.Typer(
     help=__doc__,

@@ -73,7 +73,9 @@ jobs:
           python-version: '3.11'
 
       - name: Install requirements
-        run: pip install -r requirements-dev.txt
+        run: |
+          pip install typer-invoke
+          inv pip install dev
 
       - name: Build app
         run: inv build.app

@@ -115,6 +115,24 @@ def pip_compile(
         run(False, 'pip-compile', *dry_option, str(filename))
 
 
+@app.command(name='install')
+def pip_install(requirements: RequirementsAnnotation = None, dry: DryAnnotation = False):
+    """
+    Install packages from the requirements file(s).
+
+    Equivalent to ``pip install -r <file>``. Making it easier to point to the correct file.
+    """
+    from itertools import chain
+
+    files = _get_requirements_files(requirements, RequirementsType.OUT)
+    run(
+        dry,
+        'pip',
+        'install',
+        *list(chain.from_iterable(zip(['-r'] * len(files), map(str, files)))),
+    )
+
+
 @app.command(name='sync')
 def pip_sync(requirements: RequirementsAnnotation = None, dry: DryAnnotation = False):
     """
