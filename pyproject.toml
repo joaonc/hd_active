@@ -45,6 +45,7 @@ module = ['invoke', 'factory', 'pytest_check', 'pytest_params', 'PySide6.*']
 # Paths from where `pyproject.toml` is located (root of project)
 modules = [
     'admin.build',
+    'admin.docs',
     'admin.lint',
     'admin.pip',
     'admin.precommit',
