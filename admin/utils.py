@@ -86,13 +86,19 @@ def is_package_installed(package_name: str) -> bool:
     return importlib.util.find_spec(package_name) is not None
 
 
-def install_package(package: str, dry: bool = False):
-    """Install a Python package if not already installed."""
+def install_package(package: str, package_install: str | None =None, dry: bool = False):
+    """
+    Install a Python package if not already installed.
+
+    :param package: Name of the package to check/install.
+    :param package_install: Name of the package to install, if different from the name to check.
+    :param dry: Show the command that would be run without running it.
+    """
     if is_package_installed(package):
         logger.debug(f'Package `{package}` is already installed.')
         return
 
-    run(dry, sys.executable, '-m', 'pip', 'install', package)
+    run(dry, sys.executable, '-m', 'pip', 'install', package_install or package)
 
 
 def get_logger(name=None, level=logging.DEBUG) -> logging.Logger:
