@@ -17,22 +17,22 @@ app = typer.Typer(
 
 @app.command(name='black')
 def lint_black(path='.', dry: DryAnnotation = False):
-    run(dry, 'black', path)
+    run('black', path, dry=dry)
 
 
 @app.command(name='flake8')
 def lint_flake8(path='.', dry: DryAnnotation = False):
-    run(dry, 'flake8', path)
+    run('flake8', path, dry=dry)
 
 
 @app.command(name='isort')
 def lint_isort(path='.', dry: DryAnnotation = False):
-    run(dry, 'isort', path)
+    run('isort', path, dry=dry)
 
 
 @app.command(name='mypy')
 def lint_mypy(path='.', dry: DryAnnotation = False):
-    run(dry, 'mypy', path)
+    run('mypy', path, dry=dry)
 
 
 @app.command(name='all')

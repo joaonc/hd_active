@@ -62,7 +62,7 @@ def ui_py(
 
         file_path_out = SOURCE_DIR / 'ui/forms' / f'ui_{file_stem}.py'
 
-        run(dry, 'pyside6-uic', str(file_path_in), '-o', str(file_path_out), '--from-imports')
+        run('pyside6-uic', str(file_path_in), '-o', str(file_path_out), '--from-imports', dry=dry)
 
 
 @app.command(name='rc')
@@ -100,7 +100,7 @@ def ui_rc(
 
         file_path_out = SOURCE_DIR / 'ui/forms' / f'{file_stem}_rc.py'
 
-        run(dry, 'pyside6-rcc', str(file_path_in), '-o', str(file_path_out))
+        run('pyside6-rcc', str(file_path_in), '-o', str(file_path_out), dry=dry)
 
 
 @app.command(name='edit')
@@ -125,7 +125,7 @@ def ui_edit(
         )
         raise typer.Exit(1)
 
-    run_async(dry, 'pyside6-designer', str(ui_file_path))
+    run_async('pyside6-designer', str(ui_file_path), dry=dry)
 
 
 if __name__ == '__main__':

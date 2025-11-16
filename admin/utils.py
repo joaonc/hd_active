@@ -2,6 +2,7 @@ import logging
 import subprocess
 import sys
 from enum import Enum
+from itertools import chain
 from typing import Annotated
 
 import typer
@@ -40,20 +41,39 @@ def get_os() -> OS:
     return OS.Linux
 
 
-def run(dry: bool, *args) -> subprocess.CompletedProcess | None:
+def run(*args, dry: bool = False, **kwargs) -> subprocess.CompletedProcess | None:
+    """
+    Run a CLI command synchronously (i.e., wait for the command to finish) and return the result.
+
+    This function is a wrapper around ``subprocess.run(...)``.
+
+    If you need access to the output, add the ``capture_output=True`` argument and do
+    ``.stdout.decode().strip()`` to get the output as a string.
+    """
     logger.info(' '.join(map(str, args)))
 
     if dry:
         return None
 
+    defaults = dict(
+        cwd=PROJECT_ROOT,
+        capture_output=False,
+        check=True,
+    )
+
     try:
-        return subprocess.run(args, cwd=PROJECT_ROOT, check=True)
+        return subprocess.run(args, **(defaults | kwargs))  # type: ignore
     except subprocess.CalledProcessError as e:
-        logger.error(e)
+        msg = str(e)
+        if e.stdout:
+            msg += f'\nSTDOUT:\n{e.stdout.decode()}'
+        if e.stderr:
+            msg += f'\nSTDERR:\n{e.stderr.decode()}'
+        logger.error(msg)
         raise typer.Exit(1)
 
 
-def run_async(dry: bool, *args) -> subprocess.Popen | None:
+def run_async(*args, dry: bool = False, **kwargs) -> subprocess.Popen | None:
     """
     Starts the process and continues code execution.
 
@@ -72,8 +92,12 @@ def run_async(dry: bool, *args) -> subprocess.Popen | None:
     if dry:
         return None
 
+    defaults = dict(
+        cwd=PROJECT_ROOT,
+    )
+
     try:
-        return subprocess.Popen(args, cwd=PROJECT_ROOT)
+        return subprocess.Popen(args, **(defaults | kwargs))
     except subprocess.CalledProcessError as e:
         logger.error(e)
         raise typer.Exit(1)
@@ -86,7 +110,7 @@ def is_package_installed(package_name: str) -> bool:
     return importlib.util.find_spec(package_name) is not None
 
 
-def install_package(package: str, package_install: str | None =None, dry: bool = False):
+def install_package(package: str, package_install: str | None = None, dry: bool = False):
     """
     Install a Python package if not already installed.
 
@@ -98,14 +122,18 @@ def install_package(package: str, package_install: str | None =None, dry: bool =
         logger.debug(f'Package `{package}` is already installed.')
         return
 
-    run(dry, sys.executable, '-m', 'pip', 'install', package_install or package)
+    run(sys.executable, '-m', 'pip', 'install', package_install or package, dry=dry)
 
 
-def get_logger(name=None, level=logging.DEBUG) -> logging.Logger:
+def multiple_parameters(parameter: str, *options) -> list[str]:
+    return list(chain.from_iterable(zip([parameter] * len(options), map(str, options))))
+
+
+def get_logger(name: str | None = 'typer-invoke', level=logging.DEBUG) -> logging.Logger:
     """Set up logging configuration with Rich handler and custom formatting."""
 
     # Create logger
-    _logger = logging.getLogger('typer-invoke')
+    _logger = logging.getLogger(name)
     _logger.setLevel(level)
     _logger.handlers.clear()
     handler = RichHandler(
