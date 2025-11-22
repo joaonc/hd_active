@@ -55,8 +55,8 @@ modules = [
 no_args_is_help = true
 add_completion = false
 rich_markup_mode = 'markdown'
-logging_level = 'INFO'
-logging_format = '%(message)s'
+log_level = 'INFO'
+log_format = '%(message)s'
 
 [build-system]
 requires = ['flit_core >=3.2,<4']

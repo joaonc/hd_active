@@ -111,7 +111,9 @@ def pip_compile(
 
     dry_option = ['--dry-run'] if dry else []
     for filename in _get_requirements_files(requirements, RequirementsType.IN):
-        run('pip-compile', *dry_option, str(filename), dry=False)
+        run(
+            'pip-compile', '--no-header', '--no-strip-extras', *dry_option, str(filename), dry=False
+        )
 
 
 @app.command(name='sync')
@@ -158,7 +160,7 @@ def pip_upgrade(requirements, dry: DryAnnotation = False):
     install_package('piptools', 'pip-tools', dry=dry)
 
     for filename in _get_requirements_files(requirements, RequirementsType.IN):
-        run(['pip-compile', '--upgrade', filename], dry=dry)
+        run(['pip-compile', '--no-strip-extras', '--upgrade', filename], dry=dry)
 
 
 if __name__ == '__main__':
