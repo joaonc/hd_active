@@ -140,6 +140,7 @@ def get_logger(name: str | None = 'typer-invoke', level=logging.DEBUG) -> loggin
         level=level,
         show_time=False,
         show_level=True,
+        show_path=False,
         markup=True,
         rich_tracebacks=False,
     )
