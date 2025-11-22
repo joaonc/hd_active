@@ -31,8 +31,13 @@ def lint_isort(path='.', dry: DryAnnotation = False):
 
 
 @app.command(name='mypy')
-def lint_mypy(path='.', dry: DryAnnotation = False):
-    run('mypy', path, dry=dry)
+def lint_mypy(path=None, dry: DryAnnotation = False):
+    if path:
+        run('mypy', path, dry=dry)
+    else:
+        run('mypy', 'src', dry=dry)
+        run('mypy', 'tests', dry=dry)
+        run('mypy', 'admin', dry=dry)
 
 
 @app.command(name='all')
