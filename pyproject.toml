@@ -2,7 +2,7 @@
 
 [tool.black]
 line-length = 100
-target-version = ['py311']
+target-version = ['py312']
 skip-string-normalization = true
 extend-exclude='''
 (
@@ -28,7 +28,7 @@ testpaths = ['tests']
 # 1 The regex for all folders needs to be in a one line string.
 # 2 The `.` doesn't need to be escaped. Escape with `\\.` for a fully compatible regex.
 exclude = '^venv*|^.venv*|.git|.eggs|build|dist|.cache|.pytest_cache|.mypy_cache|.vscode|.idea|tasks.py|src/ui/forms'
-python_version = '3.11'
+python_version = '3.12'
 warn_return_any = true
 warn_unused_configs = true
 # Let mypy find modules inside the 'src' directory when importing 'hd_active'.
@@ -39,7 +39,7 @@ disable_error_code = 'annotation-unchecked'
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
-module = ['invoke', 'factory', 'pytest_check', 'pytest_params', 'PySide6.*']
+module = ['factory', 'pytest_check', 'pytest_params', 'PySide6.*']
 
 [tool.typer-invoke]
 # Paths from where `pyproject.toml` is located (root of project)
@@ -70,7 +70,7 @@ readme = 'README.md'
 authors = [{name = 'Joao Coelho'}]
 license = {file = 'LICENSE.txt'}
 dependencies = ['pyside6']
-requires-python = '>=3.10,<=3.14'
+requires-python = '>=3.12,<=3.15'
 classifiers = [
     "License :: OSI Approved :: MIT License",
 ]
@@ -94,9 +94,9 @@ exclude = [
 ]
 # Errors being ignored:
 # - E203 is not PEP8 compliant and clashes with black
-# - E701,E704 multiple statements on one line (colon)
+# - E701 multiple statements on one line (colon)
 #   Conflict with black, where empty class definitions (with Ellipsis) are formatted to be in
 #   one line in black, ex: class FileUpdateError(Exception): ...
 # - W503 line break before binary operator clashes with black
 # - F811 redefinition of unused import happens when importing pytest fixtures in test modules
-ignore = ['E203', 'E701', 'E704', 'W503', 'F811']
+ignore = ['E203', 'E701', 'W503', 'F811']
