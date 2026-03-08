@@ -202,6 +202,7 @@ def build_publish(
     run('uv', 'build', dry=dry)
     if not upload:
         return
+
     msg = f'Publishing version `{_get_project_version()}` to PyPI. Press Y to confirm. '
     if yes or input(msg).strip().lower() == 'y':
         run('uv', 'publish', dry=dry)
