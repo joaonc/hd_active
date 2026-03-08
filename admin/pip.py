@@ -36,7 +36,6 @@ class Requirements(StrEnum):
 
 
 class RequirementsType(StrEnum):
-
     IN = 'in'
     OUT = 'txt'
 

@@ -2,6 +2,7 @@
 """
 UI operations for Qt.
 """
+
 from typing import Annotated
 
 import typer

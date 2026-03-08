@@ -35,16 +35,16 @@ def test_defaults(read_mock):
     [
         pytest.param(
             (
-                '''[HD Active]
-drives = e:\\''',
+                """[HD Active]
+drives = e:\\""",
                 ['e:\\'],
             ),
             id='one drive only',
         ),
         pytest.param(
             (
-                '''[HD Active]
-drives = e:\\,f,    g/''',
+                """[HD Active]
+drives = e:\\,f,    g/""",
                 ['e:\\', 'f', 'g/'],
             ),
             id='multiple drives',
@@ -76,9 +76,9 @@ def test_file_doesnt_exist():
     [
         pytest.param(
             (
-                '''[HD Active]
+                """[HD Active]
 wait_between_access = 7
-drives = e:\\,f:\\''',
+drives = e:\\,f:\\""",
                 'drive paths: e:\\, f:\\\nwait: 7.0s',
             ),
             id='two drives',
