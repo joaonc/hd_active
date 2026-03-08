@@ -35,7 +35,9 @@ jobs:
         uses: astral-sh/setup-uv@v5
 
       - name: Install requirements
-        run: pip install -r admin/requirements/requirements-dev.in
+        run: |
+          uv pip install typer-invoke
+          inv pip install requirements-dev
 
       - name: Run tests on Linux and Mac
         # Test folder(s) configured in `pyproject.toml`
