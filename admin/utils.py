@@ -1,14 +1,20 @@
 import logging
+import os
 import subprocess
 import sys
+from dataclasses import dataclass
 from enum import Enum
 from itertools import chain
 from typing import Annotated
 
 import typer
 from rich.logging import RichHandler
+from rich.text import Text
 
 from admin import PROJECT_ROOT
+
+EMPTY_STR = object()
+"""Sentinel object to represent an empty string."""
 
 DryAnnotation = Annotated[
     bool,
@@ -27,6 +33,23 @@ class OS(str, Enum):
     Windows = 'win'
 
 
+@dataclass
+class StripOutput:
+    strip_ansi: bool = True
+    normal_strip: bool = True
+    extra_chars: str | None = None
+
+    def strip(self, text: str) -> str:
+        if self.strip_ansi:
+            text = strip_ansi(text)
+        if self.normal_strip:
+            text = text.strip()
+        if self.extra_chars:
+            text = text.strip(self.extra_chars)
+
+        return text
+
+
 def get_os() -> OS:
     """
     Similar to ``sys.platform`` and ``platform.system()``, but less ambiguous by returning an Enum
@@ -41,16 +64,37 @@ def get_os() -> OS:
     return OS.Linux
 
 
-def run(*args, dry: bool = False, **kwargs) -> subprocess.CompletedProcess | None:
+def run(
+    *args,
+    dry: bool = False,
+    extra_env: dict[str, str] | None = None,
+    strip_output: StripOutput | None = StripOutput(),
+    **kwargs,
+) -> subprocess.CompletedProcess | None:
     """
     Run a CLI command synchronously (i.e., wait for the command to finish) and return the result.
 
     This function is a wrapper around ``subprocess.run(...)``.
 
     If you need access to the output, add the ``capture_output=True`` argument and do
-    ``.stdout.decode().strip()`` to get the output as a string.
+    ``.stdout`` to get the output as a string.
+
+    Notes:
+
+    * Args are converted to strings using ``str(...)``.
+    * Empty strings and ``None`` are removed from the command.
+      If you want to explicitly include an empty string, use ``EMPTY_STR`` instead.
+    * ``stdout`` and ``stderr`` will be stripped of ANSI escape sequences by default.
     """
-    logger.info(' '.join(map(str, args)))
+    final_args: list[str] = []
+    for arg in args:
+        if arg in ['', None]:
+            continue
+        if arg == EMPTY_STR:
+            final_args.append('')
+        else:
+            final_args.append(str(arg))
+    logger.info(' '.join(f'"{a}"' if (not a or ' ' in a) else a for a in final_args))
 
     if dry:
         return None
@@ -58,19 +102,28 @@ def run(*args, dry: bool = False, **kwargs) -> subprocess.CompletedProcess | Non
     defaults = dict(
         cwd=PROJECT_ROOT,
         capture_output=False,
+        text=True,
         check=True,
+        env=os.environ.copy() | (extra_env or {}),
     )
+    final_kwargs = defaults | kwargs
 
     try:
-        return subprocess.run(args, **(defaults | kwargs))  # type: ignore
+        result = subprocess.run(final_args, **final_kwargs)  # type: ignore
     except subprocess.CalledProcessError as e:
         msg = str(e)
         if e.stdout:
-            msg += f'\nSTDOUT:\n{e.stdout.decode()}'
+            msg += f'\nSTDOUT:\n{e.stdout}'
         if e.stderr:
-            msg += f'\nSTDERR:\n{e.stderr.decode()}'
+            msg += f'\nSTDERR:\n{e.stderr}'
         logger.error(msg)
         raise typer.Exit(1)
+
+    if final_kwargs.get('capture_output') and strip_output:
+        result.stdout = strip_output.strip(result.stdout)
+        result.stderr = strip_output.strip(result.stderr)
+
+    return result  # type: ignore
 
 
 def run_async(*args, dry: bool = False, **kwargs) -> subprocess.Popen | None:
@@ -127,6 +180,10 @@ def install_package(package: str, package_install: str | None = None, dry: bool 
 
 def multiple_parameters(parameter: str, *options) -> list[str]:
     return list(chain.from_iterable(zip([parameter] * len(options), map(str, options))))
+
+
+def strip_ansi(text: str) -> str:
+    return Text.from_ansi(text).plain
 
 
 def get_logger(name: str | None = 'typer-invoke', level=logging.DEBUG) -> logging.Logger:

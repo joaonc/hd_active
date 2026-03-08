@@ -121,29 +121,31 @@ def _get_latest_release(dry: bool) -> tuple[str, str, list[dict]]:
     """
     import json
 
-    release_info_json = (
-        run('gh', 'release', 'view', '--json', 'name,tagName,assets', dry=dry, capture_output=True)
-        .stdout.decode()  # type: ignore
-        .strip()
-    )
+    release_info_json = run(
+        'gh', 'release', 'view', '--json', 'name,tagName,assets', dry=dry, capture_output=True
+    ).stdout
     release_info = json.loads(release_info_json)
     return release_info['name'], release_info['tagName'], release_info['assets']
 
 
 def _get_branch():
     """Returns the current branch."""
-    return (
-        run('git', 'branch', '--show-current', dry=False, capture_output=True)
-        .stdout.decode()  # type: ignore
-        .strip()
-    )
+    return run('git', 'branch', '--show-current', dry=False, capture_output=True).stdout
 
 
 def _get_default_branch():
     """Returns the default branch (usually ``main``)."""
     return run(
-        False, 'gh', 'repo', 'view', '--json', 'defaultBranchRef', '--jq', '.defaultBranchRef.name'
-    )
+        'gh',
+        'repo',
+        'view',
+        '--json',
+        'defaultBranchRef',
+        '--jq',
+        '.defaultBranchRef.name',
+        dry=False,
+        capture_output=True,
+    ).stdout
 
 
 def _commit(message: str, dry: bool):
