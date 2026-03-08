@@ -72,7 +72,7 @@ module-name = 'hd_active'
 
 [project]
 name = 'hd_active'
-version = '0.1.1'
+version = '0.2.0'
 description = 'Prevent external HDs from becoming inactive (sleeping).'
 readme = 'README.md'
 authors = [{name = 'Joao Coelho'}]
