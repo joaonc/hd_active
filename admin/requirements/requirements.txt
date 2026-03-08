@@ -1,12 +1,12 @@
-pyside6==6.10.1
-    # via -r C:/Users/joaon/code/hd_active/admin/requirements/requirements.in
-pyside6-addons==6.10.1
+pyside6==6.10.2
+    # via -r requirements.in
+pyside6-addons==6.10.2
     # via pyside6
-pyside6-essentials==6.10.1
+pyside6-essentials==6.10.2
     # via
     #   pyside6
     #   pyside6-addons
-shiboken6==6.10.1
+shiboken6==6.10.2
     # via
     #   pyside6
     #   pyside6-addons
