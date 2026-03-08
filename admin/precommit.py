@@ -2,6 +2,7 @@
 """
 Precommit linting and static type checking.
 """
+
 from typing import Annotated
 
 import typer
@@ -46,7 +47,7 @@ def precommit_run(
     Manually run pre-commit hooks.
     """
     hook = hook or '--all-files'
-    run(dry, 'pre-commit' 'run', hook)
+    run(dry, 'pre-commitrun', hook)
 
 
 if __name__ == '__main__':

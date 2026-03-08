@@ -6,10 +6,12 @@ on:
 jobs:
   pytest:
     runs-on: windows-latest
+    env:
+      UV_SYSTEM_PYTHON: '1'
     strategy:
       matrix:
         # Min and max versions supported
-        python-version: ['3.10', '3.13']
+        python-version: ['3.12', '3.14']
     name: Python ${{ matrix.python-version }}
     steps:
       - name: Checkout code
@@ -29,8 +31,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: x64
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
       - name: Install requirements
-        run: pip install -r admin/requirements/requirements-dev.in
+        run: |
+          uv pip install typer-invoke
+          inv pip install requirements-dev
 
       - name: Run tests on Linux and Mac
         # Test folder(s) configured in `pyproject.toml`

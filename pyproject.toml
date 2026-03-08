@@ -1,22 +1,27 @@
 [tool.bandit]
-
-[tool.black]
+[tool.ruff]
 line-length = 100
-target-version = ['py311']
-skip-string-normalization = true
-extend-exclude='''
-(
-    src/hd_active/ui/forms
-  | \.venv.*
-  | \venv.*
-)
-'''
+target-version = 'py312'
+exclude = [
+    'src/hd_active/ui/forms',
+    '.venv*',
+    'venv*',
+    '.git',
+    '.github',
+    'assets',
+    'build',
+    'dist',
+    'docs',
+    'site',
+    '__pycache__',
+]
 
-[tool.isort]
-extend_skip = ['src/hd_active/ui/forms']
-profile = 'black'
-sections = 'FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER'
-skip_glob = ['**/.venv*', '**/venv*', '/build']
+[tool.ruff.lint]
+select = ['E', 'F', 'W', 'I']
+extend-ignore = ['E203', 'E701', 'F811']
+
+[tool.ruff.format]
+quote-style = 'single'
 
 [tool.pytest.ini_options]
 # Markers: See documentation on what markers represent.
@@ -28,7 +33,7 @@ testpaths = ['tests']
 # 1 The regex for all folders needs to be in a one line string.
 # 2 The `.` doesn't need to be escaped. Escape with `\\.` for a fully compatible regex.
 exclude = '^venv*|^.venv*|.git|.eggs|build|dist|.cache|.pytest_cache|.mypy_cache|.vscode|.idea|tasks.py|src/ui/forms'
-python_version = '3.11'
+python_version = '3.12'
 warn_return_any = true
 warn_unused_configs = true
 # Let mypy find modules inside the 'src' directory when importing 'hd_active'.
@@ -39,7 +44,7 @@ disable_error_code = 'annotation-unchecked'
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
-module = ['invoke', 'factory', 'pytest_check', 'pytest_params', 'PySide6.*']
+module = ['factory', 'pytest_check', 'pytest_params', 'PySide6.*']
 
 [tool.typer-invoke]
 # Paths from where `pyproject.toml` is located (root of project)
@@ -50,16 +55,20 @@ modules = [
     'admin.pip',
     'admin.precommit',
     'admin.test',
+    'admin.ui',
 ]
 no_args_is_help = true
 add_completion = false
 rich_markup_mode = 'markdown'
-logging_level = 'INFO'
-logging_format = '%(message)s'
+log_level = 'INFO'
+log_format = '%(message)s'
 
 [build-system]
-requires = ['flit_core >=3.2,<4']
-build-backend = 'flit_core.buildapi'
+requires = ['uv_build>=0.10.4,<0.11.0']
+build-backend = 'uv_build'
+
+[tool.uv.build-backend]
+module-name = 'hd_active'
 
 [project]
 name = 'hd_active'
@@ -69,7 +78,7 @@ readme = 'README.md'
 authors = [{name = 'Joao Coelho'}]
 license = {file = 'LICENSE.txt'}
 dependencies = ['pyside6']
-requires-python = '>=3.10,<=3.14'
+requires-python = '>=3.12,<=3.15'
 classifiers = [
     "License :: OSI Approved :: MIT License",
 ]
@@ -81,21 +90,3 @@ Documentation = 'https://joaonc.github.io/hd_active'
 [project.scripts]
 hd_active = 'hd_active.main:main'
 
-[tool.flit.module]
-name = 'hd_active'
-
-
-[tool.flake8]
-max-line-length = 100
-exclude = [
-  '.git', '.github', '.venv*', 'venv*', '__pycache__',
-  'assets', 'src/hd_active/ui/forms', 'docs', 'site', 'build',
-]
-# Errors being ignored:
-# - E203 is not PEP8 compliant and clashes with black
-# - E701,E704 multiple statements on one line (colon)
-#   Conflict with black, where empty class definitions (with Ellipsis) are formatted to be in
-#   one line in black, ex: class FileUpdateError(Exception): ...
-# - W503 line break before binary operator clashes with black
-# - F811 redefinition of unused import happens when importing pytest fixtures in test modules
-ignore = ['E203', 'E701', 'E704', 'W503', 'F811']

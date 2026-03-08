@@ -1,5 +1,5 @@
 name: Linting
-# Linting tools use `pyproject.toml` and `setup.cfg` for config.
+# Linting tools use `pyproject.toml` for config.
 
 on:
   - pull_request
@@ -7,6 +7,9 @@ on:
 jobs:
   linting:
     runs-on: ubuntu-latest
+    env:
+      UV_SYSTEM_PYTHON: '1'
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -14,16 +17,15 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.11'
+          python-version: '3.12'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
 
       - name: Install requirements
-        run: pip install -r admin/requirements/requirements-dev.in
+        run: |
+          uv pip install typer-invoke
+          inv pip install requirements-dev
 
-      - name: isort
-        run: isort .
-      - name: black
-        run: black .
-      - name: flake8
-        run: flake8 .
-      - name: mypy
-        run: mypy src && mypy tests
+      - name: Lint and type check
+        run: inv lint all --check

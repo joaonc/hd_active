@@ -2,6 +2,7 @@
 """
 Python packages related tasks.
 """
+
 from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
@@ -9,7 +10,7 @@ from typing import Annotated
 import typer
 
 from admin import PROJECT_ROOT
-from admin.utils import DryAnnotation, install_package, logger, run
+from admin.utils import DryAnnotation, logger, multiple_parameters, run
 
 REQUIREMENTS_DIR = PROJECT_ROOT / 'admin' / 'requirements'
 
@@ -32,20 +33,12 @@ class Requirements(StrEnum):
 
     MAIN = 'requirements'
     DEV = 'requirements-dev'
-    DOCS = 'requirements-docs'
 
 
 class RequirementsType(StrEnum):
-
     IN = 'in'
     OUT = 'txt'
 
-
-REQUIREMENTS_TASK_HELP = {
-    'requirements': '`.in` file. Full name not required, just the initial name after the dash '
-    f'(ex. "{Requirements.DEV.name}"). For main file use "{Requirements.MAIN.name}". '
-    f'Available requirements: {", ".join(Requirements)}.'
-}
 
 RequirementsAnnotation = Annotated[
     list[str] | None,
@@ -66,7 +59,7 @@ def _get_requirements_file(
     else:
         try:
             reqs = Requirements[requirements.upper()]  # noqa
-        except ValueError:
+        except KeyError:
             try:
                 reqs = Requirements(requirements.lower())
             except ValueError:
@@ -78,13 +71,13 @@ def _get_requirements_file(
     else:
         reqs_type = RequirementsType(requirements_type.lstrip('.').lower())
 
-    return REQUIREMENTS_DIR / f'{reqs}.{reqs_type}'
+    return REQUIREMENTS_DIR / f'{reqs.value}.{reqs_type.value}'
 
 
 def _get_requirements_files(
     requirements: list[str | Requirements] | None, requirements_type: str | RequirementsType
 ) -> list[Path]:
-    """Get full filename+extension and sort by the order defined in ``Requirements``"""
+    """Get full filename+extension and sort by the order defined in ``Requirements``."""
     requirements_files = list(Requirements) if requirements is None else requirements
     return [_get_requirements_file(r, requirements_type) for r in requirements_files]
 
@@ -96,7 +89,7 @@ def pip_compile(
         bool,
         typer.Option(
             help=f'Delete the existing requirements `{RequirementsType.OUT.value}` files, forcing '
-            f'a clean compilation.'
+            f'a clean compilation.',
         ),
     ] = False,
     dry: DryAnnotation = False,
@@ -104,33 +97,24 @@ def pip_compile(
     """
     Compile requirements file(s).
     """
-    install_package('pip-tools', dry=dry)
-
     if clean and not dry:
         for filename in _get_requirements_files(requirements, RequirementsType.OUT):
             filename.unlink(missing_ok=True)
 
-    dry_option = ['--dry-run'] if dry else []
     for filename in _get_requirements_files(requirements, RequirementsType.IN):
-        run(False, 'pip-compile', *dry_option, str(filename))
-
-
-@app.command(name='install')
-def pip_install(requirements: RequirementsAnnotation = None, dry: DryAnnotation = False):
-    """
-    Install packages from the requirements file(s).
-
-    Equivalent to ``pip install -r <file>``. Making it easier to point to the correct file.
-    """
-    from itertools import chain
-
-    files = _get_requirements_files(requirements, RequirementsType.OUT)
-    run(
-        dry,
-        'pip',
-        'install',
-        *list(chain.from_iterable(zip(['-r'] * len(files), map(str, files)))),
-    )
+        output_file = filename.with_suffix('.txt')
+        run(
+            'uv',
+            'pip',
+            'compile',
+            '--no-header',
+            '--no-strip-extras',
+            filename.name,
+            '-o',
+            output_file.name,
+            dry=dry,
+            cwd=REQUIREMENTS_DIR,
+        )
 
 
 @app.command(name='sync')
@@ -138,43 +122,66 @@ def pip_sync(requirements: RequirementsAnnotation = None, dry: DryAnnotation = F
     """
     Synchronize environment with requirements file.
     """
-    install_package('pip-tools', dry=dry)
-    run(dry, 'pip-sync', *_get_requirements_files(requirements, RequirementsType.OUT))
+    run('uv', 'pip', 'sync', *_get_requirements_files(requirements, RequirementsType.OUT), dry=dry)
 
 
 @app.command(name='package')
 def pip_package(
     requirements: RequirementsAnnotation,
-    packages: Annotated[
-        list[str], typer.Option('--packages', '-p', help='One or more packages to upgrade.')
+    package: Annotated[
+        list[str], typer.Option('--package', '-p', help='One or more packages to upgrade.')
     ],
     dry: DryAnnotation = False,
 ):
     """
     Upgrade one or more packages.
     """
-    install_package('pip-tools', dry=dry)
-
     for filename in _get_requirements_files(requirements, RequirementsType.IN):
+        output_file = filename.with_suffix('.txt')
         run(
-            dry, 'pip-compile', '--upgrade-package', *' --upgrade-package '.join(packages), filename
+            'uv',
+            'pip',
+            'compile',
+            *multiple_parameters('--upgrade-package', *package),
+            str(filename),
+            '-o',
+            str(output_file),
+            dry=dry,
         )
 
 
 @app.command(name='upgrade')
-def pip_upgrade(requirements, dry: DryAnnotation = False):
+def pip_upgrade(requirements: RequirementsAnnotation = None, dry: DryAnnotation = False):
     """
     Try to upgrade all dependencies to their latest versions.
 
     Equivalent to ``compile`` with ``--clean`` option.
 
     Use ``package`` to only upgrade individual packages,
-    Ex ``pip package dev mypy flake8``.
+    Ex ``pip package dev mypy ruff``.
     """
-    install_package('pip-tools', dry=dry)
-
     for filename in _get_requirements_files(requirements, RequirementsType.IN):
-        run(dry, ['pip-compile', '--upgrade', filename])
+        output_file = filename.with_suffix('.txt')
+        run(
+            'uv',
+            'pip',
+            'compile',
+            '--no-strip-extras',
+            '--upgrade',
+            str(filename),
+            '-o',
+            str(output_file),
+            dry=dry,
+        )
+
+
+@app.command(name='install')
+def pip_install(requirements: RequirementsAnnotation, dry: DryAnnotation = False):
+    """
+    Equivalent to ``uv pip install -r <requirements*.txt>``.
+    """
+    requirements_files = _get_requirements_files(requirements, RequirementsType.OUT)  # type: ignore
+    run('uv', 'pip', 'install', *multiple_parameters('-r', *requirements_files), dry=dry)
 
 
 if __name__ == '__main__':

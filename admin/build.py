@@ -20,7 +20,7 @@ app = typer.Typer()
 
 
 def _update_project_version(version: str):
-    regex = r'''^([ _]*version[ _]*[:=] *['"])(.*)(['"].*)$'''
+    regex = r"""^([ _]*version[ _]*[:=] *['"])(.*)(['"].*)$"""
     for file in VERSION_FILES:
         _re_sub_file(file, regex, version)
 
@@ -28,7 +28,7 @@ def _update_project_version(version: str):
 def _get_project_version() -> str:
     import re
 
-    pattern = re.compile('''^[ _]*version[ _]*[:=] *['"](.*)['"]''', re.MULTILINE)
+    pattern = re.compile("""^[ _]*version[ _]*[:=] *['"](.*)['"]""", re.MULTILINE)
     versions = {}
     for file in VERSION_FILES:
         with open(file) as f:
@@ -113,7 +113,7 @@ def _get_version_from_release_name(release_name: str) -> str:
     return release_name[1:]
 
 
-def _get_latest_release(c) -> tuple[str, str, list[dict]]:
+def _get_latest_release(dry: bool) -> tuple[str, str, list[dict]]:
     """
     Retrieves the latest release from GitHub.
 
@@ -121,14 +121,22 @@ def _get_latest_release(c) -> tuple[str, str, list[dict]]:
     """
     import json
 
-    release_info_json = c.run('gh release view --json name,tagName,assets').stdout.strip()
+    release_info_json = (
+        run('gh', 'release', 'view', '--json', 'name,tagName,assets', dry=dry, capture_output=True)
+        .stdout.decode()  # type: ignore
+        .strip()
+    )
     release_info = json.loads(release_info_json)
     return release_info['name'], release_info['tagName'], release_info['assets']
 
 
 def _get_branch():
     """Returns the current branch."""
-    return run(False, 'git', 'branch', '--show-current')
+    return (
+        run('git', 'branch', '--show-current', dry=False, capture_output=True)
+        .stdout.decode()  # type: ignore
+        .strip()
+    )
 
 
 def _get_default_branch():
@@ -140,12 +148,12 @@ def _get_default_branch():
 
 def _commit(message: str, dry: bool):
     # Commit
-    run(dry, 'git', 'add', *VERSION_FILES)
-    run(dry, 'git', 'commit', '-m', message)
+    run('git', 'add', *VERSION_FILES, dry=dry)
+    run('git', 'commit', '-m', message, dry=dry)
 
     # Push current branch
     branch = _get_branch()
-    run(dry, 'git', 'push', 'origin', branch)
+    run('git', 'push', 'origin', branch, dry=dry)
 
 
 def _create_pr(title: str, description: str, dry: bool):
@@ -158,7 +166,6 @@ def _create_pr(title: str, description: str, dry: bool):
     default_branch = _get_default_branch()
     branch = _get_branch()
     run(
-        dry,
         'gh',
         'pr',
         'create',
@@ -170,10 +177,11 @@ def _create_pr(title: str, description: str, dry: bool):
         branch,
         '--base',
         default_branch,
+        dry=dry,
     )
 
     # Merge PR after checks pass
-    run(dry, 'gh', 'pr', 'merge', 'branch', '--squash', '--auto')
+    run('gh', 'pr', 'merge', 'branch', '--squash', '--auto', dry=dry)
 
 
 @app.command(name='clean')
@@ -181,6 +189,22 @@ def build_clean():
     import shutil
 
     shutil.rmtree(BUILD_DIST_DIR, ignore_errors=True)
+
+
+@app.command(name='publish')
+def build_publish(
+    upload: Annotated[bool, typer.Option(help='Upload to PyPI after build.')] = True,
+    yes: Annotated[bool, typer.Option(help='Skip publish confirmation.')] = False,
+    dry: DryAnnotation = False,
+):
+    run('uv', 'build', dry=dry)
+    if not upload:
+        return
+    msg = f'Publishing version `{_get_project_version()}` to PyPI. Press Y to confirm. '
+    if yes or input(msg).strip().lower() == 'y':
+        run('uv', 'publish', dry=dry)
+    else:
+        logger.info('Package not published to PyPI.')
 
 
 @app.command(name='version')
@@ -213,7 +237,7 @@ def build_version(
     yes: Annotated[
         bool,
         typer.Option(
-            help='Don\'t ask confirmation to create new branch if necessary.',
+            help="Don't ask confirmation to create new branch if necessary.",
             show_default=False,
         ),
     ] = False,
@@ -269,7 +293,7 @@ def build_version(
         if yes or input(
             f'Current branch `{branch}` is the default branch, create new branch? [Y/n] '
         ).strip().lower() in ['', 'y', 'yes']:
-            run(dry, 'git', 'checkout', '-b', f'release-{v2}')
+            run('git', 'checkout', '-b', f'release-{v2}', dry=dry)
             branch_ok = True
         if not branch_ok:
             logger.error(f'Cannot make changes in the default branch `{branch}`.')
@@ -277,20 +301,20 @@ def build_version(
 
     # Update files to new version
     _update_project_version(str(v2))
-    print(
+    logger.info(
         f'New version is `{v2}`. Modified files :\n'
         + '\n'.join(f'  {file.relative_to(PROJECT_ROOT)}' for file in VERSION_FILES)
     )
 
     # Commit/push/pr
     if mode == 'nothing':
-        print('Files not committed, PR not created.')
+        logger.info('Files not committed, PR not created.')
     if mode in ['commit', 'pr']:
-        print('Commit and push changes.')
+        logger.info('Commit and push changes.')
         _commit(f'bump version to {v2}', dry)
     if mode == 'pr':
         pr_title = f'Release {v2}'
-        print(f'Create and merge PR `{pr_title}`.')
+        logger.info(f'Create and merge PR `{pr_title}`.')
         _create_pr(pr_title, f'Preparing for release {v2}', dry)
 
 

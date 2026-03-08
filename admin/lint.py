@@ -3,6 +3,8 @@
 Linting and static type checking.
 """
 
+from typing import Annotated
+
 import typer
 
 from admin.utils import DryAnnotation, logger, run
@@ -15,36 +17,56 @@ app = typer.Typer(
 )
 
 
-@app.command(name='black')
-def lint_black(path='.', dry: DryAnnotation = False):
-    run(dry, 'black', path)
-
-
-@app.command(name='flake8')
-def lint_flake8(path='.', dry: DryAnnotation = False):
-    run(dry, 'flake8', path)
-
-
-@app.command(name='isort')
-def lint_isort(path='.', dry: DryAnnotation = False):
-    run(dry, 'isort', path)
+@app.command(name='ruff')
+def lint_ruff(
+    path: Annotated[str, typer.Argument(help='Path to directory or file to lint.')] = '.',
+    check: Annotated[
+        bool,
+        typer.Option(
+            help='Check-only mode: report violations without fixing or reformatting. '
+            'Exits non-zero if any issues are found. Use this in CI.',
+        ),
+    ] = False,
+    dry: DryAnnotation = False,
+):
+    if check:
+        run('ruff', 'check', path, dry=dry)
+        run('ruff', 'format', '--check', path, dry=dry)
+    else:
+        run('ruff', 'check', '--fix', path, dry=dry)
+        run('ruff', 'format', path, dry=dry)
 
 
 @app.command(name='mypy')
-def lint_mypy(path='.', dry: DryAnnotation = False):
-    run(dry, 'mypy', path)
+def lint_mypy(
+    path: Annotated[str | None, typer.Argument(help='Path to type-check.')] = None,
+    dry: DryAnnotation = False,
+):
+    if path:
+        run('mypy', path, dry=dry)
+    else:
+        run('mypy', 'src', dry=dry)
+        run('mypy', 'tests', dry=dry)
+        run('mypy', 'admin', dry=dry)
 
 
 @app.command(name='all')
-def lint_all(dry: DryAnnotation = False):
+def lint_all(
+    check: Annotated[
+        bool,
+        typer.Option(
+            help='Check-only mode: report violations without fixing or reformatting. '
+            'Exits non-zero if any issues are found. Use this in CI.',
+        ),
+    ] = False,
+    dry: DryAnnotation = False,
+):
     """
     Run all linters.
 
     Config for each of the tools is in ``pyproject.toml``.
     """
-    lint_isort(dry=dry)
-    lint_black(dry=dry)
-    lint_flake8(dry=dry)
+    lint_ruff(check=check, dry=dry)
     lint_mypy(dry=dry)
 
     logger.info('Done')
