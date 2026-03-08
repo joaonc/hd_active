@@ -191,6 +191,22 @@ def build_clean():
     shutil.rmtree(BUILD_DIST_DIR, ignore_errors=True)
 
 
+@app.command(name='publish')
+def build_publish(
+    upload: Annotated[bool, typer.Option(help='Upload to PyPI after build.')] = True,
+    yes: Annotated[bool, typer.Option(help='Skip publish confirmation.')] = False,
+    dry: DryAnnotation = False,
+):
+    run('uv', 'build', dry=dry)
+    if not upload:
+        return
+    msg = f'Publishing version `{_get_project_version()}` to PyPI. Press Y to confirm. '
+    if yes or input(msg).strip().lower() == 'y':
+        run('uv', 'publish', dry=dry)
+    else:
+        logger.info('Package not published to PyPI.')
+
+
 @app.command(name='version')
 def build_version(
     version: Annotated[

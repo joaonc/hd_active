@@ -4,88 +4,48 @@ annotated-doc==0.0.4
     # via typer
 bandit==1.9.4
     # via -r requirements-dev.in
-black==26.3.0
-    # via -r requirements-dev.in
-build==1.4.0
-    # via pip-tools
-certifi==2026.2.25
-    # via requests
 cfgv==3.5.0
     # via pre-commit
-charset-normalizer==3.4.5
-    # via requests
 click==8.3.1
-    # via
-    #   black
-    #   pip-tools
-    #   typer
+    # via typer
 colorama==0.4.6
     # via
     #   bandit
-    #   build
     #   click
     #   pytest
 distlib==0.4.0
     # via virtualenv
-docutils==0.22.4
-    # via flit
 filelock==3.25.0
     # via
     #   python-discovery
     #   virtualenv
-flake8==7.3.0
-    # via
-    #   -r requirements-dev.in
-    #   flake8-pyproject
-flake8-pyproject==1.2.4
-    # via -r requirements-dev.in
-flit==3.12.0
-    # via -r requirements-dev.in
-flit-core==3.12.0
-    # via flit
 identify==2.6.17
     # via pre-commit
-idna==3.11
-    # via requests
 iniconfig==2.3.0
     # via pytest
-isort==8.0.1
-    # via -r requirements-dev.in
 librt==0.8.1
     # via mypy
 markdown-it-py==4.0.0
     # via rich
-mccabe==0.7.0
-    # via flake8
 mdurl==0.1.2
     # via markdown-it-py
 mypy==1.19.1
     # via -r requirements-dev.in
 mypy-extensions==1.1.0
-    # via
-    #   black
-    #   mypy
+    # via mypy
 nodeenv==1.10.0
     # via pre-commit
 packaging==26.0
     # via
-    #   black
-    #   build
     #   pyinstaller
     #   pyinstaller-hooks-contrib
     #   pytest
-    #   wheel
 pathspec==1.0.4
-    # via
-    #   black
-    #   mypy
+    # via mypy
 pefile==2024.8.26
     # via pyinstaller
-pip-tools==7.5.3
-    # via -r requirements-dev.in
 platformdirs==4.9.4
     # via
-    #   black
     #   python-discovery
     #   virtualenv
 pluggy==1.6.0
@@ -94,10 +54,6 @@ pluggy==1.6.0
     #   pytest-qt
 pre-commit==4.5.1
     # via -r requirements-dev.in
-pycodestyle==2.14.0
-    # via flake8
-pyflakes==3.4.0
-    # via flake8
 pygments==2.19.2
     # via
     #   pytest
@@ -106,10 +62,6 @@ pyinstaller==6.19.0
     # via -r requirements-dev.in
 pyinstaller-hooks-contrib==2026.2
     # via pyinstaller
-pyproject-hooks==1.2.0
-    # via
-    #   build
-    #   pip-tools
 pyside6==6.10.2
     # via -r requirements.txt
 pyside6-addons==6.10.2
@@ -132,21 +84,23 @@ pytest-qt==4.5.0
     # via -r requirements-dev.in
 python-discovery==1.1.1
     # via virtualenv
-pytokens==0.4.1
-    # via black
 pywin32-ctypes==0.2.3
     # via pyinstaller
 pyyaml==6.0.3
     # via
     #   bandit
     #   pre-commit
-requests==2.32.5
-    # via flit
 rich==14.3.3
     # via
     #   bandit
     #   typer
     #   typer-invoke
+ruff==0.15.5
+    # via -r requirements-dev.in
+setuptools==82.0.0
+    # via
+    #   pyinstaller
+    #   pyinstaller-hooks-contrib
 shellingham==1.5.4
     # via typer
 shiboken6==6.10.2
@@ -157,23 +111,17 @@ shiboken6==6.10.2
     #   pyside6-essentials
 stevedore==5.7.0
     # via bandit
-tomli-w==1.2.0
-    # via flit
 typer==0.24.1
-    # via typer-invoke
+    # via
+    #   -r requirements-dev.in
+    #   typer-invoke
 typer-invoke==0.5.0
     # via -r requirements-dev.in
 typing-extensions==4.15.0
     # via
     #   mypy
     #   pytest-qt
-urllib3==2.6.3
-    # via requests
+uv==0.10.9
+    # via -r requirements-dev.in
 virtualenv==21.1.0
     # via pre-commit
-wheel==0.46.3
-    # via pip-tools
-
-# The following packages are considered to be unsafe in a requirements file:
-# pip
-# setuptools

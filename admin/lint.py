@@ -15,19 +15,14 @@ app = typer.Typer(
 )
 
 
-@app.command(name='black')
-def lint_black(path='.', dry: DryAnnotation = False):
-    run('black', path, dry=dry)
-
-
-@app.command(name='flake8')
-def lint_flake8(path='.', dry: DryAnnotation = False):
-    run('flake8', path, dry=dry)
-
-
-@app.command(name='isort')
-def lint_isort(path='.', dry: DryAnnotation = False):
-    run('isort', path, dry=dry)
+@app.command(name='ruff')
+def lint_ruff(path='.', check: bool = False, dry: DryAnnotation = False):
+    if check:
+        run('ruff', 'check', path, dry=dry)
+        run('ruff', 'format', '--check', path, dry=dry)
+    else:
+        run('ruff', 'check', '--fix', path, dry=dry)
+        run('ruff', 'format', path, dry=dry)
 
 
 @app.command(name='mypy')
@@ -47,9 +42,7 @@ def lint_all(dry: DryAnnotation = False):
 
     Config for each of the tools is in ``pyproject.toml``.
     """
-    lint_isort(dry=dry)
-    lint_black(dry=dry)
-    lint_flake8(dry=dry)
+    lint_ruff(check=True, dry=dry)
     lint_mypy(dry=dry)
 
     logger.info('Done')
