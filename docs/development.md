@@ -5,7 +5,7 @@ To get started with development of this project:
 1. Clone
    Virtual environment recommended, but optional.  
    Developed with Python 3.7, but should be straightforward to upgrade to newer versions.
-2. `uv pip install -r admin/requirements/requirements-dev.txt`
+2. `uv pip install typer-invoke && inv pip sync requirements-dev`
 3. `pre-commit install`
 
 ## UI
@@ -78,7 +78,7 @@ code and debug `tasks.py` as any other Python file.
 ## Documentation
 Install documentation requirements with:
 ```
-uv pip install -r admin/requirements/requirements-docs.txt
+uv pip install typer-invoke && inv pip sync requirements-docs
 ```
 
 You can then edit the `.md` files under the `docs` directory and, if more need to be added, update
