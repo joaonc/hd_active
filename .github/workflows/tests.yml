@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
 
       - name: Install libEGL (Linux only)
         # Implementation of the EGL (Embedded-Systems Graphics Library) API.
