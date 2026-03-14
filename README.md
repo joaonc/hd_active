@@ -5,6 +5,12 @@
 
 Prevent external HD's from becoming inactive (sleeping).
 
+In a world of SSD's, an app like this is not as needed, but if you still have an HD hooked up that
+goes to sleep and takes a while to access, this app can help.
+
+In my particular case, have an HD that constantly goes to sleep and can't find the drivers to
+prevent that. Wanted to learn a bit more about Qt, so went ahead and made this.
+
 **[https://joaonc.github.io/hd_active](https://joaonc.github.io/hd_active)**
 
 ## Quick start

@@ -54,10 +54,12 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      UV_SYSTEM_PYTHON: '1'
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -65,7 +67,9 @@ jobs:
           python-version: '3.12'
 
       - name: Install requirements
-        run: pip install -r admin/requirements/requirements-dev.in
+        run: |
+          uv pip install typer-invoke
+          uv run inv pip sync requirements-dev
 
       - name: Set git user
         run: |
@@ -75,17 +79,17 @@ jobs:
       - name: Bump version
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: inv build.version --bump ${{ github.event.inputs.version_bump }} --mode pr --yes
+        run: uv run inv build.version --bump ${{ github.event.inputs.version_bump }} --mode pr --yes
 
       - name: Create release
         if: github.event.inputs.create_release == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: inv build.release --notes "${{ github.event.inputs.release_notes }}" --yes
+        run: uv run inv build.release --notes "${{ github.event.inputs.release_notes }}" --yes
 
       - name: Publish to Pypi
         if: github.event.inputs.publish == 'true'
         env:
           FLIT_USERNAME: "__token__"
           FLIT_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-        run: inv build.publish --yes
+        run: uv run inv build.publish --yes

@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -20,12 +20,12 @@ jobs:
           python-version: '3.12'
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@v7
 
       - name: Install requirements
         run: |
           uv pip install typer-invoke
-          inv pip install requirements-dev
+          uv run inv pip install requirements-dev
 
       - name: Lint and type check
-        run: inv lint all --check
+        run: uv run inv lint all --check

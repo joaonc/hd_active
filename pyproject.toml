@@ -89,4 +89,27 @@ Documentation = 'https://joaonc.github.io/hd_active'
 
 [project.scripts]
 hd_active = 'hd_active.main:main'
+[dependency-groups]
+dev = [
+    'bandit',
+    'mypy',
+    'pre-commit',
+    'pyinstaller',
+    'pytest',
+    'pytest-params',
+    'pytest-qt',
+    'ruff',
+    'typer',
+    'typer-invoke',
+    'uv',
+]
+docs = [
+    'mdx_truly_sane_lists',
+    'mkdocs',
+    'mkdocs-glightbox',
+    'mkdocs-material',
+]
+
+[tool.uv]
+default-groups = ['dev']
 

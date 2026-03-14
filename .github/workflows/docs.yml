@@ -15,9 +15,12 @@ permissions:
 jobs:
   deploy-docs:
     runs-on: ubuntu-latest
+    env:
+      UV_SYSTEM_PYTHON: '1'
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -25,7 +28,9 @@ jobs:
           python-version: '3.12'
 
       - name: Install requirements
-        run: pip install -r admin/requirements/requirements-docs.in
+        run: |
+          uv pip install typer-invoke
+          uv run inv pip sync requirements-docs
 
       - name: Deploy docs
-        run: mkdocs gh-deploy --force
+        run: uv run mkdocs gh-deploy --force
