@@ -49,5 +49,5 @@ class HdActiveConfig:
             str(drive_path) for drive_path in self.drive_paths
         )
 
-        with open(self.file_name) as configfile:
+        with open(self.file_name, 'w') as configfile:
             self.config.write(configfile)
