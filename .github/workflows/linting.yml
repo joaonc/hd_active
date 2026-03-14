@@ -25,7 +25,7 @@ jobs:
       - name: Install requirements
         run: |
           uv pip install typer-invoke
-          inv pip install requirements-dev
+          uv run inv pip install requirements-dev
 
       - name: Lint and type check
-        run: inv lint all --check
+        run: uv run inv lint all --check

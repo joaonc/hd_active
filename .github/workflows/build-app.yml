@@ -56,15 +56,15 @@ jobs:
       - name: Install requirements
         run: |
           uv pip install typer-invoke
-          inv pip install requirements-dev
+          uv run inv pip install requirements-dev
 
       - name: Build app
-        run: inv build.app
+        run: uv run inv build app
 
       - name: Upload to GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: inv build.upload
+        run: uv run inv build upload
 
   windows:
     runs-on: windows-latest
@@ -87,15 +87,15 @@ jobs:
       - name: Install requirements
         run: |
           uv pip install typer-invoke
-          inv pip install requirements-dev
+          uv run inv pip install requirements-dev
 
       - name: Build app
-        run: inv build.app
+        run: uv run inv build app
 
       - name: Upload to GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: inv build.upload
+        run: uv run inv build upload
 
   linux:
     runs-on: ubuntu-latest
@@ -125,12 +125,12 @@ jobs:
       - name: Install requirements
         run: |
           uv pip install typer-invoke
-          inv pip install requirements-dev
+          uv run inv pip install requirements-dev
 
       - name: Build app
-        run: inv build.app
+        run: uv run inv build app
 
       - name: Upload to GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: inv build.upload
+        run: uv run inv build upload
