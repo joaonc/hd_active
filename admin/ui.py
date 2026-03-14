@@ -95,7 +95,8 @@ def ui_rc(
             file_path_in = next(p for p in QRC_FILES if p.stem == file_stem)
         except StopIteration:
             logger.error(
-                f'File "{file}" not found. Available files: {", ".join(p.stem for p in QRC_FILES)}'
+                f'File "{file_stem}" not found. Available files: '
+                + ', '.join(p.stem for p in QRC_FILES)
             )
             raise typer.Exit(1)
 
@@ -122,7 +123,7 @@ def ui_edit(
         ui_file_path = next(p for p in UI_FILES if p.stem == file_stem)
     except StopIteration:
         logger.error(
-            f'File "{file}" not found. Available files: {", ".join(p.stem for p in UI_FILES)}'
+            f'File "{file_stem}" not found. Available files: {", ".join(p.stem for p in UI_FILES)}'
         )
         raise typer.Exit(1)
 

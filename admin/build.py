@@ -183,7 +183,7 @@ def _create_pr(title: str, description: str, dry: bool):
     )
 
     # Merge PR after checks pass
-    run('gh', 'pr', 'merge', 'branch', '--squash', '--auto', dry=dry)
+    run('gh', 'pr', 'merge', branch, '--squash', '--auto', dry=dry)
 
 
 @app.command(name='clean')

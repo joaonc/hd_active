@@ -47,7 +47,7 @@ def precommit_run(
     Manually run pre-commit hooks.
     """
     hook = hook or '--all-files'
-    run(dry, 'pre-commitrun', hook)
+    run(dry, 'pre-commit', 'run', hook)
 
 
 if __name__ == '__main__':
