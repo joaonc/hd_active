@@ -1,5 +1,7 @@
 import configparser
 
+from .utils import FilePath
+
 
 class HdActiveConfig:
     """
@@ -11,7 +13,7 @@ class HdActiveConfig:
     OPTION_WAIT = 'wait_between_access'
     OPTION_DRIVE_PATHS = 'drives'
 
-    def __init__(self, file_name: str):
+    def __init__(self, file_name: FilePath):
         self.file_name = file_name
 
         # Default values

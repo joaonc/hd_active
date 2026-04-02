@@ -1,9 +1,12 @@
 from numbers import Number
+from os import PathLike
 from pathlib import Path
 from typing import Any, Iterable
 
 PROJECT_ROOT = Path(__file__).parents[2].resolve()
 ASSETS_ROOT = PROJECT_ROOT / 'assets'
+
+FilePath = str | PathLike[str]
 
 
 def get_asset(*args) -> Path:
