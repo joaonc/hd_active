@@ -5,7 +5,7 @@ from collections import deque
 from datetime import datetime
 from os import PathLike, urandom
 from pathlib import Path
-from typing import Deque, Iterable, Optional, Set, Union
+from typing import Deque, Iterable
 
 from .hd_action_state import HdActionState
 
@@ -16,11 +16,11 @@ logger = logging.getLogger(__name__)
 class HdActive:
     def __init__(
         self,
-        drive_paths=Optional[Iterable[PathLike]],
+        drive_paths=Iterable[PathLike] | None,
         run: bool = False,
-        wait: Union[int, float] = 1,
+        wait: int | float = 1,
     ):
-        self._drive_paths: Set[Path] = set()
+        self._drive_paths: set[Path] = set()
         if drive_paths is not None:
             self.add_hds(drive_paths)
         self._is_running = False

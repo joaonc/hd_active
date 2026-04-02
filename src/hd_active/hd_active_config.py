@@ -1,5 +1,4 @@
 import configparser
-from typing import List, Union
 
 
 class HdActiveConfig:
@@ -17,8 +16,8 @@ class HdActiveConfig:
 
         # Default values
         self.run: bool = False
-        self.wait: Union[int, float] = 60
-        self.drive_paths: List[str] = []
+        self.wait: int | float = 60
+        self.drive_paths: list[str] = []
 
         self.config = configparser.ConfigParser(
             converters={'list': lambda x: [i.strip(' "\'') for i in x.split(',')]}
