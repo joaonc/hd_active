@@ -15,7 +15,7 @@ WAIT_TEST = 2 * WAIT
 
 class HdActiveTest(HdActive):
     """
-    Extend `HdActive` to change defaults for testing purposes.
+    Extend ``HdActive`` to change defaults for testing purposes.
     """
 
     def __init__(self, drive_paths=None, run=False, wait=WAIT):
