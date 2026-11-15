@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QApplication, QMenu, QMessageBox, QSystemTrayIcon
 from .. import __version__
 from ..hd_active import HdActive
 from ..hd_active_config import HdActiveConfig
-from ..utils import is_truthy
+from ..utils import FilePath, is_truthy
 from .settings_dialog import SettingsDialog
 
 HD_ACTION_DEBUG = is_truthy(os.getenv('HD_ACTION_DEBUG', 'True'))
@@ -17,7 +17,9 @@ DEFAULT_HD_ACTIVE_FILE_NAME = 'hd_active.ini'
 
 
 class SystemTrayIcon(QSystemTrayIcon):
-    def __init__(self, icon, parent=None, hd_active_file_name: str = DEFAULT_HD_ACTIVE_FILE_NAME):
+    def __init__(
+        self, icon, parent=None, hd_active_file_name: FilePath = DEFAULT_HD_ACTIVE_FILE_NAME
+    ):
         super().__init__(icon=icon, parent=parent)
 
         self.hd_active_file_name = hd_active_file_name

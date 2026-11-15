@@ -1,5 +1,6 @@
 import configparser
-from typing import List, Union
+
+from .utils import FilePath
 
 
 class HdActiveConfig:
@@ -12,13 +13,13 @@ class HdActiveConfig:
     OPTION_WAIT = 'wait_between_access'
     OPTION_DRIVE_PATHS = 'drives'
 
-    def __init__(self, file_name: str):
+    def __init__(self, file_name: FilePath):
         self.file_name = file_name
 
         # Default values
         self.run: bool = False
-        self.wait: Union[int, float] = 60
-        self.drive_paths: List[str] = []
+        self.wait: int | float = 60
+        self.drive_paths: list[str] = []
 
         self.config = configparser.ConfigParser(
             converters={'list': lambda x: [i.strip(' "\'') for i in x.split(',')]}

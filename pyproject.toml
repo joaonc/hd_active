@@ -64,7 +64,7 @@ log_level = 'INFO'
 log_format = '%(message)s'
 
 [build-system]
-requires = ['uv_build>=0.10.4,<0.11.0']
+requires = ['uv_build>=0.10.4,<0.12.0']
 build-backend = 'uv_build'
 
 [tool.uv.build-backend]
@@ -101,7 +101,6 @@ dev = [
     'ruff',
     'typer',
     'typer-invoke',
-    'uv',
 ]
 docs = [
     'mdx_truly_sane_lists',
@@ -112,4 +111,3 @@ docs = [
 
 [tool.uv]
 default-groups = ['dev']
-
