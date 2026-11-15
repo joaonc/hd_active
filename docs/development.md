@@ -3,10 +3,12 @@
 To get started with development of this project:
 
 1. Clone
-   Virtual environment recommended, but optional.  
-   Developed with Python 3.7, but should be straightforward to upgrade to newer versions.
-2. `uv pip install typer-invoke && inv pip sync requirements-dev`
-3. `pre-commit install`
+2. Install [uv](https://docs.astral.sh/uv/getting-started/installation/), which manages the Python
+   version, virtual environment (`.venv`) and dependencies.
+3. `uv sync`
+4. `uv run inv precommit install`
+
+Prefix commands with `uv run` (ex: `uv run inv --help`) or activate the `.venv` first.
 
 ## UI
 This project uses [Qt 6](https://www.qt.io) for its UI components.
@@ -43,42 +45,47 @@ List of markers used, defined in `pyproject.toml`
 |:-------|:--------------------------------------------------|
 | `windows` | Test case valid on Windows operating system only. |
 
+## Linting and type checking
+[Ruff](https://docs.astral.sh/ruff/) is used for linting and formatting and
+[ty](https://docs.astral.sh/ty/) for type checking. Configuration for both is in `pyproject.toml`.
+
+```
+uv run inv lint all           # Fix and format (ruff), then type check (ty)
+uv run inv lint all --check   # Check only, as done in CI
+```
+
+## Dependencies
+Dependencies are declared in `pyproject.toml` and locked in `uv.lock`.
+
+```
+uv add <package>                  # Add a runtime dependency
+uv add --group dev <package>      # Add a dev dependency
+uv lock --upgrade                 # Upgrade all dependencies
+uv lock --upgrade-package <pkg>   # Upgrade one dependency
+uv sync                           # Sync the environment with the lock file
+```
+
 ## Development tasks
-This project uses **pyinvoke** ([main page](https://www.pyinvoke.org/) | [docs](https://docs.pyinvoke.org/en/stable/) |
-[GitHub](https://github.com/pyinvoke/invoke)) to facilitate executing miscellaneous tasks that help
-with development.
+This project uses [typer-invoke](https://github.com/joaonc/typer-invoke) (`inv`) to facilitate
+executing miscellaneous tasks that help with development.
 
-### Using invoke
-After installing the dev requirements, try the commands below.
-
+### Using inv
 List all available tasks:
 ```
-inv --list
-```
-
-Tasks are grouped (those that have a `.`). To see all the _lint_ tasks:
-```
-inv --list lint
+uv run inv --help
 ```
 
 Help with a certain task:
 ```
-inv --help pip.package
+uv run inv lint --help
 ```
 
 Use `--dry` to see what the task does without executing it.
 
-### Debugging tasks
-To debug `tasks.py` (the file used by `invoke`), either add a `breakpoint()` statement or, if using
-an IDE (in this example PyCharm), use the configuration below to allow setting breakpoints in the
-code and debug `tasks.py` as any other Python file.
-
-![PyCharm tasks run config](images/pycharm_tasks_run_config.png)
-
 ## Documentation
 Install documentation requirements with:
 ```
-uv pip install typer-invoke && inv pip sync requirements-docs
+uv sync --group docs
 ```
 
 You can then edit the `.md` files under the `docs` directory and, if more need to be added, update

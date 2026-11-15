@@ -2,12 +2,13 @@ import logging
 import threading
 import time
 from collections import deque
+from collections.abc import Iterable
 from datetime import datetime
-from os import PathLike, urandom
+from os import urandom
 from pathlib import Path
-from typing import Deque, Iterable
 
 from .hd_action_state import HdActionState
+from .utils import FilePath
 
 FILE_NAME = '_hd_active.txt'
 logger = logging.getLogger(__name__)
@@ -16,7 +17,7 @@ logger = logging.getLogger(__name__)
 class HdActive:
     def __init__(
         self,
-        drive_paths: Iterable[PathLike] | None = None,
+        drive_paths: Iterable[FilePath] | None = None,
         run: bool = False,
         wait: int | float = 1,
     ):
@@ -26,7 +27,7 @@ class HdActive:
         self._is_running = False
         self._write_hd_thread = None
         # `deque` instead of `list` to prevent from growing indefinitely
-        self._log: Deque[str] = deque(maxlen=1000)
+        self._log: deque[str] = deque(maxlen=1000)
         self.wait = wait
         if run:
             self.start()
@@ -66,13 +67,13 @@ class HdActive:
             self.write_hds()
             time.sleep(self.wait)
 
-    def add_hds(self, drive_paths: Iterable[PathLike]):
+    def add_hds(self, drive_paths: Iterable[FilePath]):
         self._drive_paths.update(Path(drive_path) for drive_path in drive_paths)
 
-    def add_hd(self, drive_path: PathLike):
+    def add_hd(self, drive_path: FilePath):
         self.add_hds([drive_path])
 
-    def remove_hd(self, drive_path: PathLike):
+    def remove_hd(self, drive_path: FilePath):
         self._drive_paths.remove(Path(drive_path))
 
     @property

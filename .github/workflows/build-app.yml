@@ -38,8 +38,6 @@ jobs:
   mac_os:
     runs-on: macos-latest
     if: github.event.inputs.mac_os == 'true'
-    env:
-      UV_SYSTEM_PYTHON: '1'
 
     steps:
       - name: Checkout code
@@ -54,9 +52,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
 
       - name: Install requirements
-        run: |
-          uv pip install typer-invoke
-          uv run inv pip install requirements-dev
+        run: uv sync
 
       - name: Build app
         run: uv run inv build app
@@ -69,8 +65,6 @@ jobs:
   windows:
     runs-on: windows-latest
     if: github.event.inputs.windows == 'true'
-    env:
-      UV_SYSTEM_PYTHON: '1'
 
     steps:
       - name: Checkout code
@@ -85,9 +79,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
 
       - name: Install requirements
-        run: |
-          uv pip install typer-invoke
-          uv run inv pip install requirements-dev
+        run: uv sync
 
       - name: Build app
         run: uv run inv build app
@@ -100,8 +92,6 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     if: github.event.inputs.linux == 'true'
-    env:
-      UV_SYSTEM_PYTHON: '1'
 
     steps:
       - name: Checkout code
@@ -123,9 +113,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
 
       - name: Install requirements
-        run: |
-          uv pip install typer-invoke
-          uv run inv pip install requirements-dev
+        run: uv sync
 
       - name: Build app
         run: uv run inv build app

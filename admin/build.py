@@ -4,7 +4,7 @@ from typing import Annotated
 import typer
 
 from admin import PROJECT_ROOT, SOURCE_DIR
-from admin.utils import DryAnnotation, logger, run
+from admin.utils import DryAnnotation, logger, run, run_capture
 
 BUILD_DIST_DIR = PROJECT_ROOT / 'dist'
 VERSION_FILES = [
@@ -121,31 +121,23 @@ def _get_latest_release(dry: bool) -> tuple[str, str, list[dict]]:
     """
     import json
 
-    release_info_json = run(
-        'gh', 'release', 'view', '--json', 'name,tagName,assets', dry=dry, capture_output=True
-    ).stdout
+    release_info_json = run_capture(
+        'gh', 'release', 'view', '--json', 'name,tagName,assets', dry=dry
+    )
     release_info = json.loads(release_info_json)
     return release_info['name'], release_info['tagName'], release_info['assets']
 
 
 def _get_branch():
     """Returns the current branch."""
-    return run('git', 'branch', '--show-current', dry=False, capture_output=True).stdout
+    return run_capture('git', 'branch', '--show-current')
 
 
 def _get_default_branch():
     """Returns the default branch (usually ``main``)."""
-    return run(
-        'gh',
-        'repo',
-        'view',
-        '--json',
-        'defaultBranchRef',
-        '--jq',
-        '.defaultBranchRef.name',
-        dry=False,
-        capture_output=True,
-    ).stdout
+    return run_capture(
+        'gh', 'repo', 'view', '--json', 'defaultBranchRef', '--jq', '.defaultBranchRef.name'
+    )
 
 
 def _commit(message: str, dry: bool):

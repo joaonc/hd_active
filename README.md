@@ -19,18 +19,18 @@ python -m src.hd_active.hd_active --conf src/hd_active/hd_active.ini
 ```
 
 ## Development
-Note: Best to work on a virtual environment.
-This page doesn't go into how to do that.
+This project is managed with [uv](https://docs.astral.sh/uv/getting-started/installation/), which
+needs to be installed first.
 
-Install the development packages:
+Create the virtual environment and install the development packages:
 ```
-pip typer-invoke && inv pip sync
+uv sync
 ```
 
 This project uses [typer-invoke](https://github.com/joaonc/typer-invoke) to facilitate common tasks.
 For a list of tasks:
 ```
-inv --help
+uv run inv --help
 ```
 
 ## Licensing

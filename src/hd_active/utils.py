@@ -1,7 +1,9 @@
+from collections.abc import Iterable, Sized
+from decimal import Decimal, InvalidOperation
 from numbers import Number
 from os import PathLike
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 PROJECT_ROOT = Path(__file__).parents[2].resolve()
 ASSETS_ROOT = PROJECT_ROOT / 'assets'
@@ -58,10 +60,16 @@ def is_truthy(value: Any, raise_if_unclear: bool = True, empty_means_false: bool
         elif value == '' and empty_means_false:
             falsy = True
         else:
+            # `Decimal` instead of `float` so that values like '1.0000000000000001' aren't rounded
+            # to 1.
             try:
-                return is_truthy(float(value), raise_if_unclear=raise_if_unclear)
-            except (TypeError, ValueError):
+                number = Decimal(value.strip())
+            except InvalidOperation:
                 pass
+            else:
+                if number.is_finite():
+                    truthy = number == 1
+                    falsy = number == 0
     elif isinstance(value, bool):
         truthy = value
         falsy = not value
@@ -71,7 +79,7 @@ def is_truthy(value: Any, raise_if_unclear: bool = True, empty_means_false: bool
     elif value is None:
         falsy = empty_means_false
     elif isinstance(value, Iterable):
-        falsy = empty_means_false and not value
+        falsy = empty_means_false and _is_empty(value)
 
     if truthy:
         return True
@@ -79,3 +87,19 @@ def is_truthy(value: Any, raise_if_unclear: bool = True, empty_means_false: bool
         raise ValueError(f'Value is neither truthy or falsy: `{value}`.')
 
     return False
+
+
+_SENTINEL = object()
+
+
+def _is_empty(iterable: Iterable) -> bool:
+    """
+    Whether the iterable has no items, without relying on its truthiness (an empty iterator is
+    truthy) or on it having a length.
+
+    Iterators have no length, so one is probed by taking its first item, which consumes it. That's
+    acceptable here since a non-empty iterable is *unclear* regardless.
+    """
+    if isinstance(iterable, Sized):
+        return len(iterable) == 0
+    return next(iter(iterable), _SENTINEL) is _SENTINEL

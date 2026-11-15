@@ -23,16 +23,16 @@ def precommit_install(dry: DryAnnotation = False):
     Install pre-commit into the git hooks, which will cause pre-commit to run on automatically.
     This should be the first thing to do after cloning this project and installing requirements.
     """
-    run(dry, 'pre-commit', 'install')
+    run('pre-commit', 'install', dry=dry)
 
 
-# `upgrade` instead of `update` to maintain similar naming to `pip-compile upgrade`
+# `upgrade` instead of `update` to maintain similar naming to `uv lock --upgrade`
 @app.command(name='upgrade')
 def precommit_upgrade(dry: DryAnnotation = False):
     """
     Upgrade pre-commit config to the latest repos' versions.
     """
-    run(dry, 'pre-commit', 'autoupdate')
+    run('pre-commit', 'autoupdate', dry=dry)
 
 
 @app.command(name='run')
@@ -46,8 +46,7 @@ def precommit_run(
     """
     Manually run pre-commit hooks.
     """
-    hook = hook or '--all-files'
-    run(dry, 'pre-commit', 'run', hook)
+    run('pre-commit', 'run', hook, '--all-files', dry=dry)
 
 
 if __name__ == '__main__':

@@ -27,16 +27,21 @@ class TestIsTruthy:
     def test_false(self, value):
         assert is_truthy(value) is False
 
-    @pytest.mark.parametrize('value', ['foo', '', 1.1, -1, 2, '2', None, [], [1], object()])
+    @pytest.mark.parametrize(
+        'value',
+        ['foo', '', 1.1, -1, 2, '2', '1.0000000000000001', 'nan', 'inf', None, [], [1], object()],
+    )
     def test_undetermined(self, value):
         with pytest.raises(ValueError):
             is_truthy(value)
 
-    @pytest.mark.parametrize('value', ['foo', 1.1, -1, '2', [1], object()])
+    @pytest.mark.parametrize(
+        'value', ['foo', 1.1, -1, '2', '1.0000000000000001', 'nan', [1], object()]
+    )
     def test_undetermined_no_raise(self, value):
         assert is_truthy(value, raise_if_unclear=False) is False
 
-    @pytest.mark.parametrize('value', ['', None, [], ()])
+    @pytest.mark.parametrize('value', ['', None, [], (), iter(())])
     def test_empty_means_false(self, value):
         assert is_truthy(value, empty_means_false=True) is False
 

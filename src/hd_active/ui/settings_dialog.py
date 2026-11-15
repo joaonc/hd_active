@@ -6,7 +6,7 @@ from .log_dialog import LogDialog
 
 
 class SettingsDialog(QDialog, Ui_SettingsDialog):
-    def __init__(self, hd_active: HdActive, parent: QWidget):
+    def __init__(self, hd_active: HdActive, parent: QWidget | None = None):
         super().__init__(parent)
         self.hd_active = hd_active
         self.setupUi(self)

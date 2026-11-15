@@ -37,17 +37,14 @@ def lint_ruff(
         run('ruff', 'format', path, dry=dry)
 
 
-@app.command(name='mypy')
-def lint_mypy(
-    path: Annotated[str | None, typer.Argument(help='Path to type-check.')] = None,
+@app.command(name='ty')
+def lint_ty(
+    path: Annotated[
+        str | None, typer.Argument(help='Path to type-check. Default is the whole project.')
+    ] = None,
     dry: DryAnnotation = False,
 ):
-    if path:
-        run('mypy', path, dry=dry)
-    else:
-        run('mypy', 'src', dry=dry)
-        run('mypy', 'tests', dry=dry)
-        run('mypy', 'admin', dry=dry)
+    run('ty', 'check', path, dry=dry)
 
 
 @app.command(name='all')
@@ -67,7 +64,7 @@ def lint_all(
     Config for each of the tools is in ``pyproject.toml``.
     """
     lint_ruff(check=check, dry=dry)
-    lint_mypy(dry=dry)
+    lint_ty(dry=dry)
 
     logger.info('Done')
 

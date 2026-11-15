@@ -5,7 +5,7 @@ import sys
 from dataclasses import dataclass
 from enum import Enum
 from itertools import chain
-from typing import Annotated
+from typing import Annotated, Any
 
 import typer
 from rich.logging import RichHandler
@@ -123,7 +123,17 @@ def run(
         result.stdout = strip_output.strip(result.stdout)
         result.stderr = strip_output.strip(result.stderr)
 
-    return result  # type: ignore
+    return result
+
+
+def run_capture(*args, dry: bool = False, **kwargs) -> str:
+    """
+    Run a CLI command and return its (stripped) ``stdout``. Returns an empty string if ``dry``.
+
+    See ``run(...)`` for more details.
+    """
+    result = run(*args, dry=dry, capture_output=True, **kwargs)
+    return result.stdout if result else ''
 
 
 def run_async(*args, dry: bool = False, **kwargs) -> subprocess.Popen | None:
@@ -145,12 +155,10 @@ def run_async(*args, dry: bool = False, **kwargs) -> subprocess.Popen | None:
     if dry:
         return None
 
-    defaults = dict(
-        cwd=PROJECT_ROOT,
-    )
+    defaults: dict[str, Any] = dict(cwd=PROJECT_ROOT)
 
     try:
-        return subprocess.Popen(args, **(defaults | kwargs))
+        return subprocess.Popen([str(a) for a in args], **(defaults | kwargs))
     except subprocess.CalledProcessError as e:
         logger.error(e)
         raise typer.Exit(1)
@@ -161,21 +169,6 @@ def is_package_installed(package_name: str) -> bool:
     import importlib.util
 
     return importlib.util.find_spec(package_name) is not None
-
-
-def install_package(package: str, package_install: str | None = None, dry: bool = False):
-    """
-    Install a Python package if not already installed.
-
-    :param package: Name of the package to check/install.
-    :param package_install: Name of the package to install, if different from the name to check.
-    :param dry: Show the command that would be run without running it.
-    """
-    if is_package_installed(package):
-        logger.debug(f'Package `{package}` is already installed.')
-        return
-
-    run(sys.executable, '-m', 'pip', 'install', package_install or package, dry=dry)
 
 
 def multiple_parameters(parameter: str, *options) -> list[str]:
