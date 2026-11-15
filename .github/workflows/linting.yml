@@ -7,8 +7,6 @@ on:
 jobs:
   linting:
     runs-on: ubuntu-latest
-    env:
-      UV_SYSTEM_PYTHON: '1'
 
     steps:
       - name: Checkout code
@@ -23,9 +21,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
 
       - name: Install requirements
-        run: |
-          uv pip install typer-invoke
-          uv run inv pip install requirements-dev
+        run: uv sync
 
       - name: Lint and type check
         run: uv run inv lint all --check

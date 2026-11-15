@@ -21,7 +21,7 @@ def docs_serve(dry: DryAnnotation = False):
     """
     Start documentation local server.
     """
-    run(dry, 'mkdocs', 'serve')
+    run('mkdocs', 'serve', dry=dry)
 
 
 @app.command(name='deploy')
@@ -29,7 +29,7 @@ def docs_deploy(dry: DryAnnotation = False):
     """
     Publish documentation to GitHub Pages at https://joaonc.github.io/hd_active
     """
-    run(dry, 'mkdocs', 'gh-deploy')
+    run('mkdocs', 'gh-deploy', dry=dry)
 
 
 @app.command(name='clean')

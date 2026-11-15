@@ -10,21 +10,25 @@ icon (`src/hd_active/main.py`) and is configured via an INI file.
 
 ## Development setup
 
-This project uses [typer-invoke](https://github.com/joaonc/typer-invoke) (`inv`) as a task runner,
-with tasks defined as Typer apps under `admin/`. Best to work in a virtual environment.
+The project is managed with [uv](https://docs.astral.sh/uv/) (install it first: it manages the
+Python version, `.venv`, dependencies and `uv.lock`). Linting/formatting is done with
+[ruff](https://docs.astral.sh/ruff/) and type checking with [ty](https://docs.astral.sh/ty/).
+`pip`, `mypy`, `black` and `isort` are not used.
 
-Install dev tooling and sync dependencies:
+Create the environment and install dependencies (the `dev` group is the default):
 ```bash
-pip install typer-invoke
-inv pip sync
+uv sync
 ```
 
-`uv` manages the lock file/environment; `inv pip ...` wraps `uv lock` / `uv sync` with requirement
-aliases (`requirements`, `requirements-dev`, `requirements-docs` — see `admin/pip.py`).
+Dependencies live in `pyproject.toml`; change them with `uv add [--group dev|docs] <pkg>`,
+`uv remove <pkg>` and `uv lock --upgrade[-package <pkg>]`, which update `uv.lock`.
+
+Tasks are run with [typer-invoke](https://github.com/joaonc/typer-invoke) (`inv`), defined as Typer
+apps under `admin/` and installed by `uv sync`. Run them with `uv run inv ...` (or activate `.venv`).
 
 List all available tasks:
 ```bash
-inv --help
+uv run inv --help
 ```
 
 Most `inv` commands accept `--dry` to print the underlying command instead of running it.
@@ -51,18 +55,18 @@ on non-Windows runners and all tests on Windows.
 
 Lint / format / type-check:
 ```bash
-inv lint all            # ruff check --fix + ruff format + mypy (src, tests, admin)
-inv lint all --check     # check-only mode, used in CI
-inv lint ruff <path>     # just ruff
-inv lint mypy [path]     # just mypy
+inv lint all            # ruff check --fix + ruff format + ty check
+inv lint all --check    # check-only mode, used in CI
+inv lint ruff <path>    # just ruff
+inv lint ty [path]      # just ty
 ```
-Ruff line length is 100, single-quote formatting, targets py312. mypy excludes `src/ui/forms`
-(generated Qt code — see below) and `tasks.py`.
+Ruff line length is 100, single-quote formatting, targets py312. ty excludes
+`src/hd_active/ui/forms` (generated Qt code — see below). Both are configured in `pyproject.toml`.
 
 Pre-commit:
 ```bash
-inv precommit install    # run once after cloning
-inv precommit run [--hook name]
+inv precommit install                 # run once after cloning
+inv precommit run [--hook <hook-id>]  # all files; optionally a single hook
 ```
 
 Qt UI generation — `.ui`/`.qrc` files live under `assets/ui`; never hand-edit the generated output:
@@ -74,8 +78,9 @@ inv ui edit <file>   # open a .ui file in Qt Designer
 
 Docs (mkdocs):
 ```bash
-inv docs serve
-inv docs deploy   # publishes to https://joaonc.github.io/hd_active
+uv sync --group docs   # docs dependencies aren't in the default groups
+inv docs serve    # `mkdocs serve`
+inv docs deploy   # `mkdocs gh-deploy`, publishes to https://joaonc.github.io/hd_active
 ```
 
 Build/release (see `admin/build.py` for the full flow — bumps version across `pyproject.toml` and
@@ -109,12 +114,12 @@ inv build clean
 - `utils.py` — small shared helpers: `FilePath` type alias, `get_asset()` for locating files under
   `assets/`, and `is_truthy()`, a permissive string/number/bool truthiness parser (raises on
   ambiguous input unless told not to) used for env-var flags like `HD_ACTION_DEBUG`.
-- `admin/` — all `inv` task definitions (one module per concern: `build`, `docs`, `lint`, `pip`,
+- `admin/` — all `inv` task definitions (one module per concern: `build`, `docs`, `lint`,
   `precommit`, `test`, `ui`), registered via `[tool.typer-invoke]` in `pyproject.toml`.
 
 ## Notes
 
 - The core drive-writing logic in `HdActive` is UI-independent by design — prefer testing it
   directly rather than through the Qt layer where possible (`pytest-qt` is available for UI tests).
-- CI (`tests.yml`) runs the test matrix on `windows-latest` across Python 3.12 and 3.14 (the
+- CI installs with `uv sync` and runs everything through `uv run`. `tests.yml` runs the test matrix on `windows-latest` across Python 3.12 and 3.14 (the
   supported range per `pyproject.toml`).

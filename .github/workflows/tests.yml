@@ -6,8 +6,6 @@ on:
 jobs:
   pytest:
     runs-on: windows-latest
-    env:
-      UV_SYSTEM_PYTHON: '1'
     strategy:
       matrix:
         # Min and max versions supported
@@ -36,9 +34,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
 
       - name: Install requirements
-        run: |
-          uv pip install typer-invoke
-          uv run inv pip install requirements-dev
+        run: uv sync
 
       - name: Run tests on Linux and Mac
         # Test folder(s) configured in `pyproject.toml`

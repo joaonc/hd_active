@@ -15,8 +15,6 @@ permissions:
 jobs:
   deploy-docs:
     runs-on: ubuntu-latest
-    env:
-      UV_SYSTEM_PYTHON: '1'
 
     steps:
       - name: Checkout code
@@ -31,9 +29,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
 
       - name: Install requirements
-        run: |
-          uv pip install typer-invoke
-          uv run inv pip sync requirements-docs
+        run: uv sync --only-group docs
 
       - name: Deploy docs
-        run: uv run mkdocs gh-deploy --force
+        run: uv run --no-sync mkdocs gh-deploy --force
