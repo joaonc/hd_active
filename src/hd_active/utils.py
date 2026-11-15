@@ -22,11 +22,11 @@ def is_truthy(value: Any, raise_if_unclear: bool = True, empty_means_false: bool
     See parameters documentation for more details.
 
     A value is *truthy* if: (returns ``True`` always)
-        * String 'true' or 'yes' (case-insensitive).
+        * String 'true', 'yes' or 'on' (case-insensitive).
         * Number 1 or a string representation of the number 1.
 
     A value is *falsy* if: (returns ``False`` always)
-        * String 'false' or 'no' (case-insensitive).
+        * String 'false', 'no' or 'off' (case-insensitive).
         * Number 0 or a string representation of the number 0.
 
     :param value: The value to check for truthiness/falseness.
@@ -44,14 +44,16 @@ def is_truthy(value: Any, raise_if_unclear: bool = True, empty_means_false: bool
           are considered *unclear*).
         * Numbers or string representation of numbers that are not ``1`` or ``0`` are considered
           *unclear*.
+        * Any other type of value (including ``None`` unless ``empty_means_false`` is ``True``) is
+          considered *unclear*.
     """
     truthy = False
     falsy = False
     if isinstance(value, str):
         value_lower = value.lower()
-        if value_lower in ['true', 'yes']:
+        if value_lower in ['true', 'yes', 'on']:
             truthy = True
-        elif value_lower in ['false', 'no']:
+        elif value_lower in ['false', 'no', 'off']:
             falsy = True
         elif value == '' and empty_means_false:
             falsy = True
@@ -66,11 +68,10 @@ def is_truthy(value: Any, raise_if_unclear: bool = True, empty_means_false: bool
     elif isinstance(value, Number):
         truthy = value == 1
         falsy = value == 0
+    elif value is None:
+        falsy = empty_means_false
     elif isinstance(value, Iterable):
-        if empty_means_false:
-            falsy = not bool(value)
-    else:
-        return is_truthy(bool(value))
+        falsy = empty_means_false and not value
 
     if truthy:
         return True

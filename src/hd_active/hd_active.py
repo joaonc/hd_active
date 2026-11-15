@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 class HdActive:
     def __init__(
         self,
-        drive_paths=Iterable[PathLike] | None,
+        drive_paths: Iterable[PathLike] | None = None,
         run: bool = False,
         wait: int | float = 1,
     ):
