@@ -121,5 +121,5 @@ inv build clean
 
 - The core drive-writing logic in `HdActive` is UI-independent by design — prefer testing it
   directly rather than through the Qt layer where possible (`pytest-qt` is available for UI tests).
-- CI installs with `uv sync` and runs everything through `uv run`. `tests.yml` runs the test matrix on `windows-latest` across Python 3.12 and 3.14 (the
-  supported range per `pyproject.toml`).
+- CI installs with `uv sync` and runs everything through `uv run`. `tests.yml` runs the test matrix on `windows-latest` across Python 3.12 and 3.15 (the
+  min/max of the supported range per `pyproject.toml`, `>=3.12,<3.16`).

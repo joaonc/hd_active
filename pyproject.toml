@@ -52,7 +52,7 @@ log_level = 'INFO'
 log_format = '%(message)s'
 
 [build-system]
-requires = ['uv_build>=0.10.4,<0.12.0']
+requires = ['uv_build>=0.13.8,<0.14.0']
 build-backend = 'uv_build'
 
 [tool.uv.build-backend]
@@ -66,9 +66,14 @@ readme = 'README.md'
 authors = [{name = 'Joao Coelho'}]
 license = {file = 'LICENSE.txt'}
 dependencies = ['pyside6']
-requires-python = '>=3.12,<=3.15'
+requires-python = '>=3.12,<3.16'
 classifiers = [
     "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
 ]
 
 [project.urls]
