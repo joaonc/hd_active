@@ -64,11 +64,11 @@ version = '0.2.0'
 description = 'Prevent external HDs from becoming inactive (sleeping).'
 readme = 'README.md'
 authors = [{name = 'Joao Coelho'}]
-license = {file = 'LICENSE.txt'}
+license = 'MIT'
+license-files = ['LICENSE.txt']
 dependencies = ['pyside6']
 requires-python = '>=3.12,<3.16'
 classifiers = [
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
