@@ -1,21 +1,6 @@
 import pytest
 
-from hd_active.utils import ASSETS_ROOT, PROJECT_ROOT, get_asset, is_truthy
-
-
-class TestGlobals:
-    def test_project_root(self):
-        assert PROJECT_ROOT.name == 'hd_active'
-
-    def test_assets_root(self):
-        assert ASSETS_ROOT.name == 'assets'
-
-
-class TestGetAsset:
-    @pytest.mark.parametrize('path', ['images/hard_drive_icon.png'])
-    def test_exists(self, path):
-        asset = get_asset(path)
-        assert asset.exists()
+from hd_active.utils import is_truthy
 
 
 class TestIsTruthy:

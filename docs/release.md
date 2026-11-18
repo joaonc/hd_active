@@ -27,20 +27,12 @@ steps.
    ```
    Gets published to [https://pypi.org/project/hd_active/](https://pypi.org/project/hd_active/)
 
-##### Binary
-1. Build app
-   ```
-   inv build.app
-   ```
-   Check that the executable looks good after building (run tests).
-2. Upload to 
-
 #### Pypi
 **TODO: Finish**
 
 ## GitHub Actions
-The GitHub actions [Release](https://github.com/joaonc/hd_active/actions/workflows/release.yml) and
-[Build app](https://github.com/joaonc/hd_active/actions/workflows/build-app.yml) follow the same
-steps described above, but in an automatic way, making it easier and with less room for error.
+The GitHub action [Release](https://github.com/joaonc/hd_active/actions/workflows/release.yml)
+follows the same steps described above, but in an automatic way, making it easier and with less
+room for error.
 
 **TODO: Finish**

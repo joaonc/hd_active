@@ -20,10 +20,28 @@ All the required tools are available by installing `pyside6`:
 
 * `Qt Designer`: `pyside6-designer`
 * `.ui > .py` Converter: `pyside6-uic`
-  At the project root (use full paths if relative doesn't work):
-  ```
-  pyside6-uic assets/ui/settings.ui -o hd_active/ui/forms/ui_settings_dialog.py
-  ```
+* `.qrc > .py` Converter (resources, like images): `pyside6-rcc`
+
+These are wrapped in `inv` tasks:
+```
+uv run inv ui edit settings_dialog   # Open in Qt Designer
+uv run inv ui py                     # assets/ui/*.ui  > src/hd_active/ui/forms/ui_*.py
+uv run inv ui rc                     # assets/*.qrc    > src/hd_active/ui/forms/*_rc.py
+```
+The generated files under `src/hd_active/ui/forms` should not be edited by hand.
+
+### Structure
+* `HdActive` (`hd_active.py`) is the engine. It doesn't depend on Qt and does the writing in a
+  background thread.
+* `HdActiveController` (`ui/controller.py`) wraps the engine in a `QObject` and exposes what
+  happens in it as Qt signals, delivered in the GUI thread.
+* The tray icon and the dialogs only talk to the controller: they call its slots and connect to
+  its signals, never polling the engine nor touching widgets from the background thread.
+* Dialogs _have_ a generated form (`self.ui = Ui_...()`) instead of inheriting from it.
+* Images are loaded from Qt resources (`:/images/...`), so they work regardless of how the app is
+  installed.
+
+To try the UI without writing to any drive: `uv run hd_active --dry-run`.
 
 !!! Note
 

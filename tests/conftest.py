@@ -1,8 +1,4 @@
-# Ensure the 'src' directory is on sys.path so tests can import 'hd_active' without installation.
-import sys
-from pathlib import Path
+import os
 
-ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'src'
-if str(SOURCE) not in sys.path:
-    sys.path.insert(0, str(SOURCE))
+# Run Qt without a display, so UI tests don't open windows and work in CI.
+os.environ.setdefault('QT_QPA_PLATFORM', 'offscreen')

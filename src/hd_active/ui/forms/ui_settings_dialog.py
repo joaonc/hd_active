@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'settings_dialog.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.2
+## Created by: Qt User Interface Compiler version 6.12.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -15,118 +15,150 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QDialog, QGridLayout, QHBoxLayout,
-    QLabel, QLayout, QLineEdit, QPushButton,
-    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QAbstractButton, QAbstractItemView, QApplication, QCheckBox,
+    QDialog, QDialogButtonBox, QDoubleSpinBox, QFormLayout,
+    QFrame, QHBoxLayout, QLabel, QListWidget,
+    QListWidgetItem, QPushButton, QSizePolicy, QSpacerItem,
+    QVBoxLayout, QWidget)
 from . import resources_rc
 
 class Ui_SettingsDialog(object):
     def setupUi(self, SettingsDialog):
         if not SettingsDialog.objectName():
             SettingsDialog.setObjectName(u"SettingsDialog")
-        SettingsDialog.resize(300, 151)
-        SettingsDialog.setMinimumSize(QSize(300, 150))
-        SettingsDialog.setMaximumSize(QSize(800, 300))
+        SettingsDialog.resize(420, 320)
         icon = QIcon()
         icon.addFile(u":/images/hard_drive_icon.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         SettingsDialog.setWindowIcon(icon)
-        self.verticalLayout = QVBoxLayout(SettingsDialog)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.gridLayout = QGridLayout()
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
+        self.vertical_layout = QVBoxLayout(SettingsDialog)
+        self.vertical_layout.setObjectName(u"vertical_layout")
         self.drives_label = QLabel(SettingsDialog)
         self.drives_label.setObjectName(u"drives_label")
 
-        self.gridLayout.addWidget(self.drives_label, 0, 0, 1, 1)
+        self.vertical_layout.addWidget(self.drives_label)
 
-        self.drives_line_edit = QLineEdit(SettingsDialog)
-        self.drives_line_edit.setObjectName(u"drives_line_edit")
+        self.drives_layout = QHBoxLayout()
+        self.drives_layout.setObjectName(u"drives_layout")
+        self.drives_list = QListWidget(SettingsDialog)
+        self.drives_list.setObjectName(u"drives_list")
+        self.drives_list.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
 
-        self.gridLayout.addWidget(self.drives_line_edit, 0, 1, 1, 1)
+        self.drives_layout.addWidget(self.drives_list)
 
+        self.drives_buttons_layout = QVBoxLayout()
+        self.drives_buttons_layout.setObjectName(u"drives_buttons_layout")
+        self.add_drive_button = QPushButton(SettingsDialog)
+        self.add_drive_button.setObjectName(u"add_drive_button")
+
+        self.drives_buttons_layout.addWidget(self.add_drive_button)
+
+        self.remove_drive_button = QPushButton(SettingsDialog)
+        self.remove_drive_button.setObjectName(u"remove_drive_button")
+        self.remove_drive_button.setEnabled(False)
+
+        self.drives_buttons_layout.addWidget(self.remove_drive_button)
+
+        self.drives_buttons_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.drives_buttons_layout.addItem(self.drives_buttons_spacer)
+
+
+        self.drives_layout.addLayout(self.drives_buttons_layout)
+
+
+        self.vertical_layout.addLayout(self.drives_layout)
+
+        self.form_layout = QFormLayout()
+        self.form_layout.setObjectName(u"form_layout")
         self.wait_label = QLabel(SettingsDialog)
         self.wait_label.setObjectName(u"wait_label")
 
-        self.gridLayout.addWidget(self.wait_label, 1, 0, 1, 1)
+        self.form_layout.setWidget(0, QFormLayout.ItemRole.LabelRole, self.wait_label)
 
-        self.wait_line_edit = QLineEdit(SettingsDialog)
-        self.wait_line_edit.setObjectName(u"wait_line_edit")
-        self.wait_line_edit.setMaximumSize(QSize(40, 16777215))
+        self.wait_spin_box = QDoubleSpinBox(SettingsDialog)
+        self.wait_spin_box.setObjectName(u"wait_spin_box")
+        self.wait_spin_box.setDecimals(1)
+        self.wait_spin_box.setMinimum(0.100000000000000)
+        self.wait_spin_box.setMaximum(86400.000000000000000)
+        self.wait_spin_box.setValue(60.000000000000000)
 
-        self.gridLayout.addWidget(self.wait_line_edit, 1, 1, 1, 1)
+        self.form_layout.setWidget(0, QFormLayout.ItemRole.FieldRole, self.wait_spin_box)
+
+        self.run_on_start_check_box = QCheckBox(SettingsDialog)
+        self.run_on_start_check_box.setObjectName(u"run_on_start_check_box")
+
+        self.form_layout.setWidget(1, QFormLayout.ItemRole.FieldRole, self.run_on_start_check_box)
 
 
-        self.verticalLayout.addLayout(self.gridLayout)
+        self.vertical_layout.addLayout(self.form_layout)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.line = QFrame(SettingsDialog)
+        self.line.setObjectName(u"line")
+        self.line.setFrameShape(QFrame.Shape.HLine)
+        self.line.setFrameShadow(QFrame.Shadow.Sunken)
 
-        self.verticalLayout.addItem(self.verticalSpacer)
+        self.vertical_layout.addWidget(self.line)
 
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.state_layout = QHBoxLayout()
+        self.state_layout.setObjectName(u"state_layout")
+        self.status_label = QLabel(SettingsDialog)
+        self.status_label.setObjectName(u"status_label")
 
-        self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
+        self.state_layout.addWidget(self.status_label)
+
+        self.state_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.state_layout.addItem(self.state_spacer)
 
         self.log_button = QPushButton(SettingsDialog)
         self.log_button.setObjectName(u"log_button")
+        self.log_button.setAutoDefault(False)
 
-        self.horizontalLayout_2.addWidget(self.log_button)
+        self.state_layout.addWidget(self.log_button)
 
         self.change_state_button = QPushButton(SettingsDialog)
         self.change_state_button.setObjectName(u"change_state_button")
+        self.change_state_button.setAutoDefault(False)
 
-        self.horizontalLayout_2.addWidget(self.change_state_button)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
-
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer)
-
-        self.ok_button = QPushButton(SettingsDialog)
-        self.ok_button.setObjectName(u"ok_button")
-
-        self.horizontalLayout.addWidget(self.ok_button)
-
-        self.cancel_button = QPushButton(SettingsDialog)
-        self.cancel_button.setObjectName(u"cancel_button")
-
-        self.horizontalLayout.addWidget(self.cancel_button)
+        self.state_layout.addWidget(self.change_state_button)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.vertical_layout.addLayout(self.state_layout)
+
+        self.button_box = QDialogButtonBox(SettingsDialog)
+        self.button_box.setObjectName(u"button_box")
+        self.button_box.setStandardButtons(QDialogButtonBox.StandardButton.Cancel|QDialogButtonBox.StandardButton.Ok)
+
+        self.vertical_layout.addWidget(self.button_box)
 
 #if QT_CONFIG(shortcut)
-        self.drives_label.setBuddy(self.drives_line_edit)
-        self.wait_label.setBuddy(self.wait_line_edit)
+        self.drives_label.setBuddy(self.drives_list)
+        self.wait_label.setBuddy(self.wait_spin_box)
 #endif // QT_CONFIG(shortcut)
-        QWidget.setTabOrder(self.drives_line_edit, self.wait_line_edit)
-        QWidget.setTabOrder(self.wait_line_edit, self.log_button)
+        QWidget.setTabOrder(self.drives_list, self.add_drive_button)
+        QWidget.setTabOrder(self.add_drive_button, self.remove_drive_button)
+        QWidget.setTabOrder(self.remove_drive_button, self.wait_spin_box)
+        QWidget.setTabOrder(self.wait_spin_box, self.run_on_start_check_box)
+        QWidget.setTabOrder(self.run_on_start_check_box, self.log_button)
         QWidget.setTabOrder(self.log_button, self.change_state_button)
-        QWidget.setTabOrder(self.change_state_button, self.ok_button)
-        QWidget.setTabOrder(self.ok_button, self.cancel_button)
 
         self.retranslateUi(SettingsDialog)
-
-        self.ok_button.setDefault(True)
-        self.cancel_button.setDefault(False)
-
+        self.button_box.accepted.connect(SettingsDialog.accept)
+        self.button_box.rejected.connect(SettingsDialog.reject)
 
         QMetaObject.connectSlotsByName(SettingsDialog)
     # setupUi
 
     def retranslateUi(self, SettingsDialog):
         SettingsDialog.setWindowTitle(QCoreApplication.translate("SettingsDialog", u"HD Active", None))
-        self.drives_label.setText(QCoreApplication.translate("SettingsDialog", u"Drives", None))
-        self.wait_label.setText(QCoreApplication.translate("SettingsDialog", u"Wait", None))
-        self.log_button.setText(QCoreApplication.translate("SettingsDialog", u"Log", None))
-        self.change_state_button.setText(QCoreApplication.translate("SettingsDialog", u"Start/Stop", None))
-        self.ok_button.setText(QCoreApplication.translate("SettingsDialog", u"Ok", None))
-        self.cancel_button.setText(QCoreApplication.translate("SettingsDialog", u"Cancel", None))
+        self.drives_label.setText(QCoreApplication.translate("SettingsDialog", u"&Drives", None))
+        self.add_drive_button.setText(QCoreApplication.translate("SettingsDialog", u"&Add...", None))
+        self.remove_drive_button.setText(QCoreApplication.translate("SettingsDialog", u"&Remove", None))
+        self.wait_label.setText(QCoreApplication.translate("SettingsDialog", u"&Wait between writes", None))
+        self.wait_spin_box.setSuffix(QCoreApplication.translate("SettingsDialog", u" s", None))
+        self.run_on_start_check_box.setText(QCoreApplication.translate("SettingsDialog", u"&Start writing when HD Active starts", None))
+        self.status_label.setText(QCoreApplication.translate("SettingsDialog", u"Stopped", None))
+        self.log_button.setText(QCoreApplication.translate("SettingsDialog", u"&Log", None))
+        self.change_state_button.setText(QCoreApplication.translate("SettingsDialog", u"Start", None))
     # retranslateUi
 

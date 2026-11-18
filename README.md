@@ -15,8 +15,15 @@ prevent that. Wanted to learn a bit more about Qt, so went ahead and made this.
 
 ## Quick start
 ```
-python -m src.hd_active.hd_active --conf src/hd_active/hd_active.ini
+hd_active                  # Run in the system tray (same as `hd_active gui`)
+hd_active run              # Run in the console, without UI, until Ctrl+C
+hd_active config init --drive e:\ --drive f:\ --wait 30
+hd_active config show
 ```
+
+Options common to all commands: `--conf FILE` (default: `hd_active.ini` in the current directory)
+and `--log LEVEL`. `gui` and `run` also accept `--dry-run`, to not write to the drives.
+See `hd_active --help` for more.
 
 ## Development
 This project is managed with [uv](https://docs.astral.sh/uv/getting-started/installation/), which

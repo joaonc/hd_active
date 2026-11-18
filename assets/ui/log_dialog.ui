@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>719</width>
-    <height>411</height>
+    <width>720</width>
+    <height>410</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,32 +17,38 @@
    <iconset resource="../resources.qrc">
     <normaloff>:/images/hard_drive_icon.png</normaloff>:/images/hard_drive_icon.png</iconset>
   </property>
-  <widget class="QPushButton" name="ok_button">
-   <property name="geometry">
-    <rect>
-     <x>630</x>
-     <y>380</y>
-     <width>75</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Ok</string>
-   </property>
-  </widget>
-  <widget class="QTextBrowser" name="log_textBrowser">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>701</width>
-     <height>361</height>
-    </rect>
-   </property>
-  </widget>
+  <layout class="QVBoxLayout" name="vertical_layout">
+   <item>
+    <widget class="QPlainTextEdit" name="log_text_edit">
+     <property name="lineWrapMode">
+      <enum>QPlainTextEdit::LineWrapMode::NoWrap</enum>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+     <property name="maximumBlockCount">
+      <number>1000</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="button_box">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::StandardButton::Close</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources>
   <include location="../resources.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>button_box</sender>
+   <signal>rejected()</signal>
+   <receiver>LogDialog</receiver>
+   <slot>reject()</slot>
+  </connection>
+ </connections>
 </ui>
