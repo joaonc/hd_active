@@ -60,7 +60,7 @@ module-name = 'hd_active'
 
 [project]
 name = 'hd_active'
-version = '0.2.0'
+version = '0.3.0'
 description = 'Prevent external HDs from becoming inactive (sleeping).'
 readme = 'README.md'
 authors = [{name = 'Joao Coelho'}]
@@ -81,12 +81,11 @@ Home = 'https://github.com/joaonc/hd_active'
 Documentation = 'https://joaonc.github.io/hd_active'
 
 [project.scripts]
-hd_active = 'hd_active.main:main'
+hd_active = 'hd_active.cli:main'
 [dependency-groups]
 dev = [
     'bandit',
     'pre-commit',
-    'pyinstaller',
     'pytest',
     'pytest-params',
     'pytest-qt',

@@ -1,68 +1,102 @@
-import os
-
-from PySide6.QtWidgets import QApplication, QMenu, QMessageBox, QSystemTrayIcon, QWidget
+from PySide6.QtCore import QObject, Slot
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QApplication, QDialog, QMenu, QMessageBox, QSystemTrayIcon
 
 from .. import __version__
-from ..hd_active import HdActive
-from ..hd_active_config import HdActiveConfig
-from ..utils import FilePath, is_truthy
+from .controller import HdActiveController
+from .forms import resources_rc  # noqa: F401  Registers the resources, like the icon below.
+from .log_dialog import LogDialog
 from .settings_dialog import SettingsDialog
 
-HD_ACTION_DEBUG = is_truthy(os.getenv('HD_ACTION_DEBUG', 'True'))
-"""
-If truthy, HDs are not accessed. Used for testing purposes.
-"""
-
-DEFAULT_HD_ACTIVE_FILE_NAME = 'hd_active.ini'
+APP_NAME = 'HD Active'
+# Icon from https://icon-icons.com/icon/drive-harddisk-usb/36212 (GPL v3)
+ICON_RESOURCE = ':/images/hard_drive_icon.png'
 
 
 class SystemTrayIcon(QSystemTrayIcon):
-    def __init__(
-        self,
-        icon,
-        parent: QWidget | None = None,
-        hd_active_file_name: FilePath = DEFAULT_HD_ACTIVE_FILE_NAME,
-    ):
-        super().__init__(icon=icon, parent=parent)
+    """
+    The app's presence in the system tray: context menu, notifications and access to the dialogs.
+    """
 
-        self._parent_widget = parent
-        self.hd_active_file_name = hd_active_file_name
-        config = HdActiveConfig(self.hd_active_file_name)
-        # Don't start yet: in debug mode, writing must be disabled before the writer thread runs.
-        self.hd_active = HdActive(drive_paths=config.drive_paths, run=False, wait=config.wait)
-        if HD_ACTION_DEBUG:
-            # Disable actual writing to HD
-            self.hd_active.write_hds = lambda: None
-        if config.run:
-            self.hd_active.start()
+    def __init__(self, controller: HdActiveController, parent: QObject | None = None):
+        super().__init__(QIcon(ICON_RESOURCE), parent)
+        self._controller = controller
 
-        # Menu
-        menu = QMenu(parent)
-        self._change_state_action = menu.addAction(self.hd_active.get_change_state())
-        self._change_state_action.triggered.connect(self.change_state)
-        show_settings_action = menu.addAction('Settings')
-        show_settings_action.triggered.connect(self._show_settings_dialog)
-        menu.addSeparator()
-        about_action = menu.addAction('About')
-        about_action.triggered.connect(self.about)
-        quit_action = menu.addAction('Exit')
-        quit_action.triggered.connect(QApplication.instance().quit)  # type: ignore
-        self.setContextMenu(menu)
+        # Dialogs are created when first needed and then reused, so there's only one of each.
+        self._settings_dialog: SettingsDialog | None = None
+        self._log_dialog: LogDialog | None = None
 
-        # Other events
-        self.activated.connect(self.on_tray_icon_activated)
+        # A tray icon isn't a widget, so it can't be the menu's parent. Keep a reference instead.
+        self._menu = QMenu()
+        self.change_state_action = self._menu.addAction('')
+        self.change_state_action.triggered.connect(self.toggle)
+        self._menu.addAction('Settings...').triggered.connect(self.show_settings_dialog)
+        self._menu.addAction('Log').triggered.connect(self.show_log_dialog)
+        self._menu.addSeparator()
+        self._menu.addAction('About').triggered.connect(self.about)
+        self._menu.addAction('Exit').triggered.connect(QApplication.quit)
+        self.setContextMenu(self._menu)
 
-    def _show_settings_dialog(self):
-        settings_dialog = SettingsDialog(hd_active=self.hd_active, parent=self._parent_widget)
-        settings_dialog.exec()
+        self.activated.connect(self._on_activated)
+        self._controller.state_changed.connect(self._update_state)
+        self._controller.error.connect(self._show_error)
 
+        self._update_state(self._controller.is_running)
+
+    @Slot()
+    def toggle(self):
+        if not self._controller.toggle() and not self._controller.config.drive_paths:
+            self.showMessage(
+                APP_NAME,
+                'No drives to keep active. Add them in Settings.',
+                QSystemTrayIcon.MessageIcon.Warning,
+            )
+
+    @Slot()
+    def show_settings_dialog(self) -> SettingsDialog:
+        if self._settings_dialog is None:
+            self._settings_dialog = SettingsDialog(self._controller)
+            self._settings_dialog.log_requested.connect(self.show_log_dialog)
+        self._show(self._settings_dialog)
+        return self._settings_dialog
+
+    @Slot()
+    def show_log_dialog(self) -> LogDialog:
+        if self._log_dialog is None:
+            self._log_dialog = LogDialog(self._controller)
+        self._show(self._log_dialog)
+        return self._log_dialog
+
+    @Slot()
     def about(self):
-        QMessageBox.information(self._parent_widget, 'About', f'HD Active {__version__}')
+        QMessageBox.about(
+            None,
+            f'About {APP_NAME}',
+            f'{APP_NAME} {__version__}\n\nPrevent external HDs from becoming inactive (sleeping).',
+        )
 
-    def on_tray_icon_activated(self, reason):
+    @staticmethod
+    def _show(dialog: QDialog):
+        """
+        Show a dialog (non-modal) or, if already open, bring it to the front.
+        """
+        dialog.show()
+        dialog.raise_()
+        dialog.activateWindow()
+
+    @Slot(QSystemTrayIcon.ActivationReason)
+    def _on_activated(self, reason: QSystemTrayIcon.ActivationReason):
         if reason == QSystemTrayIcon.ActivationReason.DoubleClick:
-            self._show_settings_dialog()
+            self.show_settings_dialog()
 
-    def change_state(self):
-        next_state = self.hd_active.change_state()
-        self._change_state_action.setText(next_state)
+    @Slot(bool)
+    def _update_state(self, is_running: bool):
+        self.change_state_action.setText('Stop' if is_running else 'Start')
+        tool_tip = f'{APP_NAME}: {"running" if is_running else "stopped"}'
+        if self._controller.dry_run:
+            tool_tip += ' (dry run)'
+        self.setToolTip(tool_tip)
+
+    @Slot(str)
+    def _show_error(self, message: str):
+        self.showMessage(APP_NAME, message, QSystemTrayIcon.MessageIcon.Warning)
