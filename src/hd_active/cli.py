@@ -9,19 +9,26 @@ import configparser
 import logging
 import os
 import sys
+import threading
 import time
 from collections.abc import Sequence
 from dataclasses import replace
 from pathlib import Path
+from typing import TextIO
 
 from . import __version__
-from .hd_active import HdActive
+from .hd_active import HdActive, LogEntry
 from .hd_active_config import DEFAULT_CONFIG_FILE_NAME, HdActiveConfig
 from .utils import is_truthy
 
 ENV_DRY_RUN = 'HD_ACTION_DEBUG'
 """
 Environment variable that, if truthy, has the same effect as ``--dry-run``.
+"""
+
+STATUS_FLASH_SECONDS = 0.5
+"""
+How long the status in the `run` command stays yellow after a write.
 """
 
 logger = logging.getLogger(__name__)
@@ -125,6 +132,77 @@ def _gui(config_file: Path, dry_run: bool) -> int:
     return run_gui(config_file, dry_run=dry_run)
 
 
+class _StatusLine:
+    """
+    One line, updated in place, that shows when a write happens: green when idle, yellow briefly
+    after each write. Errors are printed above it, on lines of their own.
+
+    :param flash_seconds: How long the line stays yellow after a write.
+    :param stream: Where to print to. Must be a terminal, since it relies on ``\\r``.
+    """
+
+    IDLE = '🟢'
+    WRITING = '🟡'
+
+    def __init__(self, flash_seconds: float, stream: TextIO | None = None):
+        self._flash_seconds = flash_seconds
+        self._stream = stream if stream is not None else sys.stdout
+        self._lock = threading.Lock()
+        self._timer: threading.Timer | None = None
+        self._generation = 0
+        self._open = False
+
+    def _draw(self, dot: str):
+        # Caller holds the lock. Emoji are the same width, so the line is fully overwritten.
+        self._stream.write(f'\rstatus: {dot}')
+        self._stream.flush()
+
+    def start(self):
+        with self._lock:
+            self._open = True
+            self._draw(self.IDLE)
+
+    def on_log(self, entry: LogEntry):
+        """
+        To be used as the ``on_log`` callback of :class:`HdActive` (worker thread).
+        """
+        with self._lock:
+            if not self._open:
+                return
+            if self._timer is not None:
+                self._timer.cancel()
+            if entry.error is not None:
+                # Clear the status line, print the error, then bring the status back below it.
+                self._stream.write(f'\r{" " * 20}\r{entry}\n')
+            self._draw(self.WRITING)
+            # `cancel` doesn't stop a callback that's already waiting for the lock, so each timer
+            # carries the generation it was created for and is ignored if it's no longer current.
+            self._generation += 1
+            self._timer = threading.Timer(
+                self._flash_seconds, self._back_to_idle, args=(self._generation,)
+            )
+            self._timer.daemon = True
+            self._timer.start()
+
+    def _back_to_idle(self, generation: int):
+        with self._lock:
+            if self._open and generation == self._generation:
+                self._draw(self.IDLE)
+
+    def stop(self):
+        """
+        Stop updating and move to a new line, so that what's printed next doesn't overwrite it.
+        """
+        with self._lock:
+            if not self._open:
+                return
+            self._open = False
+            if self._timer is not None:
+                self._timer.cancel()
+            self._stream.write('\n')
+            self._stream.flush()
+
+
 def _run(config_file: Path, dry_run: bool) -> int:
     config = _load_config(config_file)
     if config is None:
@@ -133,24 +211,37 @@ def _run(config_file: Path, dry_run: bool) -> int:
         _error(f'No drives in config file {config_file}')
         return 1
 
+    # The in-place status line only makes sense in a terminal. When the output is redirected,
+    # fall back to one line per write.
+    status_line = _StatusLine(min(STATUS_FLASH_SECONDS, config.wait / 2)) if _is_tty() else None
     hd_active = HdActive(
         drive_paths=config.drive_paths,
         wait=config.wait,
         dry_run=dry_run,
-        on_log=lambda entry: print(entry, flush=True),
+        on_log=status_line.on_log if status_line else lambda entry: print(entry, flush=True),
     )
-    hd_active.start()
     print(f'HD Active started{" (dry run)" if dry_run else ""}. Ctrl+C to stop.\n{config}')
+    if status_line:
+        status_line.start()
+    hd_active.start()
     try:
         while hd_active.is_running:
             # Short sleeps, so Ctrl+C is handled promptly on all platforms.
             time.sleep(0.2)
     except KeyboardInterrupt:
+        if status_line:
+            status_line.stop()
         print('Stopping HD Active.')
     finally:
+        if status_line:
+            status_line.stop()
         hd_active.stop()
     print('HD Active stopped.')
     return 0
+
+
+def _is_tty() -> bool:
+    return sys.stdout.isatty()
 
 
 def _config_show(config_file: Path) -> int:
