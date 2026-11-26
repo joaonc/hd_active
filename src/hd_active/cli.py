@@ -149,6 +149,7 @@ class _StatusLine:
         self._stream = stream if stream is not None else sys.stdout
         self._lock = threading.Lock()
         self._timer: threading.Timer | None = None
+        self._generation = 0
         self._open = False
 
     def _draw(self, dot: str):
@@ -174,13 +175,18 @@ class _StatusLine:
                 # Clear the status line, print the error, then bring the status back below it.
                 self._stream.write(f'\r{" " * 20}\r{entry}\n')
             self._draw(self.WRITING)
-            self._timer = threading.Timer(self._flash_seconds, self._back_to_idle)
+            # `cancel` doesn't stop a callback that's already waiting for the lock, so each timer
+            # carries the generation it was created for and is ignored if it's no longer current.
+            self._generation += 1
+            self._timer = threading.Timer(
+                self._flash_seconds, self._back_to_idle, args=(self._generation,)
+            )
             self._timer.daemon = True
             self._timer.start()
 
-    def _back_to_idle(self):
+    def _back_to_idle(self, generation: int):
         with self._lock:
-            if self._open:
+            if self._open and generation == self._generation:
                 self._draw(self.IDLE)
 
     def stop(self):

@@ -203,3 +203,19 @@ class TestStatusLine:
         written = stream.getvalue()
         status.on_log(self.entry())
         assert stream.getvalue() == written
+
+    def test_stale_timer_is_ignored(self):
+        stream = io.StringIO()
+        status = cli._StatusLine(60, stream)
+        status.start()
+        status.on_log(self.entry())
+        stale = status._generation
+        status.on_log(self.entry())
+
+        # A callback from the first entry that had already fired before it was cancelled.
+        status._back_to_idle(stale)
+        assert stream.getvalue().endswith('\rstatus: 🟡')
+
+        status._back_to_idle(status._generation)
+        assert stream.getvalue().endswith('\rstatus: 🟢')
+        status.stop()
