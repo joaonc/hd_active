@@ -1,9 +1,13 @@
+import io
+import time
+from datetime import datetime
 from pathlib import Path
 from unittest.mock import patch
 
 import pytest
 
 from hd_active import __version__, cli
+from hd_active.hd_active import LogEntry
 from hd_active.hd_active_config import DEFAULT_CONFIG_FILE_NAME, HdActiveConfig
 
 
@@ -91,6 +95,19 @@ class TestRun:
         # The first write is done before stop is processed.
         assert f'10000 bytes written to {tmp_path}' in capsys.readouterr().out
 
+    def test_status_line_in_terminal(self, config_file, capsys):
+        with (
+            patch('hd_active.cli._is_tty', return_value=True),
+            patch('hd_active.cli.time.sleep', side_effect=[None, KeyboardInterrupt]),
+        ):
+            assert cli.main(['run', '--conf', str(config_file), '--dry-run']) == 0
+
+        out = capsys.readouterr().out
+        assert 'wait: 0.05s\n\rstatus: 🟢' in out
+        # No line per write.
+        assert 'dry run, nothing written' not in out
+        assert out.index('Stopping HD Active.') > out.index('status:')
+
     def test_no_config_file(self, tmp_path, capsys):
         assert cli.main(['run', '--conf', str(tmp_path / 'missing.ini')]) == 1
         assert 'not found' in capsys.readouterr().err
@@ -148,3 +165,41 @@ class TestConfig:
         file = tmp_path / 'new.ini'
         assert cli.main(['config', 'init', '--conf', str(file), '--wait', '0']) == 1
         assert not file.exists()
+
+
+class TestStatusLine:
+    @staticmethod
+    def entry(error=None) -> LogEntry:
+        return LogEntry(datetime(2026, 1, 1), Path('e:/'), bytes_written=10, error=error)
+
+    def test_flashes_yellow_then_green(self):
+        stream = io.StringIO()
+        status = cli._StatusLine(0.01, stream)
+        status.start()
+        assert stream.getvalue() == '\rstatus: 🟢'
+
+        status.on_log(self.entry())
+        deadline = time.monotonic() + 5
+        while not stream.getvalue().endswith('\rstatus: 🟢\rstatus: 🟡\rstatus: 🟢'):
+            assert time.monotonic() < deadline, stream.getvalue()
+            time.sleep(0.01)
+        status.stop()
+        assert stream.getvalue().endswith('\n')
+
+    def test_error_gets_own_line(self):
+        stream = io.StringIO()
+        status = cli._StatusLine(60, stream)
+        status.start()
+        status.on_log(self.entry(error='boom'))
+        status.stop()
+        assert 'ERROR writing to' in stream.getvalue()
+        assert 'boom\n\rstatus: 🟡' in stream.getvalue()
+
+    def test_nothing_after_stop(self):
+        stream = io.StringIO()
+        status = cli._StatusLine(0.01, stream)
+        status.start()
+        status.stop()
+        written = stream.getvalue()
+        status.on_log(self.entry())
+        assert stream.getvalue() == written
